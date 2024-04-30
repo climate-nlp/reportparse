@@ -1,0 +1,73 @@
+registrable==0.0.4
+git+https://github.com/huggingface/transformers.git@057e1d74733f52817dc05b673a340b4e3ebea08c
+opencv-python==4.5.4.60
+spacy==3.7.2
+#beautifulsoup4==4.11.2
+datasets==2.14.7
+pycryptodome==3.19.0
+PyMuPDF==1.23.22
+
+pandas==2.0.3
+wordcloud==1.9.3
+gradio==3.50
+
+# Required for deepdoctection (modified from origin requirements because pyyaml==6.0 and pypdf2==1.27.9 do not work)
+attrs==21.4.0
+    # via jsonlines
+catalogue==2.0.7
+    # via deepdoctection (setup.py)
+certifi==2021.10.8
+    # via requests
+charset-normalizer==2.0.12
+    # via requests
+filelock==3.6.0
+    # via huggingface-hub
+fsspec==2023.9.2
+    # via huggingface-hub
+huggingface-hub==0.17.2
+    # via deepdoctection (setup.py)
+idna==3.3
+    # via requests
+importlib-metadata==4.11.2
+    # via deepdoctection (setup.py)
+jsonlines==3.0.0
+    # via deepdoctection (setup.py)
+mock==4.0.3
+    # via deepdoctection (setup.py)
+networkx==2.7.1
+    # via deepdoctection (setup.py)
+numpy==1.22.3
+    # via deepdoctection (setup.py)
+packaging==21.3
+    # via
+    #   deepdoctection (setup.py)
+    #   huggingface-hub
+pillow==10.0.1
+    # via deepdoctection (setup.py)
+pyparsing==3.0.7
+    # via packaging
+PyPDF2==3.0.1
+    # via deepdoctection (setup.py)
+pyyaml==6.0.1
+    # via
+    #   deepdoctection (setup.py)
+    #   huggingface-hub
+pyzmq==24.0.1
+    # via deepdoctection (setup.py)
+requests==2.27.1
+    # via huggingface-hub
+tabulate==0.8.10
+    # via deepdoctection (setup.py)
+termcolor==2.0.1
+    # via deepdoctection (setup.py)
+tqdm==4.64.0
+    # via
+    #   deepdoctection (setup.py)
+    #   huggingface-hub
+typing-extensions==4.1.1
+    # via huggingface-hub
+urllib3==1.26.8
+    # via requests
+zipp==3.7.0
+    # via importlib-metadata
+timm==0.6.12
