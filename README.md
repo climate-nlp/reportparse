@@ -20,7 +20,12 @@
 ReportParse is a Python-based tool designed to parse corporate (sustainability) reports. 
 It combines document structure analysis with natural language processing (NLP) models to extract sustainability-related information from the reports. 
 We also provide easy-to-use web and command interfaces. 
-The tool is expected to aid researchers and analysts in evaluating corporate commitment to and management of sustainability efforts.
+The tool is expected to aid researchers and analysts in evaluating corporate commitment and management of sustainability efforts.
+
+### Tutorials
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1SUF7aX62LOUhpp004zn8NItM_tOkCZc4?usp=sharing) Setup and basic example
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing) Setup and basic example (install without root permission for deepdoctection).
+
 
 
 ## Why should I use ReportParse?
@@ -58,14 +63,14 @@ Read our IJCAI 2024 demonstration paper "ReportParse: A Unified NLP Tool for Ext
 ### Understanding document structure, reader, and annotator
 
 ReportParse can extract document structure from a reports.
-The following figure shows the important document structure (page, block, and sentences) represented in ReportParse.
+The following figure shows the important document structure levels (page, block, and sentences) represented in ReportParse.
 
 <p align="center">
   <img align="center" src="reportparse/asset/reportparse_structure.png" width="450px" />
 </p>
 
 By using [deepdoctection](https://github.com/deepdoctection/deepdoctection), the _reader_ can analyze the document structure. 
-Then, an _annotator_ of ReportParse annotates labels for each structure element (i.e., page, block, or sentence) by using cutting-edge language models.
+Then, an _annotator_ of ReportParse annotates labels for each structure level (i.e., page, block, or sentence) by using cutting-edge language models.
 For example by using ```environmenta_claim``` annotator, you can extract sentences that are related to environmental claims.
 You can easily change the reader and annotator, or you can create your own reader or annotator.
 
@@ -86,6 +91,9 @@ See current supported [readers](#readers) and [annotators](#annotators).
 ```
 
 ## Quick setup
+
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1SUF7aX62LOUhpp004zn8NItM_tOkCZc4?usp=sharing) Setup and basic example
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing) Setup and basic example (install without root permission for deepdoctection).
 
 ### Environment
 
@@ -113,8 +121,9 @@ pip install git+https://github.com/facebookresearch/detectron2.git@ff53992b1985b
 
 python -m spacy download en_core_web_sm
 
+# Make sure that the torch and torchvision version depend on your Python version
 pip install torch==1.10.1 torchvision==0.11.2
-# If you use CUDA
+# If you use CUDA, for example:
 #pip install torch==1.10.1+cu111 torchvision==0.11.2+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 **IMPORTANT: To use deepdoctection, you need to install external packages of poppler, tesseract, leptonica, and qpdf.**
@@ -176,7 +185,38 @@ python -m example_code
 - The output CSV file would be look like [example.pdf.sentence-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.sentence-level-dataset.csv). This file is useful to count labels included in a document.
   - If you use different annotation levels such as block or page, you can refer [example.pdf.block-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.block-level-dataset.csv) or [example.pdf.page-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.page-level-dataset.csv).
 
+### Example data analysis using the output file of ReportParse
 
+Extracting environmental claims and counting them.
+
+```python
+import pandas as pd
+
+# Read the CSV dataset file
+df = pd.read_csv('reportparse/asset/example_results/example.pdf.sentence-level-dataset.csv')
+# Get environmental claim sentences
+df_environment = df[df['environmental_claim'] == 'yes']
+# Remove "too short" sentences
+df_environment = df[(df['sentence_text'].str.split().str.len() > 20)]
+
+# Show some example text
+print(df_environment[:5])
+# Results -->
+# 10    Hitachi identifies, evaluates, and manages cli...
+# 18    Therefore, we have established COz emissions p...
+# 19    We also set and manage a metric for avoided em...
+# 20    We continue to reduce COz emissions generated ...
+# 22    In addition, in April 2021, Hitachi, Ltd. intr...
+# Name: sentence_text, dtype: object
+
+# Show some example texts
+print('The number of total sentences:', len(df))
+# Result --> The number of total sentences: 158
+print('The number of environmental claim sentences:', len(df_environment))
+# Result --> The number of environmental claim sentences: 62
+print('Environmental claim ratio [%]:', 100 * len(df_environment) / len(df))
+# Result --> Environmental claim ratio [%]: 39.24050632911393
+```
 
 
 
@@ -243,15 +283,15 @@ If you would like to add more, please contribute!
 
 We currently support following annotators. If you would like to add more, please contribute! 
 
-| Annotator name                      | Reference                                                                                                                                                             | Description                                                                                                                   |
-|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| ```climate_commitment```            | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-commitment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080) | Classify climate-related text into "climate commitments and actions" or not.                                                  |
-| ```climate_sentiment```             | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-sentiment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080)  | Classify climate-related text into climate-related "sentiment classes", either opportunity, neutral, or risk.                 |
-| ```environmental_claim```           | [Huggingface](https://huggingface.co/climatebert/environmental-claims), [Paper](https://aclanthology.org/2023.acl-short.91/)                                          | Classify text into environmental claim or not. The model is trained on the EnvironmentalClaims dataset.                       |
-| ```est_bert```                      | [Huggingface](https://huggingface.co/nbroad/ESG-BERT), [Blog](https://towardsdatascience.com/nlp-meets-sustainable-investing-d0542b3c264b)                            | Classify text into 26 ESG-related topics. The full list of labels can be found [here]().                                      |
-| ```netzero_reduction```             | [Huggingface](https://huggingface.co/climatebert/netzero-reduction), [Paper](https://aclanthology.org/2023.emnlp-main.975/)                                           | Classify climate-related text into net-zero target, reduction target, or no-target.                                           |
-| ```sst2```                          | [Huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), [Related paper](https://www.mdpi.com/2076-3417/12/11/5614)          | Classify text into positive or negative.                                                                                      |
-| ```transition_physical_renewable``` | [Huggingface](https://huggingface.co/climatebert/transition-physical), [Paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4080181)                           | Classify text into transition risk exposure, physical risk exposure, or transition risk exposure related to renewable energy. |
+| Annotator name                      | Reference                                                                                                                                                             | Description                                                                                                                   | Default level |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|---------------|
+| ```climate_commitment```            | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-commitment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080) | Classify climate-related text into "climate commitments and actions" or not.                                                  | block         |
+| ```climate_sentiment```             | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-sentiment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080)  | Classify climate-related text into climate-related "sentiment classes", either opportunity, neutral, or risk.                 | block         |
+| ```environmental_claim```           | [Huggingface](https://huggingface.co/climatebert/environmental-claims), [Paper](https://aclanthology.org/2023.acl-short.91/)                                          | Classify text into environmental claim or not. The model is trained on the EnvironmentalClaims dataset.                       | sentence      |
+| ```est_bert```                      | [Huggingface](https://huggingface.co/nbroad/ESG-BERT), [Blog](https://towardsdatascience.com/nlp-meets-sustainable-investing-d0542b3c264b)                            | Classify text into 26 ESG-related topics. The full list of labels can be found [here]().                                      | sentence      |
+| ```netzero_reduction```             | [Huggingface](https://huggingface.co/climatebert/netzero-reduction), [Paper](https://aclanthology.org/2023.emnlp-main.975/)                                           | Classify climate-related text into net-zero target, reduction target, or no-target.                                           | block         |
+| ```sst2```                          | [Huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), [Related paper](https://www.mdpi.com/2076-3417/12/11/5614)          | Classify text into positive or negative.                                                                                      | sentence      |
+| ```transition_physical_renewable``` | [Huggingface](https://huggingface.co/climatebert/transition-physical), [Paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4080181)                           | Classify text into transition risk exposure, physical risk exposure, or transition risk exposure related to renewable energy. | block         |
 
 
 ### Using custom huggingface models

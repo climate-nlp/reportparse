@@ -70,6 +70,15 @@ def main():
     except BaseException as e:
         print(f'tesseract seems not be installed.\nErrors:\n{e}')
     print()
+    print()
+    print('#### Tesseract language files ####')
+    try:
+        installed_langs = subprocess.check_output(['tesseract', '--list-langs']).decode('ascii').strip()
+        print('English installed:', 'eng' in installed_langs)
+        print('All list:', installed_langs)
+    except BaseException as e:
+        print(f'tesseract seems not be installed.\nErrors:\n{e}')
+    print()
     return
 
 
