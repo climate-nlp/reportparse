@@ -22,10 +22,10 @@ It combines document structure analysis with natural language processing (NLP) m
 We also provide easy-to-use web and command interfaces. 
 The tool is expected to aid researchers and analysts in evaluating corporate commitment and management of sustainability efforts.
 
-### Tutorials
-- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1SUF7aX62LOUhpp004zn8NItM_tOkCZc4?usp=sharing) Setup and basic example
-- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing) Setup and basic example (install without root permission for deepdoctection).
-
+## Tutorials
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1SUF7aX62LOUhpp004zn8NItM_tOkCZc4?usp=sharing) Understanding setup and basic example
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing) Understanding setup and basic example (install without root permission for deepdoctection).
+- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1c82lWdv7xJkM1ef1jnI3Q9uyJVIsDPLY?usp=sharing) Analyzing sentiment of corporate sustainability reports
 
 
 ## Why should I use ReportParse?
@@ -78,7 +78,7 @@ See current supported [readers](#readers) and [annotators](#annotators).
 
 ### Citation
 
-```text
+```bibtex
 @inproceedings{morio-etal-2024-reportparse,
   title     = {{R}eport{P}arse: A Unified NLP Tool for Extracting Document Structure and Semantics of Corporate Sustainability Reporting},
   author    = {Morio, Gaku and In, Soh Young and Yoon, Jungah and Rowlands, Harri and Manning, Christopher D.},
@@ -90,10 +90,8 @@ See current supported [readers](#readers) and [annotators](#annotators).
 }
 ```
 
-## Quick setup
 
-- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1SUF7aX62LOUhpp004zn8NItM_tOkCZc4?usp=sharing) Setup and basic example
-- [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing) Setup and basic example (install without root permission for deepdoctection).
+## Quick setup
 
 ### Environment
 
@@ -127,13 +125,20 @@ pip install torch==1.10.1 torchvision==0.11.2
 #pip install torch==1.10.1+cu111 torchvision==0.11.2+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 **IMPORTANT: To use deepdoctection, you need to install external packages of poppler, tesseract, leptonica, and qpdf.**
-Example installations without root permissions can be found from [auto_install_deepdoctection_deps.sh](auto_install_deepdoctection_deps.sh).
+
+```bash
+sudo apt-get update
+sudo apt install -y libtool poppler-utils python3-opencv tesseract-ocr qpdf
+```
+
+If you want to install the above libs without root permissions, please refer [auto_install_deepdoctection_deps.sh](auto_install_deepdoctection_deps.sh) and example notebook [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing).
 
 After installing all of the above, you can check if the required packages are installed.
 
 ```bash
 python -m reportparse.show_version
 ````
+
 
 ## Quick start
 
@@ -167,7 +172,7 @@ document = reader.read(input_path='./reportparse/asset/example.pdf')
 document = BaseAnnotator.by_name("environmental_claim")().annotate(document=document)
 document = BaseAnnotator.by_name("sst2")().annotate(document=document)
 
-os.makedirs('./results')
+os.makedirs('./results', exist_ok=True)
 
 # Save the full data as a JSON file
 document.save('./results/example.pdf.json')

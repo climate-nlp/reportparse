@@ -1,5 +1,6 @@
 from logging import getLogger
 import argparse
+from distutils.util import strtobool
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
@@ -40,7 +41,7 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
     def annotate(
             self,
             document: Document, args=None,
-            max_len=128, batch_size=8, level='block', target_layouts=('text', 'list')
+            max_len=128, batch_size=8, level='block', target_layouts=('text', 'list'), use_deprecated=False,
     ) -> Document:
         logger = getLogger(__name__)
 
@@ -52,6 +53,12 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
         batch_size = args.climate_commitment_batch_size if args is not None else batch_size
         level = args.climate_commitment_level if args is not None else level
         target_layouts = args.climate_commitment_target_layouts if args is not None else target_layouts
+        use_deprecated = args.climate_commitment_use_deprecated if args is not None else use_deprecated
+
+        if use_deprecated:
+            logger.warning('You are using the deprecated version. We will force parameters.')
+            level = 'block'
+            target_layouts = ['text', 'list']
 
         assert level in ['block', 'sentence']
         assert max_len > 0
@@ -71,34 +78,6 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
                 self.climate_commitment_model_name_or_path
             )
 
-        """
-        We use an additional classifier to filter out non-climate mentions
-        """
-
-        if self.block_climate_tokenizer is None or self.block_climate_model is None:
-            self.block_climate_tokenizer = AutoTokenizer.from_pretrained(
-                self.block_climate_detection_model_name_or_path,
-                max_len=max_len
-            )
-            self.block_climate_model = AutoModelForSequenceClassification.from_pretrained(
-                self.block_climate_detection_model_name_or_path
-            )
-
-        # Get climate related mentions
-        document_climate_annot = annotate_by_sequence_classification(
-            annotator_name='dummy',
-            document=document,
-            tokenizer=self.block_climate_tokenizer,
-            model=self.block_climate_model,
-            level=level,
-            target_layouts=target_layouts,
-            batch_size=batch_size
-        )
-        climate_unrelated_object_ids = []
-        for annot_obj, annot in document_climate_annot.find_annotations_by_annotator_name('dummy'):
-            if annot.value == 'no':
-                climate_unrelated_object_ids.append(annot_obj.id)
-
         document = annotate_by_sequence_classification(
             annotator_name='climate_commitment',
             document=document,
@@ -109,20 +88,50 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             batch_size=batch_size
         )
 
-        # Remove annotations that do not relate to climate
-        for page in document.pages:
-            for block in page.blocks:
-                if level == 'block' and block.id in climate_unrelated_object_ids:
-                    block.remove_annotator(annotator_name='climate_commitment')
-                    #logger.info(f'Removed the "netzero_reduction" annotation of the following block '
-                    #            f'because it is not related to environment: "{block.text}".')
-                    continue
-                for sentence in block.sentences:
-                    if level == 'sentence' and sentence.id in climate_unrelated_object_ids:
-                        sentence.remove_annotator(annotator_name='climate_commitment')
-                        #logger.info(f'Removed the "netzero_reduction" annotation of the following sentence '
-                        #            f'because it is not related to environment: "{sentence.text}".')
+        """
+        We use an additional classifier to filter out non-climate mentions
+        """
+
+        if not use_deprecated:
+            if self.block_climate_tokenizer is None or self.block_climate_model is None:
+                self.block_climate_tokenizer = AutoTokenizer.from_pretrained(
+                    self.block_climate_detection_model_name_or_path,
+                    max_len=max_len
+                )
+                self.block_climate_model = AutoModelForSequenceClassification.from_pretrained(
+                    self.block_climate_detection_model_name_or_path
+                )
+
+            # Get climate related mentions
+            document_climate_annot = annotate_by_sequence_classification(
+                annotator_name='dummy',
+                document=document,
+                tokenizer=self.block_climate_tokenizer,
+                model=self.block_climate_model,
+                level=level,
+                target_layouts=target_layouts,
+                batch_size=batch_size
+            )
+
+            climate_unrelated_object_ids = []
+            for annot_obj, annot in document_climate_annot.find_annotations_by_annotator_name('dummy'):
+                if annot.value == 'no':
+                    climate_unrelated_object_ids.append(annot_obj.id)
+
+            # Remove annotations that do not relate to climate
+            for page in document.pages:
+                for block in page.blocks:
+                    if level == 'block' and block.id in climate_unrelated_object_ids:
+                        block.remove_annotator(annotator_name='climate_commitment')
+                        #logger.info(f'Removed the "climate_commitment" annotation of the following block '
+                        #            f'because it is not related to environment: "{block.text}".')
                         continue
+                    for sentence in block.sentences:
+                        if level == 'sentence' and sentence.id in climate_unrelated_object_ids:
+                            sentence.remove_annotator(annotator_name='climate_commitment')
+                            #logger.info(f'Removed the "climate_commitment" annotation of the following sentence '
+                            #            f'because it is not related to environment: "{sentence.text}".')
+                            continue
 
         return document
 
@@ -149,3 +158,10 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             nargs='+',
             default=['text', 'list']
         )
+        parser.add_argument(
+            '--climate_commitment_use_deprecated',
+            type=strtobool,
+            help='Use the deprecated version (not recommended)',
+            default=False
+        )
+

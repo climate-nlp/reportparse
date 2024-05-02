@@ -1,5 +1,6 @@
 from logging import getLogger
 import argparse
+from distutils.util import strtobool
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
@@ -46,7 +47,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
     def annotate(
         self,
         document: Document, args=None,
-        max_len=128, batch_size=8, level='block', target_layouts=('text', 'list')
+        max_len=128, batch_size=8, level='block', target_layouts=('text', 'list'), use_deprecated=False,
     ) -> Document:
         logger = getLogger(__name__)
 
@@ -58,20 +59,29 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
         batch_size = args.transition_physical_renewable_batch_size if args is not None else batch_size
         level = args.transition_physical_renewable_level if args is not None else level
         target_layouts = args.transition_physical_renewable_target_layouts if args is not None else target_layouts
+        use_deprecated = args.transition_physical_renewable_use_deprecated if args is not None else use_deprecated
 
         assert level in ['block', 'sentence']
         assert max_len > 0
         assert batch_size > 0
         assert set(target_layouts) & {'title', 'text', 'list'}
 
-        if self.transition_physical_tokenizer is None or self.transition_physical_model is None:
-            self.transition_physical_tokenizer = AutoTokenizer.from_pretrained(
-                self.transition_physical_tokenizer_name_or_path,
-                max_len=max_len
-            )
-            self.transition_physical_model = AutoModelForSequenceClassification.from_pretrained(
-                self.transition_physical_model_name_or_path
-            )
+        if use_deprecated:
+            logger.warning('You are using the deprecated version (originally called "renewable" annotator). '
+                           'We will force parameters.')
+            level = 'sentence'
+            target_layouts = ['text', 'list']
+
+        if not use_deprecated:
+            if self.transition_physical_tokenizer is None or self.transition_physical_model is None:
+                self.transition_physical_tokenizer = AutoTokenizer.from_pretrained(
+                    self.transition_physical_tokenizer_name_or_path,
+                    max_len=max_len
+                )
+                self.transition_physical_model = AutoModelForSequenceClassification.from_pretrained(
+                    self.transition_physical_model_name_or_path
+                )
+
         if self.renewable_tokenizer is None or self.renewable_model is None:
             self.renewable_tokenizer = AutoTokenizer.from_pretrained(
                 self.renewable_tokenizer_name_or_path,
@@ -83,7 +93,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
 
         # Get renewable related mentions
         document_renewable_annot = annotate_by_sequence_classification(
-            annotator_name='dummy',
+            annotator_name='renewable',
             document=document,
             tokenizer=self.renewable_tokenizer,
             model=self.renewable_model,
@@ -91,8 +101,13 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             target_layouts=target_layouts,
             batch_size=batch_size
         )
+
+        # Return only "renewable" results if using the deprecated version
+        if not use_deprecated:
+            return document_renewable_annot
+
         renewable_object_id2score = dict()
-        for annot_obj, annot in document_renewable_annot.find_annotations_by_annotator_name('dummy'):
+        for annot_obj, annot in document_renewable_annot.find_annotations_by_annotator_name('renewable'):
             if annot.value == 'LABEL_1':
                 renewable_object_id2score[annot_obj.id] = annot.meta['score']
 
@@ -136,5 +151,11 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             type=str,
             nargs='+',
             default=['text', 'list']
+        )
+        parser.add_argument(
+            '--transition_physical_use_deprecated',
+            type=strtobool,
+            help='Use the deprecated version (not recommended)',
+            default=False
         )
 
