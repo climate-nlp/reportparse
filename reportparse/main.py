@@ -1,7 +1,7 @@
 from logging import getLogger
+import traceback
 import argparse
 import os
-import json
 from distutils.util import strtobool
 
 from reportparse.structure.document import Document
@@ -142,7 +142,7 @@ def main(args):
 
         except BaseException as e:
             logger.error(f'Failed to analyze {input_path} (see the error message below).')
-            logger.error(e)
+            logger.error(traceback.format_exc())
 
     return
 

@@ -119,6 +119,9 @@ class Span:
     def remove_annotator(self, annotator_name: str):
         self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
 
+    def remove_annotator_with_prefix(self, annotator_prefix: str):
+        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
+
     def to_dict(self) -> dict:
         return {
             'id': self.id,
@@ -212,6 +215,9 @@ class Block:
 
     def remove_annotator(self, annotator_name: str):
         self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
+
+    def remove_annotator_with_prefix(self, annotator_prefix: str):
+        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
 
     def to_dict(self) -> dict:
         return {
@@ -340,6 +346,9 @@ class Page:
 
     def remove_annotator(self, annotator_name: str):
         self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
+
+    def remove_annotator_with_prefix(self, annotator_prefix: str):
+        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
 
     def to_dict(self) -> dict:
         return {

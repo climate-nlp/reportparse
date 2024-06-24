@@ -103,7 +103,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
         )
 
         # Return only "renewable" results if using the deprecated version
-        if not use_deprecated:
+        if use_deprecated:
             return document_renewable_annot
 
         renewable_object_id2score = dict()
@@ -153,7 +153,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             default=['text', 'list']
         )
         parser.add_argument(
-            '--transition_physical_use_deprecated',
+            '--transition_physical_renewable_use_deprecated',
             type=strtobool,
             help='Use the deprecated version (not recommended)',
             default=False

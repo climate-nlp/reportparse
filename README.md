@@ -71,7 +71,8 @@ The following figure shows the important document structure levels (page, block,
 
 By using [deepdoctection](https://github.com/deepdoctection/deepdoctection), the _reader_ can analyze the document structure. 
 Then, an _annotator_ of ReportParse annotates labels for each structure level (i.e., page, block, or sentence) by using cutting-edge language models.
-For example by using ```environmenta_claim``` annotator, you can extract sentences that are related to environmental claims.
+We integrate useful and valuable third-party models for the annotators.
+For example by using ```environmental_claim``` (Stammbach et al., see [annotators](#annotators)) annotator, you can extract sentences that are related to environmental claims.
 You can easily change the reader and annotator, or you can create your own reader or annotator.
 
 See current supported [readers](#readers) and [annotators](#annotators).
@@ -143,7 +144,7 @@ python -m reportparse.show_version
 ## Quick start
 
 The following shows examples of analyzing example PDF file at ```reportparse/asset/example.pdf```. 
-For example, we use ```pymupdf``` as the [reader](#readers) and ```environmental_claim``` and ```sst2``` as the [annotators](#annotators).
+For example, we use ```pymupdf``` as the [reader](#readers) and ```environmental_claim``` and ```sst2``` (provided by DistilBERT community) as the [annotators](#annotators).
 
 ### By the python command line tool
 
@@ -286,17 +287,21 @@ If you would like to add more, please contribute!
 
 <h3 id="annotators">Annotators</h4>
 
-We currently support following annotators. If you would like to add more, please contribute! 
+This project integrates a lot of valuable third-party models for the annotators.
+We currently support following annotators (note that usually the annotator integration is done by us and the original provider is not involved.)
+**Do not forget to credit the original work if you use the following annotators.**
+Note that many models are not trained on the sustainability report domain, so please be in mind that the output results contain many errors.
+If you would like to add more, please contribute! 
 
-| Annotator name                      | Reference                                                                                                                                                             | Description                                                                                                                   | Default level |
-|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|---------------|
-| ```climate_commitment```            | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-commitment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080) | Classify climate-related text into "climate commitments and actions" or not.                                                  | block         |
-| ```climate_sentiment```             | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-sentiment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080)  | Classify climate-related text into climate-related "sentiment classes", either opportunity, neutral, or risk.                 | block         |
-| ```environmental_claim```           | [Huggingface](https://huggingface.co/climatebert/environmental-claims), [Paper](https://aclanthology.org/2023.acl-short.91/)                                          | Classify text into environmental claim or not. The model is trained on the EnvironmentalClaims dataset.                       | sentence      |
-| ```est_bert```                      | [Huggingface](https://huggingface.co/nbroad/ESG-BERT), [Blog](https://towardsdatascience.com/nlp-meets-sustainable-investing-d0542b3c264b)                            | Classify text into 26 ESG-related topics. The full list of labels can be found [here]().                                      | sentence      |
-| ```netzero_reduction```             | [Huggingface](https://huggingface.co/climatebert/netzero-reduction), [Paper](https://aclanthology.org/2023.emnlp-main.975/)                                           | Classify climate-related text into net-zero target, reduction target, or no-target.                                           | block         |
-| ```sst2```                          | [Huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), [Related paper](https://www.mdpi.com/2076-3417/12/11/5614)          | Classify text into positive or negative.                                                                                      | sentence      |
-| ```transition_physical_renewable``` | [Huggingface](https://huggingface.co/climatebert/transition-physical), [Paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4080181)                           | Classify text into transition risk exposure, physical risk exposure, or transition risk exposure related to renewable energy. | block         |
+| Annotator name                      | Credit               | Reference                                                                                                                                                             | License                                                                                                                 | Description                                                                                                                   | Default level |
+|-------------------------------------|:---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|---------------|
+| ```climate_commitment```            | Bingler et al.       | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-commitment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080) | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md)                  | Classify climate-related text into "climate commitments and actions" or not.                                                  | block         |
+| ```climate_sentiment```             | Bingler et al.       | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-sentiment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080)  | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md)                  | Classify climate-related text into climate-related "sentiment classes", either opportunity, neutral, or risk.                 | block         |
+| ```environmental_claim```           | Stammbach et al.     | [Huggingface](https://huggingface.co/climatebert/environmental-claims), [Paper](https://aclanthology.org/2023.acl-short.91/)                                          | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md)                  | Classify text into environmental claim or not. The model is trained on the EnvironmentalClaims dataset.                       | sentence      |
+| ```esg_bert```                      | Mukherjee et al.     | [Huggingface](https://huggingface.co/nbroad/ESG-BERT), [Blog](https://towardsdatascience.com/nlp-meets-sustainable-investing-d0542b3c264b)                            | [Apache 2.0 (Github)](https://github.com/mukut03/ESG-BERT?tab=Apache-2.0-1-ov-file#readme)                              | Classify text into 26 ESG-related topics. The full list of labels can be found [here]().                                      | sentence      |
+| ```netzero_reduction```             | Schimanski et al.    | [Huggingface](https://huggingface.co/climatebert/netzero-reduction), [Paper](https://aclanthology.org/2023.emnlp-main.975/)                                           | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md)                  | Classify climate-related text into net-zero target, reduction target, or no-target.                                           | block         |
+| ```sst2```                          | DistilBERT community | [Huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), [Related paper](https://www.mdpi.com/2076-3417/12/11/5614)          | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md)                  | Classify text into positive or negative.                                                                                      | sentence      |
+| ```transition_physical_renewable``` | Deng et al.          | [Huggingface](https://huggingface.co/climatebert/transition-physical), [Paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4080181)                           | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md)                  | Classify text into transition risk exposure, physical risk exposure, or transition risk exposure related to renewable energy. | block         |
 
 
 ### Using custom huggingface models
