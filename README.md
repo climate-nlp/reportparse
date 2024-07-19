@@ -22,6 +22,7 @@ It combines document structure analysis with natural language processing (NLP) m
 We also provide easy-to-use web and command interfaces. 
 The tool is expected to aid researchers and analysts in evaluating corporate commitment and management of sustainability efforts.
 
+- 🆕 **2024.7**: ```standard_keyword``` annotator is available. This can extract a text that mentions sustainability-related standards (e.g., GRI, SASB, and TCFD).
 - 🆕 **2024.7**: ```climate_table``` annotator powered by deepdoctection and ```climate``` annotator is available. This can extract climate-related tables in a report.
 - 🆕 **2024.7**: ```climate_figure``` annotator powered by deepdoctection and ```climate``` annotator is available. This can extract climate-related figures in a report.
 
@@ -330,7 +331,7 @@ print(df.columns)
 #       'climate_figure-score'],
 #       dtype='object')
 
-# Let's see the bounding boxe of the figures
+# Let's see the bounding boxes of the figures
 for _, climate_figure in df[df['climate_figure'] == 'yes'].iterrows():
     print('Found figure at', climate_figure['page_id'], climate_figure['figure_bbox'])
 
@@ -350,7 +351,7 @@ for _, climate_figure in df[df['climate_figure'] == 'yes'].iterrows():
     plt.show()
 ```
 
-Example of the detected figure (shown in the red bounding box):
+An example of the detected figure (shown in the red bounding box):
 
 <p align="center">
   <img align="center" src="reportparse/asset/example_climate_figure.png" width="550px" />
