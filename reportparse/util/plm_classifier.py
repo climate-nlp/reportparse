@@ -8,11 +8,12 @@ from transformers.pipelines.pt_utils import KeyDataset
 import datasets
 
 from reportparse.structure.document import Document, Annotation
+from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
 
 
 def _load_dataset(document: Document, level: str, target_layouts: List[str] = None) -> datasets.Dataset:
-    if level not in ['page', 'block', 'sentence']:
-        raise ValueError(f'The specified level ({level}) is invalid. It must be either page, block, or sentence.')
+    if level not in LEVEL_NAMES:
+        raise ValueError(f'The specified level ({level}) is invalid. It must be one of {LEVEL_NAMES}.')
 
     data_points = []
 
@@ -22,36 +23,39 @@ def _load_dataset(document: Document, level: str, target_layouts: List[str] = No
             data_points.append({
                 'level': level,
                 'document_id': document.name,
-                'text': page.text,
+                'text': page.get_text_by_target_layouts(target_layouts=target_layouts) if target_layouts else page.text,
                 'page_num': page.num,
             })
-
-        elif level == 'block':
-
-            for block in page.blocks:
+        else:
+            for block in page.blocks + page.table_blocks:
                 if target_layouts is not None and block.layout_type not in target_layouts:
                     continue
-                data_points.append({
-                    'level': level,
-                    'document_id': document.name,
-                    'text': block.text,
-                    'page_num': page.num,
-                    'id': block.id,
-                })
-
-        elif level == 'sentence':
-
-            for block in page.blocks:
-                if target_layouts is not None and block.layout_type not in target_layouts:
-                    continue
-                for sentence in block.sentences:
+                if level == 'block':
                     data_points.append({
                         'level': level,
                         'document_id': document.name,
-                        'text': sentence.text,
+                        'text': block.text,
                         'page_num': page.num,
-                        'id': sentence.id,
+                        'id': block.id,
                     })
+                elif level == 'sentence':
+                    for sentence in block.sentences:
+                        data_points.append({
+                            'level': level,
+                            'document_id': document.name,
+                            'text': sentence.text,
+                            'page_num': page.num,
+                            'id': sentence.id,
+                        })
+                elif level == 'text':
+                    for text in block.texts:
+                        data_points.append({
+                            'level': level,
+                            'document_id': document.name,
+                            'text': text.text,
+                            'page_num': page.num,
+                            'id': text.id,
+                        })
 
     dataset = datasets.Dataset.from_list(data_points)
 
@@ -71,8 +75,8 @@ def _annotate_document(
     document = copy.deepcopy(document)
 
     if overwrite:
-        for annot_obj, _ in document.find_annotations_by_annotator_name(annotator_name=annotator_name):
-            annot_obj.remove_annotator(annotator_name=annotator_name)
+        for annot_obj, _ in document.find_all_annotations_by_annotator_name(annotator_name=annotator_name):
+            annot_obj.remove_annotations_by_annotator_name(annotator_name=annotator_name)
 
     for d in dataset:
 
@@ -110,8 +114,12 @@ def annotate_by_sequence_classification(
     batch_size: int = 1,
     multi_label: bool = False,
 ) -> Document:
-    if level not in ['page', 'block', 'sentence']:
-        raise ValueError(f'The specified level ({level}) is invalid. It must be either page, block, or sentence.')
+    if level not in LEVEL_NAMES:
+        raise ValueError(f'The specified level ({level}) is invalid. It must be one of {LEVEL_NAMES}.')
+    unk_layouts = set(target_layouts) - LAYOUT_NAMES
+    if unk_layouts:
+        raise ValueError(f'The specified target_layouts ({unk_layouts}) are invalid. '
+                         f'It must be either title, list, text, or cell.')
 
     dataset = _load_dataset(document=document, level=level, target_layouts=target_layouts)
 

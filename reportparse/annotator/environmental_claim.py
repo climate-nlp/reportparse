@@ -6,6 +6,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
+from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
 
 
 @BaseAnnotator.register("environmental_claim")
@@ -52,10 +53,10 @@ class EnvironmentalClaimAnnotator(BaseAnnotator):
         level = args.environmental_claim_level if args is not None else level
         target_layouts = args.environmental_claim_target_layouts if args is not None else target_layouts
 
-        assert level in ['block', 'sentence']
+        assert level in LEVEL_NAMES
         assert max_len > 0
         assert batch_size > 0
-        assert set(target_layouts) & {'title', 'text', 'list'}
+        assert set(target_layouts) & LAYOUT_NAMES
 
         if level != 'sentence':
             logger.warning('This model is trained on sentences. It may not perform well on blocks.')
@@ -101,6 +102,7 @@ class EnvironmentalClaimAnnotator(BaseAnnotator):
             '--environmental_claim_target_layouts',
             type=str,
             nargs='+',
-            default=['text', 'list']
+            default=['text', 'list'],
+            choices=LAYOUT_NAMES
         )
 

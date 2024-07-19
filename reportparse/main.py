@@ -96,9 +96,7 @@ def main(args):
                                    f'because you are loading document layouts from the json file.')
                     document = Document.from_json_file(file_path=output_path)
                     logger.info(f'Clear all the existing annotations')
-                    for annotator_name in document.find_annotator_names():
-                        for annot_obj, _ in document.find_annotations_by_annotator_name(annotator_name=annotator_name):
-                            annot_obj.remove_annotator(annotator_name=annotator_name)
+                    document.remove_annotations()
                 elif args.overwrite_strategy == "annotator-add":
                     logger.warning(f'The output file "{output_path}" exists. '
                                    f'We will use the existing "reader" result and add new annotator results.')
@@ -124,7 +122,7 @@ def main(args):
 
             # Save the easy-to-use CSV datasets
             if args.output_csv_dataset:
-                for level in ['page', 'block', 'sentence']:
+                for level in ['page', 'block', 'sentence', 'table', 'figure']:
                     if args.input_type == 'pdf':
                         output_csv_path = os.path.join(
                             args.output_dir, os.path.basename(input_path) + f'.{level}-level-dataset.csv')

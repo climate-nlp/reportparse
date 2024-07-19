@@ -7,6 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
+from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
 
 
 @BaseAnnotator.register("climate_commitment")
@@ -60,10 +61,10 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             level = 'block'
             target_layouts = ['text', 'list']
 
-        assert level in ['block', 'sentence']
+        assert level in LEVEL_NAMES
         assert max_len > 0
         assert batch_size > 0
-        assert set(target_layouts) & {'title', 'text', 'list'}
+        assert set(target_layouts) & LAYOUT_NAMES
 
         if level != 'block':
             logger.warning('The model is trained on paragraphs (similar to blocks). '
@@ -114,7 +115,7 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             )
 
             climate_unrelated_object_ids = []
-            for annot_obj, annot in document_climate_annot.find_annotations_by_annotator_name('dummy'):
+            for annot_obj, annot in document_climate_annot.find_all_annotations_by_annotator_name('dummy'):
                 if annot.value == 'no':
                     climate_unrelated_object_ids.append(annot_obj.id)
 
@@ -122,13 +123,13 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             for page in document.pages:
                 for block in page.blocks:
                     if level == 'block' and block.id in climate_unrelated_object_ids:
-                        block.remove_annotator(annotator_name='climate_commitment')
+                        block.remove_annotations_by_annotator_name(annotator_name='climate_commitment')
                         #logger.info(f'Removed the "climate_commitment" annotation of the following block '
                         #            f'because it is not related to environment: "{block.text}".')
                         continue
                     for sentence in block.sentences:
                         if level == 'sentence' and sentence.id in climate_unrelated_object_ids:
-                            sentence.remove_annotator(annotator_name='climate_commitment')
+                            sentence.remove_annotations_by_annotator_name(annotator_name='climate_commitment')
                             #logger.info(f'Removed the "climate_commitment" annotation of the following sentence '
                             #            f'because it is not related to environment: "{sentence.text}".')
                             continue
@@ -156,7 +157,8 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             '--climate_commitment_target_layouts',
             type=str,
             nargs='+',
-            default=['text', 'list']
+            default=['text', 'list'],
+            choices=LAYOUT_NAMES
         )
         parser.add_argument(
             '--climate_commitment_use_deprecated',

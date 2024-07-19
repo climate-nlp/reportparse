@@ -1,22 +1,20 @@
 import os
 import argparse
-from typing import Optional, List, Dict, Tuple
 import copy
 
 import numpy as np
 import pandas as pd
 import uuid
-import deepdoctection as dd
 import gradio as gr
 import spacy
 import fitz
-import cv2
 from PIL import ImageColor
 from wordcloud import WordCloud
 
 from reportparse.structure.document import Document
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.reader.pymupdf_reader import load_image_from_page, load_dummy_page_image
+from reportparse.util.helper import draw_boxes
 
 
 MAX_IMAGES = 5
@@ -41,67 +39,12 @@ os.environ['GRADIO_TEMP_DIR'] = DATA_DIR
 ASSET_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), f'asset'))
 
 
-def draw_boxes(
-    np_image,
-    boxes: np.ndarray,
-    category_names_list: List[Optional[str]],
-    category_to_color: Optional[Dict[str, Tuple[int, int, int]]] = None,
-    font_scale: float = 1.0,
-    rectangle_thickness: int = 4,
-):
-    """
-    This method was originally implemented in deepdoctection (Apache 2.0).
-    https://github.com/deepdoctection/deepdoctection/blob/619f7191fa51c3886e6e5c5bda8c53c9e0e07c8d/deepdoctection/utils/viz.py#L200
-    We slightly modified the origin code.
-    ----
-    Draw bounding boxes with category names into image.
-
-    :param np_image: Image as np.ndarray
-    :param boxes: A numpy array of shape Nx4 where each row is [x1, y1, x2, y2].
-    :param category_names_list: List of N category names.
-    :param category_to_color
-    :param font_scale: Font scale of text box
-    :param rectangle_thickness: Thickness of bounding box
-    :return: A new image np.ndarray
-    """
-    boxes = np.asarray(boxes, dtype="int32")
-    if category_names_list is not None:
-        assert len(category_names_list) == len(boxes), f"{len(category_names_list)} != {len(boxes)}"
-    areas = (boxes[:, 2] - boxes[:, 0] + 1) * (boxes[:, 3] - boxes[:, 1] + 1)
-    sorted_inds = np.argsort(-areas)  # draw large ones first
-    assert areas.min() > 0, areas.min()
-    # allow equal, because we are not very strict about rounding error here
-    assert (
-        boxes[:, 0].min() >= 0
-        and boxes[:, 1].min() >= 0
-        and boxes[:, 2].max() <= np_image.shape[1]
-        and boxes[:, 3].max() <= np_image.shape[0]
-    ), f"Image shape: {str(np_image.shape)}\n Boxes:\n{str(boxes)}"
-
-    np_image = np_image.copy()
-
-    if np_image.ndim == 2 or (np_image.ndim == 3 and np_image.shape[2] == 1):
-        np_image = cv2.cvtColor(np_image, cv2.COLOR_GRAY2BGR)
-
-    for i in sorted_inds:
-        box = boxes[i, :]
-        if category_names_list is not None:
-            choose_color = category_to_color.get(category_names_list[i])
-            if font_scale > 0 and category_names_list[i] is not None:
-                np_image = dd.draw_text(
-                    np_image, (box[0], box[1]), category_names_list[i], color=choose_color, font_scale=font_scale
-                )
-            cv2.rectangle(
-                np_image, (box[0], box[1]), (box[2], box[3]), color=choose_color, thickness=rectangle_thickness
-            )
-
-    return np_image
-
-
 def render(
     input_json_basename: str, json_dir: str, pdf_dir: str,
     load_image: bool,
     show_block: bool, block_color: str,
+    show_table_block: bool, table_block_color: str,
+    show_figure_block: bool, figure_block_color: str,
     show_sentence: bool, sentence_color: str,
     show_word: bool, word_color: str,
     annotator_name: str, prob_threshold: float, word_threshold: int, label_color: str,
@@ -121,17 +64,19 @@ def render(
     for page in progress.tqdm(document.pages, desc='Preparing annotation stats'):
 
         basic_data.append({'page': page.num, 'type': 'block', 'count': len(page.blocks)})
-        n_sentences = len([s for b in page.blocks for s in b.sentences])
-        basic_data.append({'page': page.num, 'type': 'sentence', 'count': n_sentences})
+        basic_data.append({'page': page.num, 'type': 'table', 'count': len(page.tables)})
+        basic_data.append({'page': page.num, 'type': 'figure', 'count': len(page.figures)})
+        #n_sentences = len([s for b in page.blocks for s in b.sentences])
+        #basic_data.append({'page': page.num, 'type': 'sentence', 'count': n_sentences})
 
-        for annot_obj, annot in page.find_annotations_by_annotator_name(annotator_name):
+        for annot_obj, annot in page.find_all_annotations_by_annotator_name(annotator_name):
 
             score = annot.meta['score'] if isinstance(annot.meta, dict) and 'score' in annot.meta else 1
             if score < prob_threshold:
                 continue
 
             text = annot_obj.text
-            if len(nlp(text)) < word_threshold:
+            if annotator_name != 'climate_figure' and len(nlp(text)) < word_threshold:
                 continue
 
             annots.append({
@@ -166,6 +111,8 @@ def render(
         for annot_label in annot_labels:
             text = annots[annots['value'] == annot_label]['text']
             text = ' '.join(text)
+            if not text.strip():
+                continue
             wc_img = WordCloud(
                 background_color='white',
                 width=500,
@@ -233,8 +180,45 @@ def render(
             for block in page.blocks:
                 box_stack.append(block.bbox)
                 category_names_list.append(block.layout_type)
-
             category_to_color = {k: ImageColor.getcolor(block_color, "RGB") for k in set(category_names_list)}
+
+            if box_stack:
+                boxes = np.vstack(box_stack)
+                img = draw_boxes(
+                    np_image=img,
+                    boxes=boxes,
+                    category_names_list=category_names_list,
+                    category_to_color=category_to_color,
+                    font_scale=2,
+                    rectangle_thickness=4,
+                )
+
+        if show_table_block:
+            box_stack = []
+            category_names_list = []
+            for block in page.table_blocks:
+                box_stack.append(block.bbox)
+                category_names_list.append(block.layout_type)
+            category_to_color = {k: ImageColor.getcolor(table_block_color, "RGB") for k in set(category_names_list)}
+
+            if box_stack:
+                boxes = np.vstack(box_stack)
+                img = draw_boxes(
+                    np_image=img,
+                    boxes=boxes,
+                    category_names_list=category_names_list,
+                    category_to_color=category_to_color,
+                    font_scale=2,
+                    rectangle_thickness=4,
+                )
+
+        if show_figure_block:
+            box_stack = []
+            category_names_list = []
+            for figure in page.figures:
+                box_stack.append(figure.bbox)
+                category_names_list.append('figure')
+            category_to_color = {k: ImageColor.getcolor(figure_block_color, "RGB") for k in set(category_names_list)}
 
             if box_stack:
                 boxes = np.vstack(box_stack)
@@ -250,7 +234,7 @@ def render(
         if show_sentence:
             box_stack = []
             category_names_list = []
-            for block in page.blocks:
+            for block in page.blocks + page.table_blocks:
                 for sentence in block.sentences:
                     box_stack.append(sentence.bbox)
                     category_names_list.append('sentence')
@@ -271,7 +255,7 @@ def render(
         if show_word:
             box_stack = []
             category_names_list = []
-            for block in page.blocks:
+            for block in page.blocks + page.table_blocks:
                 for txt in block.texts:
                     box_stack.append(txt.bbox)
                     category_names_list.append(txt)
@@ -292,14 +276,14 @@ def render(
         # Semantic labels
         box_stack = []
         category_names_list = []
-        for annot_obj, annot in page.find_annotations_by_annotator_name(annotator_name):
+        for annot_obj, annot in page.find_all_annotations_by_annotator_name(annotator_name):
 
             score = annot.meta['score'] if isinstance(annot.meta, dict) and 'score' in annot.meta else 1
             if score < prob_threshold:
                 continue
 
             text = annot_obj.text
-            if len(nlp(text)) < word_threshold:
+            if annotator_name != 'climate_figure' and len(nlp(text)) < word_threshold:
                 continue
 
             if hasattr(annot_obj, 'bbox'):
@@ -407,6 +391,36 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                                 )
                         with gr.Box():
                             with gr.Group():
+                                show_table_block = gr.Checkbox(
+                                    label="Table block",
+                                    info="",
+                                    min_width=5, value=True, scale=2
+                                )
+                                table_block_color = gr.ColorPicker(
+                                    label="",
+                                    show_label=False,
+                                    value="#2f73a1",
+                                    info='Bounding box color',
+                                    min_width=5,
+                                    scale=1,
+                                )
+                        with gr.Box():
+                            with gr.Group():
+                                show_figure_block = gr.Checkbox(
+                                    label="Figure",
+                                    info="",
+                                    min_width=5, value=True, scale=2
+                                )
+                                figure_block_color = gr.ColorPicker(
+                                    label="",
+                                    show_label=False,
+                                    value="#ff7321",
+                                    info='Bounding box color',
+                                    min_width=5,
+                                    scale=1,
+                                )
+                        with gr.Box():
+                            with gr.Group():
                                 show_sentence = gr.Checkbox(
                                     label="Sentence",
                                     info="",
@@ -501,6 +515,8 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                 input_json_basename, gr.State(args.json_dir), gr.State(os.path.abspath(args.pdf_dir)),
                 load_image,
                 show_block, block_color,
+                show_table_block, table_block_color,
+                show_figure_block, figure_block_color,
                 show_sentence, sentence_color,
                 show_word, word_color,
                 annotator_name, prob_threshold, word_threshold, label_color

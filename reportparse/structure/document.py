@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from typing import List, Tuple, Any
 
+from reportparse.util.settings import LAYOUT_NAMES
+
 
 def find_element_by_id(elements: list, str_id: str) -> Any:
     find = [e for e in elements if e.id == str_id]
@@ -37,7 +39,8 @@ class Annotation:
     def parent_object(self) -> str:
         return self._parent_object
 
-    def set_parent_object(self, parent_object):
+    @parent_object.setter
+    def parent_object(self, parent_object):
         self._parent_object = parent_object
 
     @property
@@ -73,29 +76,151 @@ class Annotation:
         return cls(parent_object=parent_object, annotator=data['annotator'], value=data['value'], meta=data['meta'])
 
 
-class Span:
+class AnnotatableLevel:
 
-    __slots__ = ("_id", "_bbox", "_span", "_parent_block", "_reference", "_annotations")
-
-    def __init__(self, span_id: str, parent_block, span: Tuple[int, int],
-                 bbox: Tuple[float, float, float, float] = None, reference: dict = None):
-        self._id = span_id
+    def __init__(self, _id: str, text: str, bbox: Tuple[float, float, float, float]):
+        self._id = _id
         self._bbox = bbox
-        self._span = span
-        self._parent_block = parent_block
-        self._reference = reference
+        self._text = text
         self._annotations = []
+        return
 
     def __str__(self):
-        return self.text
+        raise NotImplementedError
 
     @property
     def id(self) -> str:
         return self._id
 
     @property
-    def bbox(self) -> Tuple[float, float, float, float] or None:
+    def bbox(self) -> Tuple[float, float, float, float]:
         return self._bbox
+
+    @property
+    def text(self) -> str:
+        return self._text
+
+    @property
+    def annotations(self) -> List[Annotation]:
+        return self._annotations
+
+    def add_annotation(self, annotation: Annotation):
+        self._annotations.append(annotation)
+
+    def remove_annotations_by_annotator_name(self, annotator_name: str):
+        self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
+
+    def remove_annotations_by_annotator_prefix(self, annotator_prefix: str):
+        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
+
+    def remove_annotations(self):
+        self._annotations = []
+
+    def to_dict(self) -> dict:
+        raise NotImplementedError
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        raise NotImplementedError
+
+    def find_block_by_id(self, block_id: str) -> 'Block':
+        if hasattr(self, 'blocks'):
+            return find_element_by_id(elements=self.blocks, str_id=block_id)
+        else:
+            raise NotImplementedError('Can not find blocks because this document level does not have them.')
+
+    def find_sentence_by_id(self, span_id: str) -> 'Span':
+        if hasattr(self, 'sentences'):
+            return find_element_by_id(elements=self.sentences, str_id=span_id)
+        elif hasattr(self, 'blocks'):
+            return find_element_by_id(elements=[s for b in self.blocks for s in b.sentences], str_id=span_id)
+        else:
+            raise NotImplementedError('Can not find sentences because this document level does not have them.')
+
+    def find_text_by_id(self, span_id: str) -> 'Span':
+        if hasattr(self, 'texts'):
+            return find_element_by_id(elements=self.texts, str_id=span_id)
+        elif hasattr(self, 'blocks'):
+            return find_element_by_id(elements=[t for b in self.blocks for t in b.texts], str_id=span_id)
+        else:
+            raise NotImplementedError('Can not find texts because this document level does not have them.')
+
+    def find_all_annotations(self) -> List[Tuple['AnnotatableLevel', Annotation]]:
+        annots = []
+        for annot in self.annotations:
+            annots.append((self, annot))
+
+        if hasattr(self, 'blocks'):
+            for block in self.blocks:
+                for annot in block.annotations:
+                    annots.append((block, annot))
+
+                for sentence in block.sentences:
+                    for annot in sentence.annotations:
+                        annots.append((sentence, annot))
+
+                for text in block.texts:
+                    for annot in text.annotations:
+                        annots.append((text, annot))
+        if hasattr(self, 'tables'):
+            for table in self.tables:
+                for annot in table.annotations:
+                    annots.append((table, annot))
+
+                for block in table.blocks:
+                    for annot in block.annotations:
+                        annots.append((block, annot))
+
+                    for sentence in block.sentences:
+                        for annot in sentence.annotations:
+                            annots.append((sentence, annot))
+
+                    for text in block.texts:
+                        for annot in text.annotations:
+                            annots.append((text, annot))
+        if hasattr(self, 'figures'):
+            for figure in self.figures:
+                for annot in figure.annotations:
+                    annots.append((figure, annot))
+        if hasattr(self, 'sentences'):
+            for sentence in self.sentences:
+                for annot in sentence.annotations:
+                    annots.append((sentence, annot))
+        if hasattr(self, 'texts'):
+            for text in self.texts:
+                for annot in text.annotations:
+                    annots.append((text, annot))
+
+        return annots
+
+    def find_annotator_names(self) -> List[str]:
+        annots = self.find_all_annotations()
+        annotators = sorted(set([a.annotator for o, a in annots]))
+        return annotators
+
+    def find_all_annotations_by_annotator_name(self, annotator_name: str) -> List[Tuple['AnnotatableLevel', Annotation]]:
+        annots = self.find_all_annotations()
+        annotators = [(o, a) for o, a in annots if a.annotator == annotator_name]
+        return annotators
+
+    def find_annotation_by_id(self, annotation_id: str) -> Annotation or None:
+        annots = [a for o, a in self.find_all_annotations()]
+        return find_element_by_id(elements=annots, str_id=annotation_id)
+
+
+class Span(AnnotatableLevel):
+
+    __slots__ = ("_id", "_bbox", "_span", "_parent_block", "_reference", "_annotations")
+
+    def __init__(self, span_id: str, parent_block, span: Tuple[int, int],
+                 bbox: Tuple[float, float, float, float] = None, reference: dict = None):
+        super().__init__(_id=span_id, text='', bbox=bbox)
+        self._span = span
+        self._parent_block = parent_block
+        self._reference = reference
+
+    def __str__(self):
+        return self.text
 
     @property
     def text(self) -> str:
@@ -106,21 +231,16 @@ class Span:
         return self._span
 
     @property
-    def reference(self) -> dict:
-        return self._reference
+    def parent_block(self) -> 'Block':
+        return self._parent_block
+
+    @parent_block.setter
+    def parent_block(self, parent_block):
+        self._parent_block = parent_block
 
     @property
-    def annotations(self) -> List[Annotation]:
-        return self._annotations
-
-    def add_annotation(self, annotation: Annotation):
-        self._annotations.append(annotation)
-
-    def remove_annotator(self, annotator_name: str):
-        self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
-
-    def remove_annotator_with_prefix(self, annotator_prefix: str):
-        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
+    def reference(self) -> dict:
+        return self._reference
 
     def to_dict(self) -> dict:
         return {
@@ -132,10 +252,10 @@ class Span:
         }
 
     @classmethod
-    def from_dict(cls, data: dict, parent_block):
+    def from_dict(cls, data: dict):
         span = cls(
             span_id=data['id'],
-            parent_block=parent_block,
+            parent_block=None,
             span=data['span'],
             bbox=data['bbox'],
             reference=data['reference']
@@ -147,34 +267,21 @@ class Span:
         return span
 
 
-class Block:
+class Block(AnnotatableLevel):
 
     __slots__ = ("_id", "_bbox", "_text", "_layout_type", "_sentences", "_texts", "_annotations")
 
     def __init__(self, block_id: str, text: str,
                  layout_type: str = None, bbox: Tuple[float, float, float, float] = None):
-        self._id = block_id
-        self._text: str = text
+        super().__init__(_id=block_id, text=text, bbox=bbox)
         self._sentences: List[Span] = []
         self._texts: List[Span] = []
-        self._bbox: Tuple[float, float, float, float] = bbox
+        if layout_type not in LAYOUT_NAMES:
+            raise ValueError(f'{layout_type} is not the available layout type. Valid types are {LAYOUT_NAMES}')
         self._layout_type: str = layout_type
-        self._annotations: List[Annotation] = []
 
     def __str__(self):
         return f'[{self.layout_type}] {self.text}'
-
-    @property
-    def id(self) -> str:
-        return self._id
-
-    @property
-    def text(self) -> str:
-        return self._text
-
-    @property
-    def bbox(self) -> Tuple[float, float, float, float] or None:
-        return self._bbox
 
     @property
     def layout_type(self) -> str or None:
@@ -206,19 +313,6 @@ class Block:
     def add_text_span(self, span: Span):
         self._texts.append(span)
 
-    @property
-    def annotations(self) -> List[Annotation]:
-        return self._annotations
-
-    def add_annotation(self, annotation: Annotation):
-        self._annotations.append(annotation)
-
-    def remove_annotator(self, annotator_name: str):
-        self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
-
-    def remove_annotator_with_prefix(self, annotator_prefix: str):
-        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
-
     def to_dict(self) -> dict:
         return {
             'id': self.id,
@@ -238,74 +332,123 @@ class Block:
             block.add_annotation(annot)
 
         for text_data in data['texts']:
-            block.add_text_span(
-                span=Span.from_dict(data=text_data, parent_block=block)
-            )
+            span = Span.from_dict(data=text_data)
+            span.parent_block = block
+            block.add_text_span(span)
         for sentence_data in data['sentences']:
-            block.add_sentence_span(
-                span=Span.from_dict(data=sentence_data, parent_block=block)
-            )
+            span = Span.from_dict(data=sentence_data)
+            span.parent_block = block
+            block.add_sentence_span(span)
         return block
 
-    def find_sentence_by_id(self, span_id: str) -> Span or None:
-        return find_element_by_id(elements=self.sentences, str_id=span_id)
 
-    def find_text_by_id(self, span_id: str) -> Span or None:
-        return find_element_by_id(elements=self.texts, str_id=span_id)
+class Table(AnnotatableLevel):
 
-    def find_all_annotations(self) -> List[Tuple[Span, Annotation]]:
-        annots = []
-        for annot in self.annotations:
-            annots.append((self, annot))
+    __slots__ = ("_id", "_bbox", "_html", "_text", "_blocks", "_annotations")
 
-        for sentence in self.sentences:
-            for annot in sentence.annotations:
-                annots.append((sentence, annot))
+    def __init__(self, table_id: str, html: str, text: str, bbox: Tuple[float, float, float, float] = None):
+        super().__init__(_id=table_id, text=text, bbox=bbox)
+        self._html: str = html
+        self._blocks: List[Block] = []
 
-        for text in self.texts:
-            for annot in text.annotations:
-                annots.append((text, annot))
+    def __str__(self):
+        return f'[table] {self.text}'
 
-        return annots
+    @property
+    def html(self) -> str:
+        return self._html
 
-    def find_annotator_names(self) -> List[str]:
-        annots = self.find_all_annotations()
-        annotators = sorted(set([a.annotator for o, a in annots]))
-        return annotators
+    @property
+    def blocks(self) -> List[Block]:
+        return self._blocks
 
-    def find_annotations_by_annotator_name(self, annotator_name: str) -> List[Tuple[Span, Annotation]]:
-        annots = self.find_all_annotations()
-        annotators = [(o, a) for o, a in annots if a.annotator == annotator_name]
-        return annotators
+    def add_block(self, block: Block):
+        self._blocks.append(block)
 
-    def find_annotation_by_id(self, annotation_id: str) -> Annotation or None:
-        annots = [a for o, a in self.find_all_annotations()]
-        return find_element_by_id(elements=annots, str_id=annotation_id)
+    def to_dict(self) -> dict:
+        return {
+            'table_id': self.id,
+            'bbox': self.bbox,
+            'html': self.html,
+            'text': self.text,
+            'blocks': [b.to_dict() for b in self.blocks],
+            'annotations': [a.to_dict() for a in self.annotations],
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        page = cls(table_id=data['table_id'], html=data['html'], text=data['text'], bbox=data['bbox'])
+        for annot_data in data['annotations']:
+            annot = Annotation.from_dict(parent_object=page, data=annot_data)
+            page.add_annotation(annot)
+
+        for block_data in data['blocks']:
+            page.add_block(
+                block=Block.from_dict(data=block_data)
+            )
+        return page
 
 
-class Page:
+class Figure(AnnotatableLevel):
 
-    __slots__ = ("_num", "_width", "_height", "_image", "_blocks", "_tables", "_annotations")
+    __slots__ = ("_id", "_bbox", "_html", "_text", "_blocks", "_annotations")
+
+    def __init__(self, figure_id: str, text: str, bbox: Tuple[float, float, float, float] = None):
+        super().__init__(_id=figure_id, text=text, bbox=bbox)
+
+    def __str__(self):
+        return f'[figure] {self.bbox}'
+
+    def to_dict(self) -> dict:
+        return {
+            'figure_id': self.id,
+            'bbox': self.bbox,
+            'text': self.text,
+            'annotations': [a.to_dict() for a in self.annotations],
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        page = cls(figure_id=data['figure_id'], text=data['text'], bbox=data['bbox'])
+        for annot_data in data['annotations']:
+            annot = Annotation.from_dict(parent_object=page, data=annot_data)
+            page.add_annotation(annot)
+        return page
+
+
+class Page(AnnotatableLevel):
+
+    __slots__ = ("_id", "_bbox", "_text", "_num",
+                 "_width", "_height", "_image", "_blocks", "_tables", "_figures", "_annotations")
 
     def __init__(self, page_num: int, width: int, height: int, image: np.ndarray = None):
+        super().__init__(_id='page_idx_' + str(page_num), text='', bbox=(0, 0, width, height))
         self._num: int = page_num  # Starts with zero
         self._width: int = width
         self._height: int = height
         self._image: np.ndarray = image
         self._blocks: List[Block] = []
-        self._tables: List[str] = []
-        self._annotations: List[Annotation] = []
+        self._tables: List[Table] = []
+        self._figures: List = []
 
     def __str__(self):
         return f'[P.{self.num}] {self.width} x {self.height}, {len(self.blocks)} blocks and {len(self.tables)} tables'
 
     @property
-    def id(self) -> str:
-        return 'page_idx_' + str(self.num)
-
-    @property
     def text(self) -> str:
-        return '\n\n'.join([b.text for b in self.blocks])
+        text = '\n\n'.join([
+            b.text for b in (self.blocks + self.table_blocks)
+        ])
+        return text
+
+    def get_text_by_target_layouts(self, target_layouts: List[str]) -> str:
+        if not target_layouts:
+            raise ValueError(f'At least one target layout must be specified from {LAYOUT_NAMES}')
+        text = '\n\n'.join([
+            b.text for b in (self.blocks + self.table_blocks)
+            if (target_layouts and b.layout_type in target_layouts)
+        ])
+        return text
 
     @property
     def num(self) -> int:
@@ -331,24 +474,22 @@ class Page:
         self._blocks.append(block)
 
     @property
-    def tables(self) -> List[str]:
-        return self._tables
-
-    def add_table(self, table_html):
-        self._tables.append(table_html)
+    def table_blocks(self) -> List[Block]:
+        return [b for t in self._tables for b in t.blocks]
 
     @property
-    def annotations(self) -> List[Annotation]:
-        return self._annotations
+    def tables(self) -> List[Table]:
+        return self._tables
 
-    def add_annotation(self, annotation: Annotation):
-        self._annotations.append(annotation)
+    def add_table(self, table: Table):
+        self._tables.append(table)
 
-    def remove_annotator(self, annotator_name: str):
-        self._annotations = [a for a in self._annotations if a.annotator != annotator_name]
+    @property
+    def figures(self) -> List[Figure]:
+        return self._figures
 
-    def remove_annotator_with_prefix(self, annotator_prefix: str):
-        self._annotations = [a for a in self._annotations if not a.annotator.startswith(annotator_prefix)]
+    def add_figure(self, figure: Figure):
+        self._figures.append(figure)
 
     def to_dict(self) -> dict:
         return {
@@ -356,7 +497,8 @@ class Page:
             'width': self.width,
             'height': self.height,
             'blocks': [b.to_dict() for b in self.blocks],
-            'tables': self.tables,
+            'tables': [t.to_dict() for t in self.tables],
+            'figures': [f.to_dict() for f in self.figures],
             'annotations': [a.to_dict() for a in self.annotations],
             #'image': self.image.tolist(),
         }
@@ -367,54 +509,13 @@ class Page:
         for annot_data in data['annotations']:
             annot = Annotation.from_dict(parent_object=page, data=annot_data)
             page.add_annotation(annot)
-
         for block_data in data['blocks']:
-            page.add_block(
-                block=Block.from_dict(data=block_data)
-            )
+            page.add_block(block=Block.from_dict(data=block_data))
+        for table_data in data['tables']:
+            page.add_table(table=Table.from_dict(data=table_data))
+        for figure_data in data['figures']:
+            page.add_figure(figure=Figure.from_dict(data=figure_data))
         return page
-
-    def find_block_by_id(self, block_id: str) -> Block:
-        return find_element_by_id(elements=self.blocks, str_id=block_id)
-
-    def find_sentence_by_id(self, span_id: str) -> Span:
-        return find_element_by_id(elements=[s for b in self.blocks for s in b.sentences], str_id=span_id)
-
-    def find_text_by_id(self, span_id: str) -> Span:
-        return find_element_by_id(elements=[t for b in self.blocks for t in b.texts], str_id=span_id)
-
-    def find_all_annotations(self) -> List[Tuple[Block or Span, Annotation]]:
-        annots = []
-        for annot in self.annotations:
-            annots.append((self, annot))
-
-        for block in self.blocks:
-            for annot in block.annotations:
-                annots.append((block, annot))
-
-            for sentence in block.sentences:
-                for annot in sentence.annotations:
-                    annots.append((sentence, annot))
-
-            for text in block.texts:
-                for annot in text.annotations:
-                    annots.append((text, annot))
-
-        return annots
-
-    def find_annotator_names(self) -> List[str]:
-        annots = self.find_all_annotations()
-        annotators = sorted(set([a.annotator for o, a in annots]))
-        return annotators
-
-    def find_annotations_by_annotator_name(self, annotator_name: str) -> List[Tuple[Block or Span, Annotation]]:
-        annots = self.find_all_annotations()
-        annotators = [(o, a) for o, a in annots if a.annotator == annotator_name]
-        return annotators
-
-    def find_annotation_by_id(self, annotation_id: str) -> Annotation or None:
-        annots = [a for o, a in self.find_all_annotations()]
-        return find_element_by_id(elements=annots, str_id=annotation_id)
 
 
 class Document:
@@ -436,24 +537,10 @@ class Document:
     def pages(self) -> List[Page]:
         return self._pages
 
-    def find_all_annotations(self) -> List[Tuple[Page or Block or Span, Annotation]]:
+    def find_all_annotations(self) -> List[Tuple[AnnotatableLevel, Annotation]]:
         annots = []
         for page in self.pages:
-            for annot in page.annotations:
-                annots.append((page, annot))
-
-            for block in page.blocks:
-                for annot in block.annotations:
-                    annots.append((block, annot))
-
-                for sentence in block.sentences:
-                    for annot in sentence.annotations:
-                        annots.append((sentence, annot))
-
-                for text in block.texts:
-                    for annot in text.annotations:
-                        annots.append((text, annot))
-
+            annots += page.find_all_annotations()
         return annots
 
     def find_annotator_names(self) -> List[str]:
@@ -461,7 +548,7 @@ class Document:
         annotators = sorted(set([a.annotator for o, a in annots]))
         return annotators
 
-    def find_annotations_by_annotator_name(self, annotator_name: str) -> List[Tuple[Page or Block or Span, Annotation]]:
+    def find_all_annotations_by_annotator_name(self, annotator_name: str) -> List[Tuple[AnnotatableLevel, Annotation]]:
         annots = self.find_all_annotations()
         annotators = [(o, a) for o, a in annots if a.annotator == annotator_name]
         return annotators
@@ -469,6 +556,14 @@ class Document:
     def find_annotation_by_id(self, annotation_id: str) -> Annotation or None:
         annots = [a for o, a in self.find_all_annotations()]
         return find_element_by_id(elements=annots, str_id=annotation_id)
+
+    def remove_annotations_by_annotator_name(self, annotator_name: str):
+        for annot_obj, _ in self.find_all_annotations_by_annotator_name(annotator_name=annotator_name):
+            annot_obj.remove_annotations_by_annotator_name(annotator_name=annotator_name)
+
+    def remove_annotations(self):
+        for annot_obj, _ in self.find_all_annotations():
+            annot_obj.remove_annotations()
 
     def add_page(self, page: Page):
         if page.num in [p.num for p in self._pages]:
@@ -514,8 +609,10 @@ class Document:
         return document
 
     def to_dataframe(self, level: str) -> pd.DataFrame:
-        if level not in ['page', 'block', 'sentence']:
-            raise ValueError(f'The specified level ({level}) is invalid. It must be either page, block, or sentence.')
+        if level not in ['page', 'block', 'sentence', 'table', 'figure']:
+            raise ValueError(
+                f'The specified level ({level}) is invalid. It must be either page, block, table, figure, or sentence.'
+            )
 
         records = []
         for page in self.pages:
@@ -533,7 +630,7 @@ class Document:
                         d[annot.annotator + '-score'] = annot.meta['score']
                 records.append(d)
             elif level == 'block':
-                for block in page.blocks:
+                for block in page.blocks + page.table_blocks:
                     d = {
                         'page_id': page.id,
                         'block_id': block.id,
@@ -562,6 +659,33 @@ class Document:
                             if 'score' in annot.meta:
                                 d[annot.annotator + '-score'] = annot.meta['score']
                         records.append(d)
-
+            elif level == 'table':
+                for table in page.tables:
+                    d = {
+                        'page_id': page.id,
+                        'table_id': table.id,
+                        'table_bbox': table.bbox,
+                        'table_html': table.html,
+                        'table_text': table.text,
+                        'table_block_ids': [b.id for b in table.blocks],
+                    }
+                    for annot in table.annotations:
+                        d[annot.annotator] = annot.value
+                        if 'score' in annot.meta:
+                            d[annot.annotator + '-score'] = annot.meta['score']
+                    records.append(d)
+            elif level == 'figure':
+                for figure in page.figures:
+                    d = {
+                        'page_id': page.id,
+                        'figure_id': figure.id,
+                        'figure_bbox': figure.bbox,
+                        'figure_text': figure.text,
+                    }
+                    for annot in figure.annotations:
+                        d[annot.annotator] = annot.value
+                        if 'score' in annot.meta:
+                            d[annot.annotator + '-score'] = annot.meta['score']
+                    records.append(d)
         df = pd.DataFrame(records)
         return df

@@ -6,6 +6,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
+from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
 
 
 @BaseAnnotator.register("custom_huggingface")
@@ -42,10 +43,10 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
         level = args.custom_huggingface_level if args is not None else level
         target_layouts = args.custom_huggingface_target_layouts if args is not None else target_layouts
 
-        assert level in ['page', 'block', 'sentence']
+        assert level in LEVEL_NAMES
         assert max_len > 0
         assert batch_size > 0
-        assert set(target_layouts) & {'title', 'text', 'list'}
+        assert set(target_layouts) & LAYOUT_NAMES
         assert model_name_or_path is not None
 
         if annotator_name is None:
@@ -60,6 +61,12 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
             self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, max_len=max_len)
             self.model = AutoModelForSequenceClassification.from_pretrained(tokenizer_name_or_path)
 
+        if hasattr(self.model.config, 'problem_type') \
+                and self.model.config.problem_type == 'multi_label_classification':
+            multi_label = True
+        else:
+            multi_label = False
+
         document = annotate_by_sequence_classification(
             annotator_name=annotator_name,
             document=document,
@@ -67,7 +74,8 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
             model=self.model,
             level=level,
             target_layouts=target_layouts,
-            batch_size=batch_size
+            batch_size=batch_size,
+            multi_label=multi_label,
         )
 
         return document
@@ -108,6 +116,7 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
             '--custom_huggingface_target_layouts',
             type=str,
             nargs='+',
-            default=['text', 'list']
+            default=['text', 'list'],
+            choices=LAYOUT_NAMES
         )
 

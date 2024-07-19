@@ -7,6 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
+from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
 
 
 @BaseAnnotator.register("netzero_reduction")
@@ -61,10 +62,10 @@ class NetzeroReductionAnnotator(BaseAnnotator):
         level = args.netzero_reduction_level if args is not None else level
         use_deprecated = args.netzero_reduction_use_deprecated if args is not None else use_deprecated
 
-        assert level in ['block', 'sentence']
+        assert level in LEVEL_NAMES
         assert max_len > 0
         assert batch_size > 0
-        assert set(target_layouts) & {'title', 'text', 'list'}
+        assert set(target_layouts) & LAYOUT_NAMES
 
         if use_deprecated:
             logger.warning('You are using the deprecated version. We will force parameters.')
@@ -129,7 +130,7 @@ class NetzeroReductionAnnotator(BaseAnnotator):
                 batch_size=batch_size
             )
             climate_unrelated_object_ids = []
-            for annot_obj, annot in document_climate_annot.find_annotations_by_annotator_name('dummy'):
+            for annot_obj, annot in document_climate_annot.find_all_annotations_by_annotator_name('dummy'):
                 if annot.value == ('none' if level == 'sentence' else 'no'):
                     climate_unrelated_object_ids.append(annot_obj.id)
 
@@ -137,13 +138,13 @@ class NetzeroReductionAnnotator(BaseAnnotator):
             for page in document.pages:
                 for block in page.blocks:
                     if level == 'block' and block.id in climate_unrelated_object_ids:
-                        block.remove_annotator(annotator_name='netzero_reduction')
+                        block.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
                         #logger.info(f'Removed the "netzero_reduction" annotation of the following block '
                         #            f'because it is not related to environment: "{block.text}".')
                         continue
                     for sentence in block.sentences:
                         if level == 'sentence' and sentence.id in climate_unrelated_object_ids:
-                            sentence.remove_annotator(annotator_name='netzero_reduction')
+                            sentence.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
                             #logger.info(f'Removed the "netzero_reduction" annotation of the following sentence '
                             #            f'because it is not related to environment: "{sentence.text}".')
                             continue
@@ -170,7 +171,8 @@ class NetzeroReductionAnnotator(BaseAnnotator):
             '--netzero_reduction_target_layouts',
             type=str,
             nargs='+',
-            default=['text', 'list']
+            default=['text', 'list'],
+            choices=LAYOUT_NAMES
         )
         parser.add_argument(
             '--netzero_reduction_use_deprecated',

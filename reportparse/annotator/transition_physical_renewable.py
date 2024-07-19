@@ -7,6 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
+from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
 
 
 @BaseAnnotator.register("transition_physical_renewable")
@@ -61,10 +62,10 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
         target_layouts = args.transition_physical_renewable_target_layouts if args is not None else target_layouts
         use_deprecated = args.transition_physical_renewable_use_deprecated if args is not None else use_deprecated
 
-        assert level in ['block', 'sentence']
+        assert level in LEVEL_NAMES
         assert max_len > 0
         assert batch_size > 0
-        assert set(target_layouts) & {'title', 'text', 'list'}
+        assert set(target_layouts) & LAYOUT_NAMES
 
         if use_deprecated:
             logger.warning('You are using the deprecated version (originally called "renewable" annotator). '
@@ -107,7 +108,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             return document_renewable_annot
 
         renewable_object_id2score = dict()
-        for annot_obj, annot in document_renewable_annot.find_annotations_by_annotator_name('renewable'):
+        for annot_obj, annot in document_renewable_annot.find_all_annotations_by_annotator_name('renewable'):
             if annot.value == 'LABEL_1':
                 renewable_object_id2score[annot_obj.id] = annot.meta['score']
 
@@ -120,7 +121,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             target_layouts=target_layouts,
             batch_size=batch_size
         )
-        for annot_obj, annot in document.find_annotations_by_annotator_name('transition_physical_renewable'):
+        for annot_obj, annot in document.find_all_annotations_by_annotator_name('transition_physical_renewable'):
             new_label = self.transition_physical_label_map[annot.value]
             if new_label == 'transition_risk' and annot_obj.id in renewable_object_id2score.keys():
                 new_label += '-renewable_energy'
@@ -150,7 +151,8 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             '--transition_physical_renewable_target_layouts',
             type=str,
             nargs='+',
-            default=['text', 'list']
+            default=['text', 'list'],
+            choices=LAYOUT_NAMES
         )
         parser.add_argument(
             '--transition_physical_renewable_use_deprecated',

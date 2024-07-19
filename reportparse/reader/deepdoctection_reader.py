@@ -3,13 +3,14 @@ import argparse
 import os
 from typing import List
 
+import deepdoctection.utils
 import math
 import numpy as np
 import deepdoctection as dd
 import spacy
 
 from reportparse.reader.base import BaseReader
-from reportparse.structure.document import Document, Page, Block
+from reportparse.structure.document import Document, Page, Block, Table, Figure
 
 
 @BaseReader.register("deepdoctection")
@@ -88,6 +89,70 @@ class DeepdoctectionReader(BaseReader):
 
         return block
 
+    def _make_table(self, page: dd.Page, table: dd.Table) -> Table:
+        table_obj = Table(table_id=table.annotation_id, html=table.html, text=table.text, bbox=tuple(table.bbox))
+        for cell in table.cells:
+            text_annotation_ids = cell.text_['annotation_ids']
+            text_bboxes = [page.get_annotation(annotation_ids=aid)[0].bbox for aid in text_annotation_ids]
+
+            block_text = ''
+            text_spans = []
+            for text in cell.text_['text_list']:
+                text_spans.append((len(block_text), len(block_text + text)))
+                block_text += text + ' '
+
+            assert len(text_spans) == len(text_annotation_ids) == len(text_bboxes)
+
+            block = Block(
+                block_id=cell.annotation_id,
+                text=block_text.rstrip(),
+                layout_type=cell.category_name.value,
+                bbox=tuple(cell.bbox)
+            )
+
+            for text_annotation_id, text_span, text_bbox in zip(text_annotation_ids, text_spans, text_bboxes):
+                block.add_text(
+                    span_id=text_annotation_id,
+                    span=text_span,
+                    bbox=text_bbox,
+                )
+
+            doc = self.en_core_web_sm(block_text)
+
+            for sent in doc.sents:
+
+                sent_bbox = [9999999, 9999999, 0, 0]
+                start_text_annotation_id, end_text_annotation_id = None, None
+                for text_span, text_bbox, text_annotation_id in zip(text_spans, text_bboxes, text_annotation_ids):
+                    if set(range(*text_span)) & set(range(sent.start_char, sent.end_char)):
+                        sent_bbox[0] = min(sent_bbox[0], text_bbox[0])
+                        sent_bbox[1] = min(sent_bbox[1], text_bbox[1])
+                        sent_bbox[2] = max(sent_bbox[2], text_bbox[2])
+                        sent_bbox[3] = max(sent_bbox[3], text_bbox[3])
+
+                        if start_text_annotation_id is None:
+                            start_text_annotation_id = text_annotation_id
+                        end_text_annotation_id = text_annotation_id
+
+                assert start_text_annotation_id is not None
+                assert end_text_annotation_id is not None
+                #assert sent.text.startswith(layout.text_['text_list'][text_annotation_ids.index(start_text_annotation_id)])
+                #assert sent.text.endswith(layout.text_['text_list'][text_annotation_ids.index(end_text_annotation_id)])
+
+                block.add_sentence(
+                    span_id=cell.annotation_id + '_sent_' + str(len(block.sentences)),
+                    span=(sent.start_char, sent.end_char),
+                    bbox=sent_bbox,
+                    reference={
+                        'start_text_annotation_id': start_text_annotation_id,
+                        'end_text_annotation_id': end_text_annotation_id,
+                    }
+                )
+
+            table_obj.add_block(block=block)
+
+        return table_obj
+
     def analyze_image(
             self,
             pdf_path: str,
@@ -119,19 +184,45 @@ class DeepdoctectionReader(BaseReader):
                 page_num=page.page_number, width=page.width, height=page.height, image=image
             )
 
-            for document_id, image_id, page_number, annotation_id, reading_order, category_name, text in page.chunks:
+            all_chunks = []
+            for chunk in page._order("layouts"):
+                all_chunks.append(
+                    (
+                        chunk.annotation_id,
+                        chunk.text,
+                    )
+                )
+
+            for annotation_id, text in all_chunks:
                 layout = page.get_annotation(annotation_ids=annotation_id)
                 assert len(layout) == 1
                 layout = layout[0]
 
-                if not text.strip():
-                    continue
+                if layout.category_name.value in ['text', 'list', 'title']:
+                    if not text.strip():
+                        continue
+                    block = self._make_block(page=page, layout=layout)
+                    doc_page.add_block(block=block)
+                else:
+                    raise ValueError(f'Non-supported layout type {layout.category_name.value}')
 
-                block = self._make_block(page=page, layout=layout)
-                doc_page.add_block(block=block)
+            # Add figures
+            figure_annotations = [a for a in page.annotations if a.category_name.name == 'figure']
+            for figure_annotation in figure_annotations:
+                doc_page.add_figure(
+                    figure=Figure(
+                        figure_id=figure_annotation.annotation_id,
+                        text=figure_annotation.text,
+                        bbox=tuple(figure_annotation.bbox)),
+                )
+
+            # Add tables
+            for table in page.tables:
+                doc_page.add_table(table=self._make_table(page=page, table=table))
 
             document.add_page(page=doc_page)
 
+            #import matplotlib.pyplot as plt
             #image = page.viz()
             #plt.figure(figsize=(25, 17))
             #plt.axis('off')
