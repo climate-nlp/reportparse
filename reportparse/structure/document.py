@@ -82,7 +82,7 @@ class AnnotatableLevel:
         self._id = _id
         self._bbox = bbox
         self._text = text
-        self._annotations = []
+        self._annotations: List[Annotation] = []
         return
 
     def __str__(self):
@@ -557,7 +557,7 @@ class Document:
         annots = [a for o, a in self.find_all_annotations()]
         return find_element_by_id(elements=annots, str_id=annotation_id)
 
-    def remove_annotations_by_annotator_name(self, annotator_name: str):
+    def remove_all_annotations_by_annotator_name(self, annotator_name: str):
         for annot_obj, _ in self.find_all_annotations_by_annotator_name(annotator_name=annotator_name):
             annot_obj.remove_annotations_by_annotator_name(annotator_name=annotator_name)
 

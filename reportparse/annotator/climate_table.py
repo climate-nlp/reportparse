@@ -87,7 +87,7 @@ class ClimateTableAnnotator(BaseAnnotator):
                 )
                 table.add_annotation(annot_obj)
 
-        document.remove_annotations_by_annotator_name('dummy')
+        document.remove_all_annotations_by_annotator_name('dummy')
 
         return document
 
