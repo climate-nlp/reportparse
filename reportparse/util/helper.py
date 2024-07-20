@@ -2,6 +2,55 @@ from typing import List, Dict, Optional, Tuple
 import numpy as np
 import cv2
 import deepdoctection as dd
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+
+class HFModelCache:
+    """
+    This is a singleton class to handle caching of huggingface tokenizers and models
+    """
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        if not hasattr(self, '_tokenizer_cache'):
+            self._tokenizer_cache = dict()
+        if not hasattr(self, '_model_cache'):
+            self._model_cache = dict()
+
+    @property
+    def current_model_cache(self) -> Dict[str, AutoModelForSequenceClassification]:
+        return self._model_cache
+
+    @property
+    def current_tokenizer_cache(self) -> Dict[str, AutoTokenizer]:
+        return self._tokenizer_cache
+
+    def clear(self):
+        self._model_cache = dict()
+        self._tokenizer_cache = dict()
+        return
+
+    def load_tokenizer(self, tokenizer_name: str, max_len: int = 512):
+        if tokenizer_name in self._tokenizer_cache:
+            tokenizer = self._tokenizer_cache[tokenizer_name]
+        else:
+            tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+            self._tokenizer_cache[tokenizer_name] = tokenizer
+        tokenizer.model_max_length = max_len
+        return tokenizer
+
+    def load_sequence_classification_model(self, model_name: str):
+        if model_name in self._model_cache:
+            model = self._model_cache[model_name]
+        else:
+            model = AutoModelForSequenceClassification.from_pretrained(model_name)
+            self._model_cache[model_name] = model
+        return model
 
 
 def draw_boxes(

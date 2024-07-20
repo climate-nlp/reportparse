@@ -7,6 +7,7 @@ from distutils.util import strtobool
 from reportparse.structure.document import Document
 from reportparse.reader.base import BaseReader
 from reportparse.annotator.base import BaseAnnotator
+from reportparse.util.helper import HFModelCache
 
 
 def main(args):
@@ -119,6 +120,9 @@ def main(args):
             for annotator in annotators:
                 logger.info(f'Apply the annotator "{annotator}".')
                 document = annotator.annotate(document=document, args=args)
+                logger.info(f'Finished annotations by "{annotator}".')
+                logger.info(f'Current cached huggingface models: {HFModelCache().current_model_cache.keys()}')
+                logger.info(f'Current cached huggingface tokenizers: {HFModelCache().current_tokenizer_cache.keys()}')
 
             # Save the easy-to-use CSV datasets
             if args.output_csv_dataset:

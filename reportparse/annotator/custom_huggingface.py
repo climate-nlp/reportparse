@@ -1,12 +1,11 @@
 from logging import getLogger
 import argparse
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
 from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
+from reportparse.util.helper import HFModelCache
 
 
 @BaseAnnotator.register("custom_huggingface")
@@ -18,8 +17,6 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
 
     def __init__(self):
         super().__init__()
-        self.tokenizer = None
-        self.model = None
         return
 
     def annotate(
@@ -57,9 +54,10 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
             logger.warning('You do not specify the tokenizer name. Will use the model name instead.')
             tokenizer_name_or_path = model_name_or_path
 
-        if self.tokenizer is None or self.model is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, max_len=max_len)
-            self.model = AutoModelForSequenceClassification.from_pretrained(tokenizer_name_or_path)
+        tokenizer = HFModelCache().load_tokenizer(
+            model_name_or_path, max_len=max_len)
+        model = HFModelCache().load_sequence_classification_model(
+            tokenizer_name_or_path)
 
         if hasattr(self.model.config, 'problem_type') \
                 and self.model.config.problem_type == 'multi_label_classification':
@@ -70,8 +68,8 @@ class CustomHuggingfaceAnnotator(BaseAnnotator):
         document = annotate_by_sequence_classification(
             annotator_name=annotator_name,
             document=document,
-            tokenizer=self.tokenizer,
-            model=self.model,
+            tokenizer=tokenizer,
+            model=model,
             level=level,
             target_layouts=target_layouts,
             batch_size=batch_size,

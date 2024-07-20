@@ -1,12 +1,11 @@
 from logging import getLogger
 import argparse
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
 from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
+from reportparse.util.helper import HFModelCache
 
 
 @BaseAnnotator.register("sst2")
@@ -22,8 +21,6 @@ class SST2Annotator(BaseAnnotator):
 
     def __init__(self):
         super().__init__()
-        self.tokenizer = None
-        self.model = None
         self.sst2_model_name_or_path = 'distilbert-base-uncased-finetuned-sst-2-english'
         return
 
@@ -51,20 +48,16 @@ class SST2Annotator(BaseAnnotator):
         if level != 'sentence':
             logger.warning('This model is trained on sentences. It may not perform well on blocks.')
 
-        if self.tokenizer is None or self.model is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.sst2_model_name_or_path,
-                max_len=max_len
-            )
-            self.model = AutoModelForSequenceClassification.from_pretrained(
-                self.sst2_model_name_or_path
-            )
+        tokenizer = HFModelCache().load_tokenizer(
+            self.sst2_model_name_or_path, max_len=max_len)
+        model = HFModelCache().load_sequence_classification_model(
+            self.sst2_model_name_or_path)
 
         document = annotate_by_sequence_classification(
             annotator_name='sst2',
             document=document,
-            tokenizer=self.tokenizer,
-            model=self.model,
+            tokenizer=tokenizer,
+            model=model,
             level=level,
             target_layouts=target_layouts,
             batch_size=batch_size

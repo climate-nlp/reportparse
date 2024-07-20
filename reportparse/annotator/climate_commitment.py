@@ -2,12 +2,11 @@ from logging import getLogger
 import argparse
 from distutils.util import strtobool
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
 from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
+from reportparse.util.helper import HFModelCache
 
 
 @BaseAnnotator.register("climate_commitment")
@@ -31,11 +30,7 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
 
     def __init__(self):
         super().__init__()
-        self.tokenizer = None
-        self.model = None
         self.climate_commitment_model_name_or_path = 'climatebert/distilroberta-base-climate-commitment'
-        self.block_climate_tokenizer = None
-        self.block_climate_model = None
         self.block_climate_detection_model_name_or_path = 'climatebert/distilroberta-base-climate-detector'
         return
 
@@ -70,20 +65,14 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
             logger.warning('The model is trained on paragraphs (similar to blocks). '
                            'It may not perform well on sentences.')
 
-        if self.tokenizer is None or self.model is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.climate_commitment_model_name_or_path,
-                max_len=max_len
-            )
-            self.model = AutoModelForSequenceClassification.from_pretrained(
-                self.climate_commitment_model_name_or_path
-            )
+        tokenizer = HFModelCache().load_tokenizer(self.climate_commitment_model_name_or_path, max_len=max_len)
+        model = HFModelCache().load_sequence_classification_model(self.climate_commitment_model_name_or_path)
 
         document = annotate_by_sequence_classification(
             annotator_name='climate_commitment',
             document=document,
-            tokenizer=self.tokenizer,
-            model=self.model,
+            tokenizer=tokenizer,
+            model=model,
             level=level,
             target_layouts=target_layouts,
             batch_size=batch_size
@@ -94,21 +83,17 @@ class ClimateCommitmentAnnotator(BaseAnnotator):
         """
 
         if not use_deprecated:
-            if self.block_climate_tokenizer is None or self.block_climate_model is None:
-                self.block_climate_tokenizer = AutoTokenizer.from_pretrained(
-                    self.block_climate_detection_model_name_or_path,
-                    max_len=max_len
-                )
-                self.block_climate_model = AutoModelForSequenceClassification.from_pretrained(
-                    self.block_climate_detection_model_name_or_path
-                )
+            block_climate_tokenizer = HFModelCache().load_tokenizer(
+                self.block_climate_detection_model_name_or_path, max_len=max_len)
+            block_climate_model = HFModelCache().load_sequence_classification_model(
+                self.block_climate_detection_model_name_or_path)
 
             # Get climate related mentions
             document_climate_annot = annotate_by_sequence_classification(
                 annotator_name='dummy',
                 document=document,
-                tokenizer=self.block_climate_tokenizer,
-                model=self.block_climate_model,
+                tokenizer=block_climate_tokenizer,
+                model=block_climate_model,
                 level=level,
                 target_layouts=target_layouts,
                 batch_size=batch_size
