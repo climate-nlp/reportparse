@@ -97,7 +97,7 @@ def main(args):
                                    f'because you are loading document layouts from the json file.')
                     document = Document.from_json_file(file_path=output_path)
                     logger.info(f'Clear all the existing annotations')
-                    document.remove_annotations()
+                    document.remove_all_annotations()
                 elif args.overwrite_strategy == "annotator-add":
                     logger.warning(f'The output file "{output_path}" exists. '
                                    f'We will use the existing "reader" result and add new annotator results.')

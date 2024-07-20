@@ -173,12 +173,7 @@ class DeepdoctectionReader(BaseReader):
             if skip_pages is not None and page.page_number in skip_pages:
                 continue
 
-            image = page.image
-            if skip_load_image:
-                image = np.full(
-                    shape=(math.ceil(page.height), math.ceil(page.width), 3),
-                    fill_value=255
-                ).astype(np.uint8)
+            image = None if skip_load_image else page.image
 
             doc_page = Page(
                 page_num=page.page_number, width=page.width, height=page.height, image=image

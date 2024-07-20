@@ -561,7 +561,7 @@ class Document:
         for annot_obj, _ in self.find_all_annotations_by_annotator_name(annotator_name=annotator_name):
             annot_obj.remove_annotations_by_annotator_name(annotator_name=annotator_name)
 
-    def remove_annotations(self):
+    def remove_all_annotations(self):
         for annot_obj, _ in self.find_all_annotations():
             annot_obj.remove_annotations()
 

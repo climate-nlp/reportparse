@@ -168,10 +168,11 @@ class PyMuPDFReader(BaseReader):
 
             if skip_load_image:
                 image_info = load_dummy_page_image(page=page)
+                img = None
             else:
                 image_info = load_image_from_page(page=page)
+                img = image_info['img']
 
-            img = image_info['img']
             mat = image_info['mat']
             width = image_info['width']
             height = image_info['height']

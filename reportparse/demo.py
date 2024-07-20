@@ -7,6 +7,7 @@ import gradio as gr
 import spacy
 import copy
 import json
+import math
 from PIL import ImageColor
 from wordcloud import WordCloud
 
@@ -146,7 +147,13 @@ def render(
 
     for page in progress.tqdm(document.pages[:5], desc='Drawing output images'):
 
-        img = copy.deepcopy(page.image)
+        if page.image is not None:
+            img = copy.deepcopy(page.image)
+        else:
+            img = np.full(
+                shape=(math.ceil(page.height), math.ceil(page.width), 3),
+                fill_value=255
+            ).astype(np.uint8)
 
         if show_block:
             box_stack = []
