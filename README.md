@@ -146,7 +146,7 @@ python -m reportparse.show_version
 ````
 
 
-## Quick example 1 (extracting environmental claims from a sustainability report)
+## Quick example 1 (extracting environmental claims and sentiments from a sustainability report)
 
 The following shows examples of analyzing example PDF file at ```reportparse/asset/example.pdf```. 
 For example, we use ```pymupdf``` as the [reader](#readers) and ```environmental_claim``` and ```sst2``` (provided by DistilBERT community) as the [annotators](#annotators).
@@ -198,26 +198,31 @@ python -m example_code
 
 ### Example data analysis using the output file of ReportParse
 
-Extracting environmental claims and counting them.
+Extracting environmental claims and sentiments, and counting them.
 
 ```python
 import pandas as pd
 
 # Read the CSV dataset file
 df = pd.read_csv('reportparse/asset/example_results/example.pdf.sentence-level-dataset.csv')
+
+# ----------------------------------------
+# Extract and count environmental claims
+# ----------------------------------------
+
 # Get environmental claim sentences
 df_environment = df[df['environmental_claim'] == 'yes']
 # Remove "too short" sentences
 df_environment = df[(df['sentence_text'].str.split().str.len() > 20)]
 
 # Show some example text
-print(df_environment[:5])
+print(df_environment[:5]['sentence_text'])
 # Results -->
 # 10    Hitachi identifies, evaluates, and manages cli...
+# 11    The results are tabulated by the Sustainabilit...
+# 16    Total CO2 emissions from the use of sold produ...
 # 18    Therefore, we have established COz emissions p...
 # 19    We also set and manage a metric for avoided em...
-# 20    We continue to reduce COz emissions generated ...
-# 22    In addition, in April 2021, Hitachi, Ltd. intr...
 # Name: sentence_text, dtype: object
 
 # Show some example texts
@@ -227,6 +232,33 @@ print('The number of environmental claim sentences:', len(df_environment))
 # Result --> The number of environmental claim sentences: 62
 print('Environmental claim ratio [%]:', 100 * len(df_environment) / len(df))
 # Result --> Environmental claim ratio [%]: 39.24050632911393
+
+
+# ----------------------------------------
+# Extract and count positive/negative sentiments for environmental claims
+# ----------------------------------------
+
+# Get environmental claim sentences
+df_environment_pos = df_environment[df_environment['sst2'] == 'POSITIVE']
+df_environment_neg = df_environment[df_environment['sst2'] == 'NEGATIVE']
+
+# Show some example text
+print(df_environment_pos[:2]['sentence_text'])
+# 10    Hitachi identifies, evaluates, and manages cli...
+# 18    Therefore, we have established COz emissions p...
+# Name: sentence_text, dtype: object
+print(df_environment_neg[:2]['sentence_text'])
+# Results -->
+# 11    The results are tabulated by the Sustainabilit...
+# 16    Total CO2 emissions from the use of sold produ...
+# Name: sentence_text, dtype: object
+
+# Note: It seems that negative claims are more on risk-related descriptions
+
+print('The number of "positive" environmental claim sentences:', len(df_environment_pos))
+# Result --> The number of "positive" environmental claim sentences: 33
+print('The number of "negative" environmental claim sentences:', len(df_environment_neg))
+# Result --> The number of "positive" environmental claim sentences: 29
 ```
 
 
