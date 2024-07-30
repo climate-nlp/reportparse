@@ -84,6 +84,8 @@ See current supported [readers](#readers) and [annotators](#annotators).
 
 ### Citation
 
+Please cite the following paper if you use our tool in your work.
+
 ```bibtex
 @inproceedings{morio-etal-2024-reportparse,
   title     = {{R}eport{P}arse: A Unified NLP Tool for Extracting Document Structure and Semantics of Corporate Sustainability Reporting},
@@ -95,6 +97,13 @@ See current supported [readers](#readers) and [annotators](#annotators).
   note      = {Demos},
 }
 ```
+
+### References
+
+Our project is inspired by or related to following wonderful projects. If you are interested in, please read our paper and the following papers.
+- [PaperMage](https://github.com/EdisonNi-hku/chatreport/tree/main): A standardized tool to analyze academic papers. The technical concept of our project is inspired by PaperMage.
+- [CHATREPORT](https://aclanthology.org/2023.emnlp-demo.45/): A first tooled analyzer for sustainability reports. If you do not need the document layout analysis and want to use LLMs, this tool would be useful. For more details on the differences between our tool and this, see our paper.
+
 
 
 ## Quick setup
@@ -137,7 +146,7 @@ sudo apt-get update
 sudo apt install -y libtool poppler-utils python3-opencv tesseract-ocr qpdf
 ```
 
-If you want to install the above libs without root permissions, please refer [auto_install_deepdoctection_deps.sh](auto_install_deepdoctection_deps.sh) and example notebook [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing).
+If you want to install the above libs without root permissions, please refer to [auto_install_deepdoctection_deps.sh](auto_install_deepdoctection_deps.sh) and example notebook [<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/drive/1d9Oe0r3sJpag1e2wMWH6SItuBsQUXFB5?usp=sharing).
 
 After installing all of the above, you can check if the required packages are installed.
 
@@ -161,6 +170,15 @@ python -m reportparse.main \
   --overwrite_strategy "no" \
   --reader "pymupdf" \
   --annotators "environmental_claim" "sst2"
+ 
+# To use layout analysis,
+python -m reportparse.main \
+  -i ./reportparse/asset/example.pdf \
+  -o ./results \
+  --input_type "pdf" \
+  --overwrite_strategy "no" \
+  --reader "deepdoctection" \
+  --annotators "environmental_claim" "sst2"
 ```
 
 ### By the python code
@@ -173,6 +191,8 @@ from reportparse.reader.base import BaseReader
 from reportparse.annotator.base import BaseAnnotator
 
 reader = BaseReader.by_name('pymupdf')()
+# To use layout analysis,
+# reader = BaseReader.by_name('deepdoctection')()
 document = reader.read(input_path='./reportparse/asset/example.pdf')
 
 document = BaseAnnotator.by_name("environmental_claim")().annotate(document=document)
@@ -194,7 +214,7 @@ python -m example_code
 
 - The output JSON file would be look like [example.pdf.json](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.json). If you want to investigate full document structure, this file would be informative.
 - The output CSV file would be look like [example.pdf.sentence-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.sentence-level-dataset.csv). This file is useful to count labels included in a document.
-  - If you use different annotation levels such as block or page, you can refer [example.pdf.block-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.block-level-dataset.csv) or [example.pdf.page-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.page-level-dataset.csv).
+  - If you would like to refer to different annotation levels such as block or page, you can see [example.pdf.block-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.block-level-dataset.csv) or [example.pdf.page-level-dataset.csv](reportparse%2Fasset%2Fexample_results%2Fexample.pdf.page-level-dataset.csv).
 
 ### Example data analysis using the output file of ReportParse
 
@@ -213,26 +233,25 @@ df = pd.read_csv('reportparse/asset/example_results/example.pdf.sentence-level-d
 # Get environmental claim sentences
 df_environment = df[df['environmental_claim'] == 'yes']
 # Remove "too short" sentences
-df_environment = df[(df['sentence_text'].str.split().str.len() > 20)]
+df_environment = df_environment[(df_environment['sentence_text'].str.split().str.len() > 20)]
 
 # Show some example text
 print(df_environment[:5]['sentence_text'])
 # Results -->
 # 10    Hitachi identifies, evaluates, and manages cli...
-# 11    The results are tabulated by the Sustainabilit...
-# 16    Total CO2 emissions from the use of sold produ...
 # 18    Therefore, we have established COz emissions p...
 # 19    We also set and manage a metric for avoided em...
+# 20    We continue to reduce COz emissions generated ...
+# 22    In addition, in April 2021, Hitachi, Ltd. intr...
 # Name: sentence_text, dtype: object
 
 # Show some example texts
 print('The number of total sentences:', len(df))
 # Result --> The number of total sentences: 158
 print('The number of environmental claim sentences:', len(df_environment))
-# Result --> The number of environmental claim sentences: 62
+# Result --> The number of environmental claim sentences: 36
 print('Environmental claim ratio [%]:', 100 * len(df_environment) / len(df))
-# Result --> Environmental claim ratio [%]: 39.24050632911393
-
+# Result --> Environmental claim ratio [%]: 22.78481012658228
 
 # ----------------------------------------
 # Extract and count positive/negative sentiments for environmental claims
@@ -249,16 +268,16 @@ print(df_environment_pos[:2]['sentence_text'])
 # Name: sentence_text, dtype: object
 print(df_environment_neg[:2]['sentence_text'])
 # Results -->
-# 11    The results are tabulated by the Sustainabilit...
-# 16    Total CO2 emissions from the use of sold produ...
+# 30    These problems involve resource shortages, wat...
+# 36    We also believe in the impor- tance of water u...
 # Name: sentence_text, dtype: object
 
 # Note: It seems that negative claims are more on risk-related descriptions
 
 print('The number of "positive" environmental claim sentences:', len(df_environment_pos))
-# Result --> The number of "positive" environmental claim sentences: 33
+# Result --> The number of "positive" environmental claim sentences: 20
 print('The number of "negative" environmental claim sentences:', len(df_environment_neg))
-# Result --> The number of "positive" environmental claim sentences: 29
+# Result --> The number of "positive" environmental claim sentences: 16
 ```
 
 
@@ -343,7 +362,7 @@ for table_html in df[df['climate_table'] == 'yes']['table_html'].to_list():
 
 ## Quick example 4 (extracting figures related to climate)
 
-The following extracts tables related to climate ```reportparse/asset/example.pdf```.
+The following extracts figures related to climate ```reportparse/asset/example.pdf```.
 We use ```deepdoctection``` as the [reader](#readers) and ```climate_figure``` as the [annotator](#annotators).
 **Note that figure analyses are only supported by ```deepdoctection```.**
 
@@ -391,6 +410,80 @@ An example of the detected figure (shown in the red bounding box):
 
 
 
+
+
+## Quick example 5 (extracting layouts)
+
+The following extracts layout information of the input document ```reportparse/asset/example.pdf```.
+**Note that the layout analysis is only supported by ```deepdoctection```.**
+
+The layout is analyzed in the block-level. 
+It is useful to filter out unnecessary information from your analysis.
+The type contains:
+- ```text```: The ordinal text block (similar to paragraph).
+- ```list```: The text block recognized as a list instance.
+- ```title```: The titles. We do not consider any title-levels such as subtitles.
+- ```cell```: The text block recognized as a cell in tables.
+
+<p align="center">
+  <img align="center" src="reportparse/asset/reportparse_layout.png" width="550px" />
+</p>
+
+Here's an example to get layout-specific blocks.
+
+```python
+import pandas as pd
+pd.set_option('display.max_rows', 20)
+pd.set_option('display.max_columns', 20)
+pd.set_option('display.width', 500)
+from reportparse.reader.base import BaseReader
+
+reader = BaseReader.by_name('deepdoctection')()
+document = reader.read(input_path='./reportparse/asset/example.pdf')
+
+df = document.to_dataframe(level='block')
+print(df.columns)
+# Result --> Index(['page_id', 'block_id', 'block_layout_type', 'block_bbox', 'block_text'], dtype='object')
+
+# Extracting ordinal text blocks
+title_blocks = df[df['block_layout_type'] == 'text']
+for _, block in title_blocks.iterrows():
+    print(f"block_id: {block['block_id']}, bbox: {block['block_bbox']}, text: {block['block_text']}")
+# Result --> block_id: c85c7b64-a85d-3429-8e2d-7071860e5791, bbox: (141.0, 444.0, 358.0, 486.0), text: Environmental
+#            block_id: e52fa848-025b-3538-af8e-48d17bdc18e9, bbox: (138.0, 508.0, 755.0, 597.0), text: Advancing Our Environmental Vision and Long-Term Environmental Targets
+# ...
+
+# Extracting titles
+title_blocks = df[df['block_layout_type'] == 'title']
+for _, block in title_blocks.iterrows():
+    print(f"block_id: {block['block_id']}, bbox: {block['block_bbox']}, text: {block['block_text']}")
+# Result --> block_id: f222c053-7f0e-325f-beae-2898e75ef169, bbox: (140.0, 291.0, 544.0, 370.0), text: Environmental
+#            block_id: 4b351da4-9026-3e3b-ba68-89fd2be8f6da, bbox: (141.0, 682.0, 725.0, 727.0), text: Achieving a Decarbonized Society
+# ...
+
+# Extracting lists
+list_blocks = df[df['block_layout_type'] == 'list']
+for _, block in list_blocks.iterrows():
+    print(f"block_id: {block['block_id']}, bbox: {block['block_bbox']}, text: {block['block_text']}")
+# Result --> block_id: b6912d9e-8db5-303e-891a-c2090e95202f, bbox: (3229.0, 443.0, 4141.0, 1009.0), text: MR }P013 Reflecting Sustainability Targets in Executive Compensation Evaluation R|P.027 “Environmental Vision” and “Hitachi Environmental Innovation 2050” K|P.030 Environmental Action Plan N |P035 Achieving a Decarbonized Society N |P036 Expanding the Decarbonization Business KX |P.039 Contributing to a Decarbonized Society at Business Sites (Factories and Offices) RN |Po61 Calculating GHG Emissions Throughout the Value Chain (Fiscal 2022)
+# ...
+
+# Extracting table cells
+cell_blocks = df[df['block_layout_type'] == 'cell']
+for _, block in cell_blocks.iterrows():
+    print(f"block_id: {block['block_id']}, bbox: {block['block_bbox']}, text: {block['block_text']}")
+# Result --> block_id: 3680f920-d4c2-3ea8-8fab-414ca5e7a857, bbox: (2549.3164672851562, 697.0629470348358, 2843.3768920898438, 964.8352966308594), text: From base year 16:. reduction
+#            block_id: e5cce930-8ff1-3724-b84f-35e5a39c17df, bbox: (2205.4156799316406, 970.4532470703125, 3113.1996459960938, 1207.3731689453125), text: 100% Target: 14% 84,, Amount generated Amount generated __ =p» __ ~ = Activity amount”
+# ...
+
+
+# Visualize layouts of the first page
+document.pages[0].show()
+```
+
+
+
+
 ## Web interfaces
 
 We provide two types of Gradio-based interfaces to better understand the output results.
@@ -434,7 +527,7 @@ When running ```python -m reportparse.main```, you can use following options.
 | --skip_load_image    | bool (0 or 1)                                            | Whether to skip loading the image of pages. The default is 0 (False).                                                                                                                                                                                                                                                                                                                                            |
 | --overwrite_strategy | str ("no", "all", "annotator-add", or "annotator-clear") | Whether to overwrite the output file if it exists. The default is "no". "no" will not overwrite the output file. "all" will replace the existing output file with the completely new one. "annotator-clear" will use existing "reader" results but does not use old annotator results. "annotator-add" will use existing "reader" results and overwrite the annotator results only for the specified annotators. |
 
-We also provide annotator specific optional arguments. Please refer them by running ```python -m reportparse.main --help```.
+We also provide annotator specific optional arguments. Please refer to them by running ```python -m reportparse.main --help```.
 
 <h3 id="readers">Readers</h4>
 
@@ -464,9 +557,9 @@ If you would like to add more, please contribute!
 | ```climate_commitment```            | Bingler et al.              | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-commitment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080) | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify climate-related text into "climate commitments and actions" or not.                                                                                 | block         |
 | ```climate_sentiment```             | Bingler et al.              | [Huggingface](https://huggingface.co/climatebert/distilroberta-base-climate-sentiment), [Paper](https://www.sciencedirect.com/science/article/pii/S0378426624001080)  | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify climate-related text into climate-related "sentiment classes", either opportunity, neutral, or risk.                                                | block         |
 | ```environmental_claim```           | Stammbach et al.            | [Huggingface](https://huggingface.co/climatebert/environmental-claims), [Paper](https://aclanthology.org/2023.acl-short.91/)                                          | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify text into environmental claim or not. The model is trained on the EnvironmentalClaims dataset.                                                      | sentence      |
-| ```standard_keyword```              | ReportParse                 |                                                                                                                                                                       |                                                                                                        | Detect keywords related to standards (TCFD, GRI, SASB, UN Global Compact, SDGs, ISO-14001, ISO-14040, ISO-45001, EPA, CDP, EU REACH, ICH, WEF, and EcoVadis) | sentence      |
-| ```climate_table```                 | ReportParse, Bingler et al. | We use```climate''' to detect climate-related pages.                                                                                                                  | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify tables into climate-related or not. If the pages of a table are related to climate, then the table is related to climate.                           | table         |
-| ```climate_figure```                | ReportParse, Bingler et al. | We use```climate''' to detect climate-related pages.                                                                                                                  | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify figures into climate-related or not. If the pages of a figure are related to climate, then the figure is related to climate.                        | figure        |
+| ```standard_keyword```              | ReportParse                 |                                                                                                                                                                       | Apache 2.0                                                                                             | Detect keywords related to standards (TCFD, GRI, SASB, UN Global Compact, SDGs, ISO-14001, ISO-14040, ISO-45001, EPA, CDP, EU REACH, ICH, WEF, and EcoVadis) | sentence      |
+| ```climate_table```                 | ReportParse, Bingler et al. | We use```climate``` to detect climate-related pages.                                                                                                                  | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify tables into climate-related or not. If a table is in a climate-related page, then the table is heuristically classified into climate-related.       | table         |
+| ```climate_figure```                | ReportParse, Bingler et al. | We use```climate``` to detect climate-related pages.                                                                                                                  | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify figures into climate-related or not. If a figure is in a climate-related page, then the figure is heuristically classified into climate-related.    | figure        |
 | ```esg_bert```                      | Mukherjee et al.            | [Huggingface](https://huggingface.co/nbroad/ESG-BERT), [Blog](https://towardsdatascience.com/nlp-meets-sustainable-investing-d0542b3c264b)                            | [Apache 2.0 (Github)](https://github.com/mukut03/ESG-BERT?tab=Apache-2.0-1-ov-file#readme)             | Classify text into 26 ESG-related topics. The full list of labels can be found [here]().                                                                     | sentence      |
 | ```netzero_reduction```             | Schimanski et al.           | [Huggingface](https://huggingface.co/climatebert/netzero-reduction), [Paper](https://aclanthology.org/2023.emnlp-main.975/)                                           | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify climate-related text into net-zero target, reduction target, or no-target.                                                                          | block         |
 | ```sst2```                          | DistilBERT community        | [Huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), [Related paper](https://www.mdpi.com/2076-3417/12/11/5614)          | [Apache 2.0](https://huggingface.co/datasets/choosealicense/licenses/blob/main/markdown/apache-2.0.md) | Classify text into positive or negative.                                                                                                                     | sentence      |
@@ -483,7 +576,7 @@ For example, you can use [FinanceInc/auditor_sentiment_finetuned](https://huggin
 python -m reportparse.main \
   -i reportparse/asset/example.pdf \
   -o ./results \
-  --reader pymupdf \
+  --reader "pymupdf" \
   --annotators "custom_huggingface" \
   --custom_huggingface_annotator_name "auditor_sentiment" \
   --custom_huggingface_model_name_or_path "FinanceInc/auditor_sentiment_finetuned" \
@@ -499,12 +592,51 @@ You can use special annotator of ```keyword``` to extract texts that contain spe
 python -m reportparse.main \
   -i reportparse/asset/example.pdf \
   -o ./results \
-  --reader pymupdf \
+  --reader "pymupdf" \
   --annotators "keyword" \
   --keyword_search_text "\\bcircular economy\\b" \
   --keyword_annotator_name 'keyword-circular-economy' \
   --keyword_target_layouts "text" "list" "cell" \
   --keyword_level "sentence"
+```
+
+
+### Loading a document instance from the parsed JSON file
+
+```python
+from reportparse.structure.document import Document
+
+document = Document.from_json_file('./reportparse/asset/example_results/example.pdf.json')
+df = document.to_dataframe(level='sentence')
+print(df)
+# Result --> page_id                              block_id  ...      sst2 sst2-score
+# 0    page_idx_0  f222c053-7f0e-325f-beae-2898e75ef169  ...       NaN        NaN
+# 1    page_idx_0  c85c7b64-a85d-3429-8e2d-7071860e5791  ...  POSITIVE   0.998334
+# 2    page_idx_0  e52fa848-025b-3538-af8e-48d17bdc18e9  ...  POSITIVE   0.999226
+# ...
+```
+
+### Overwrite or add annotations on the parsed JSON file
+
+You may want to use existing parsed data instead of getting all the results from scratch because the deepdoctection reader takes a lot of time to parse.
+The following shows an example on how to overwrite or add annotators on top of the existing parsed data.
+
+```bash
+# Overwrite
+python -m reportparse.main \
+  -i reportparse/asset/example.pdf \
+  -o ./results \
+  --reader "deepdoctection" \
+  --annotators "sst2" \
+  --overwrite_strategy "annotator-clear"
+ 
+# Add
+python -m reportparse.main \
+  -i reportparse/asset/example.pdf \
+  -o ./results \
+  --reader "pymupdf" \
+  --annotators "sst2" \
+  --overwrite_strategy "annotator-add"
 ```
 
 
@@ -529,7 +661,7 @@ python -m reportparse.main \
 ## License
 
 See LICENSE file for the license of this project. Note that some codes of this project include third-party codes.
-Be careful of licenses of the third-party codes.
+Be careful of licenses of the third-party codes and models.
 
 - [helper.py](reportparse%2Futil%2Fhelper.py) includes a modified method from deepdoctection
 

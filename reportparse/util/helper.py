@@ -1,7 +1,10 @@
 from typing import List, Dict, Optional, Tuple
+import copy
+import math
 import numpy as np
 import cv2
 import deepdoctection as dd
+from PIL import ImageColor
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 
@@ -108,3 +111,160 @@ def draw_boxes(
             )
 
     return np_image
+
+
+def draw_layout_on_page(
+    page,
+    show_annotation: bool = True,
+    annotator_name: str = None,
+    annotation_color: str = '#d21cff',
+    show_block: bool = True,
+    block_color: str = '#ff73a1',
+    show_table_block: bool = True,
+    table_block_color: str = '#2f73a1',
+    show_figure_block: bool = True,
+    figure_block_color: str = "#ff7321",
+    show_sentence: bool = False,
+    sentence_color: str = "#2626ff",
+    show_word: bool = False,
+    word_color: str = "#8a8a8a",
+) -> np.ndarray:
+    if page.image is not None:
+        img = copy.deepcopy(page.image)
+    else:
+        img = np.full(
+            shape=(math.ceil(page.height), math.ceil(page.width), 3),
+            fill_value=255
+        ).astype(np.uint8)
+
+    if show_block:
+        box_stack = []
+        category_names_list = []
+        for block in page.blocks:
+            box_stack.append(block.bbox)
+            category_names_list.append(block.layout_type)
+
+        category_to_color = {k: ImageColor.getcolor(block_color, "RGB") for k in set(category_names_list)}
+
+        if box_stack:
+            boxes = np.vstack(box_stack)
+            img = draw_boxes(
+                np_image=img,
+                boxes=boxes,
+                category_names_list=category_names_list,
+                category_to_color=category_to_color,
+                font_scale=2,
+                rectangle_thickness=4,
+            )
+
+    if show_table_block:
+        box_stack = []
+        category_names_list = []
+        for block in page.table_blocks:
+            box_stack.append(block.bbox)
+            category_names_list.append(block.layout_type)
+        category_to_color = {k: ImageColor.getcolor(table_block_color, "RGB") for k in set(category_names_list)}
+
+        if box_stack:
+            boxes = np.vstack(box_stack)
+            img = draw_boxes(
+                np_image=img,
+                boxes=boxes,
+                category_names_list=category_names_list,
+                category_to_color=category_to_color,
+                font_scale=2,
+                rectangle_thickness=4,
+            )
+
+    if show_figure_block:
+        box_stack = []
+        category_names_list = []
+        for figure in page.figures:
+            box_stack.append(figure.bbox)
+            category_names_list.append('figure')
+        category_to_color = {k: ImageColor.getcolor(figure_block_color, "RGB") for k in set(category_names_list)}
+
+        if box_stack:
+            boxes = np.vstack(box_stack)
+            img = draw_boxes(
+                np_image=img,
+                boxes=boxes,
+                category_names_list=category_names_list,
+                category_to_color=category_to_color,
+                font_scale=2,
+                rectangle_thickness=4,
+            )
+
+    if show_sentence:
+        box_stack = []
+        category_names_list = []
+        for block in page.blocks + page.table_blocks:
+            for sentence in block.sentences:
+                box_stack.append(sentence.bbox)
+                category_names_list.append('sentence')
+
+        category_to_color = {'sentence': ImageColor.getcolor(sentence_color, "RGB")}
+
+        if box_stack:
+            boxes = np.vstack(box_stack)
+            img = draw_boxes(
+                np_image=img,
+                boxes=boxes,
+                category_names_list=category_names_list,
+                category_to_color=category_to_color,
+                font_scale=0,
+                rectangle_thickness=2,
+            )
+
+    if show_word:
+        box_stack = []
+        category_names_list = []
+        for block in page.blocks + page.table_blocks:
+            for txt in block.texts:
+                box_stack.append(txt.bbox)
+                category_names_list.append(txt)
+
+        category_to_color = {'word': ImageColor.getcolor(word_color, "RGB")}
+
+        if box_stack:
+            boxes = np.vstack(box_stack)
+            img = draw_boxes(
+                np_image=img,
+                boxes=boxes,
+                category_names_list=category_names_list,
+                category_to_color=category_to_color,
+                font_scale=0,
+                rectangle_thickness=2,
+            )
+
+        if show_annotation:
+            box_stack = []
+            category_names_list = []
+            if annotator_name is not None:
+                annotations = page.find_all_annotations_by_annotator_name(annotator_name)
+            else:
+                annotations = page.find_all_annotations()
+            for annot_obj, annot in annotations:
+
+                if annot.annotator != 'climate_figure':
+                    continue
+
+                score = f'({annot.meta["score"]:.1f})' if isinstance(annot.meta, dict) and 'score' in annot.meta else ''
+
+                if hasattr(annot_obj, 'bbox'):
+                    box_stack.append(annot_obj.bbox)
+                    category_names_list.append(f'{annot.annotator}={annot.value}{score}')
+
+            if box_stack:
+                boxes = np.vstack(box_stack)
+                img = draw_boxes(
+                    np_image=img,
+                    boxes=boxes,
+                    category_names_list=category_names_list,
+                    category_to_color={
+                        k: ImageColor.getcolor(annotation_color, "RGB") for k in set(category_names_list)},
+                    font_scale=1.5,
+                    rectangle_thickness=6,
+                )
+
+    return img

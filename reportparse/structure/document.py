@@ -3,6 +3,7 @@ import json
 
 import pandas as pd
 import numpy as np
+from PIL import Image
 from typing import List, Tuple, Any
 
 from reportparse.util.settings import LAYOUT_NAMES
@@ -466,6 +467,10 @@ class Page(AnnotatableLevel):
     def image(self) -> np.ndarray or None:
         return self._image
 
+    @image.setter
+    def image(self, image):
+        self._image = image
+
     @property
     def blocks(self) -> List[Block]:
         return self._blocks
@@ -516,6 +521,16 @@ class Page(AnnotatableLevel):
         for figure_data in data['figures']:
             page.add_figure(figure=Figure.from_dict(data=figure_data))
         return page
+
+    def draw_layout(self, **kwargs) -> np.ndarray:
+        from reportparse.util.helper import draw_layout_on_page
+        img = draw_layout_on_page(page=self, **kwargs)
+        return img
+
+    def show(self, **kwargs):
+        img = self.draw_layout(**kwargs)
+        img = Image.fromarray(img, 'RGB')
+        img.show()
 
 
 class Document:

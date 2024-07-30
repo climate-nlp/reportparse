@@ -2,19 +2,17 @@ import os
 import argparse
 import copy
 
-import numpy as np
 import pandas as pd
 import uuid
 import gradio as gr
 import spacy
 import fitz
-from PIL import ImageColor
 from wordcloud import WordCloud
 
 from reportparse.structure.document import Document
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.reader.pymupdf_reader import load_image_from_page, load_dummy_page_image
-from reportparse.util.helper import draw_boxes
+from reportparse.util.helper import draw_layout_on_page
 
 
 MAX_IMAGES = 5
@@ -169,139 +167,25 @@ def render(
     layout_images = []
 
     for orig_image, page_num in progress.tqdm(zip(orig_images, orig_page_nums), desc='Drawing output images'):
-
         page = document.find_page_by_num(page_num=page_num)
-
-        img = copy.deepcopy(orig_image)
-
-        if show_block:
-            box_stack = []
-            category_names_list = []
-            for block in page.blocks:
-                box_stack.append(block.bbox)
-                category_names_list.append(block.layout_type)
-            category_to_color = {k: ImageColor.getcolor(block_color, "RGB") for k in set(category_names_list)}
-
-            if box_stack:
-                boxes = np.vstack(box_stack)
-                img = draw_boxes(
-                    np_image=img,
-                    boxes=boxes,
-                    category_names_list=category_names_list,
-                    category_to_color=category_to_color,
-                    font_scale=2,
-                    rectangle_thickness=4,
-                )
-
-        if show_table_block:
-            box_stack = []
-            category_names_list = []
-            for block in page.table_blocks:
-                box_stack.append(block.bbox)
-                category_names_list.append(block.layout_type)
-            category_to_color = {k: ImageColor.getcolor(table_block_color, "RGB") for k in set(category_names_list)}
-
-            if box_stack:
-                boxes = np.vstack(box_stack)
-                img = draw_boxes(
-                    np_image=img,
-                    boxes=boxes,
-                    category_names_list=category_names_list,
-                    category_to_color=category_to_color,
-                    font_scale=2,
-                    rectangle_thickness=4,
-                )
-
-        if show_figure_block:
-            box_stack = []
-            category_names_list = []
-            for figure in page.figures:
-                box_stack.append(figure.bbox)
-                category_names_list.append('figure')
-            category_to_color = {k: ImageColor.getcolor(figure_block_color, "RGB") for k in set(category_names_list)}
-
-            if box_stack:
-                boxes = np.vstack(box_stack)
-                img = draw_boxes(
-                    np_image=img,
-                    boxes=boxes,
-                    category_names_list=category_names_list,
-                    category_to_color=category_to_color,
-                    font_scale=2,
-                    rectangle_thickness=4,
-                )
-
-        if show_sentence:
-            box_stack = []
-            category_names_list = []
-            for block in page.blocks + page.table_blocks:
-                for sentence in block.sentences:
-                    box_stack.append(sentence.bbox)
-                    category_names_list.append('sentence')
-
-            category_to_color = {'sentence': ImageColor.getcolor(sentence_color, "RGB")}
-
-            if box_stack:
-                boxes = np.vstack(box_stack)
-                img = draw_boxes(
-                    np_image=img,
-                    boxes=boxes,
-                    category_names_list=category_names_list,
-                    category_to_color=category_to_color,
-                    font_scale=0,
-                    rectangle_thickness=2,
-                )
-
-        if show_word:
-            box_stack = []
-            category_names_list = []
-            for block in page.blocks + page.table_blocks:
-                for txt in block.texts:
-                    box_stack.append(txt.bbox)
-                    category_names_list.append(txt)
-
-            category_to_color = {'word': ImageColor.getcolor(word_color, "RGB")}
-
-            if box_stack:
-                boxes = np.vstack(box_stack)
-                img = draw_boxes(
-                    np_image=img,
-                    boxes=boxes,
-                    category_names_list=category_names_list,
-                    category_to_color=category_to_color,
-                    font_scale=0,
-                    rectangle_thickness=2,
-                )
-
-        # Semantic labels
-        box_stack = []
-        category_names_list = []
-        for annot_obj, annot in page.find_all_annotations_by_annotator_name(annotator_name):
-
-            score = annot.meta['score'] if isinstance(annot.meta, dict) and 'score' in annot.meta else 1
-            if score < prob_threshold:
-                continue
-
-            text = annot_obj.text
-            if annotator_name != 'climate_figure' and len(nlp(text)) < word_threshold:
-                continue
-
-            if hasattr(annot_obj, 'bbox'):
-                box_stack.append(annot_obj.bbox)
-                category_names_list.append(annot.value)
-
-        if box_stack:
-            boxes = np.vstack(box_stack)
-            img = draw_boxes(
-                np_image=img,
-                boxes=boxes,
-                category_names_list=category_names_list,
-                category_to_color={k: ImageColor.getcolor(label_color, "RGB") for k in set(category_names_list)},
-                font_scale=1.5,
-                rectangle_thickness=6,
-            )
-
-        layout_images.append((img, f'Page {page_num + 1}'))
+        page.image = copy.deepcopy(orig_image)
+        img = draw_layout_on_page(
+            page=page,
+            show_annotation=True,
+            annotator_name=annotator_name,
+            annotation_color=label_color,
+            show_block=show_block,
+            block_color=block_color,
+            show_table_block=show_table_block,
+            table_block_color=table_block_color,
+            show_figure_block=show_figure_block,
+            figure_block_color=figure_block_color,
+            show_sentence=show_sentence,
+            sentence_color=sentence_color,
+            show_word=show_word,
+            word_color=word_color,
+        )
+        layout_images.append((img, f'Page {page.num + 1}'))
 
     save_dir = os.path.join(DATA_DIR, str(uuid.uuid4()) + os.sep)
     os.makedirs(save_dir)
