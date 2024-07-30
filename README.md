@@ -101,8 +101,8 @@ Please cite the following paper if you use our tool in your work.
 ### References
 
 Our project is inspired by or related to following wonderful projects. If you are interested in, please read our paper and the following papers.
-- [PaperMage](https://github.com/EdisonNi-hku/chatreport/tree/main): A standardized tool to analyze academic papers. The technical concept of our project is inspired by PaperMage.
-- [CHATREPORT](https://aclanthology.org/2023.emnlp-demo.45/): A first tooled analyzer for sustainability reports. If you do not need the document layout analysis and want to use LLMs, this tool would be useful. For more details on the differences between our tool and this, see our paper.
+- [PaperMage](https://aclanthology.org/2023.emnlp-demo.45/): A standardized tool to analyze academic papers. The technical concept of our project is inspired by PaperMage.
+- [CHATREPORT](https://aclanthology.org/2023.emnlp-demo.3/): A first tooled analyzer for sustainability reports. If you do not need the document layout analysis and want to use LLMs, this tool would be useful. For more details on the differences between our tool and this, see our paper.
 
 
 
