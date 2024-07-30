@@ -2,12 +2,11 @@ from logging import getLogger
 import argparse
 from distutils.util import strtobool
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
 from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
+from reportparse.util.helper import HFModelCache
 
 
 @BaseAnnotator.register("netzero_reduction")
@@ -33,14 +32,8 @@ class NetzeroReductionAnnotator(BaseAnnotator):
 
     def __init__(self):
         super().__init__()
-        self.tokenizer = None
-        self.model = None
         self.netzero_reduction_model_name_or_path = 'climatebert/netzero-reduction'
         self.netzero_reduction_tokenizer_name_or_path = 'climatebert/distilroberta-base-climate-f'
-        self.sentence_climate_tokenizer = None
-        self.sentence_climate_model = None
-        self.block_climate_tokenizer = None
-        self.block_climate_model = None
         self.sentence_climate_detection_model_name_or_path = 'ESGBERT/EnvironmentalBERT-environmental'
         self.block_climate_detection_model_name_or_path = 'climatebert/distilroberta-base-climate-detector'
         return
@@ -72,21 +65,17 @@ class NetzeroReductionAnnotator(BaseAnnotator):
             level = 'block'
             target_layouts = ['text', 'list']
 
-        if self.tokenizer is None or self.model is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.netzero_reduction_tokenizer_name_or_path,
-                max_len=max_len
-            )
-            self.model = AutoModelForSequenceClassification.from_pretrained(
-                self.netzero_reduction_model_name_or_path
-            )
+        tokenizer = HFModelCache().load_tokenizer(
+            self.netzero_reduction_tokenizer_name_or_path, max_len=max_len)
+        model = HFModelCache().load_sequence_classification_model(
+            self.netzero_reduction_model_name_or_path)
 
         # Predict netzero or reduction claims
         document = annotate_by_sequence_classification(
             annotator_name='netzero_reduction',
             document=document,
-            tokenizer=self.tokenizer,
-            model=self.model,
+            tokenizer=tokenizer,
+            model=model,
             level=level,
             target_layouts=target_layouts,
             batch_size=batch_size
@@ -102,20 +91,16 @@ class NetzeroReductionAnnotator(BaseAnnotator):
         """
 
         if not use_deprecated:
-            if level == 'sentence' and (self.sentence_climate_tokenizer is None or self.sentence_climate_model is None):
-                self.sentence_climate_tokenizer = AutoTokenizer.from_pretrained(
-                    self.sentence_climate_detection_model_name_or_path,
-                    max_len=max_len
-                )
-                self.sentence_climate_model = AutoModelForSequenceClassification.from_pretrained(
-                    self.sentence_climate_detection_model_name_or_path
-                )
-            if level == 'block' and (self.block_climate_tokenizer is None or self.block_climate_model is None):
-                self.block_climate_tokenizer = AutoTokenizer.from_pretrained(
-                    self.block_climate_detection_model_name_or_path,
-                    max_len=max_len
-                )
-                self.block_climate_model = AutoModelForSequenceClassification.from_pretrained(
+            sentence_level = level in ['sentence', 'text']
+            if sentence_level:
+                climate_tokenizer = HFModelCache().load_tokenizer(
+                    self.sentence_climate_detection_model_name_or_path, max_len=max_len)
+                climate_model = HFModelCache().load_sequence_classification_model(
+                    self.sentence_climate_detection_model_name_or_path)
+            else:
+                climate_tokenizer = HFModelCache().load_tokenizer(
+                    self.block_climate_detection_model_name_or_path, max_len=max_len)
+                climate_model = HFModelCache().load_sequence_classification_model(
                     self.block_climate_detection_model_name_or_path
                 )
 
@@ -123,31 +108,34 @@ class NetzeroReductionAnnotator(BaseAnnotator):
             document_climate_annot = annotate_by_sequence_classification(
                 annotator_name='dummy',
                 document=document,
-                tokenizer=self.sentence_climate_tokenizer if level == 'sentence' else self.block_climate_tokenizer,
-                model=self.sentence_climate_model if level == 'sentence' else self.block_climate_model,
+                tokenizer=climate_tokenizer,
+                model=climate_model,
                 level=level,
                 target_layouts=target_layouts,
                 batch_size=batch_size
             )
             climate_unrelated_object_ids = []
             for annot_obj, annot in document_climate_annot.find_all_annotations_by_annotator_name('dummy'):
-                if annot.value == ('none' if level == 'sentence' else 'no'):
+                if annot.value == ('none' if sentence_level else 'no'):
                     climate_unrelated_object_ids.append(annot_obj.id)
 
             # Remove annotations that do not relate to climate change or environment
             for page in document.pages:
-                for block in page.blocks:
-                    if level == 'block' and block.id in climate_unrelated_object_ids:
-                        block.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
-                        #logger.info(f'Removed the "netzero_reduction" annotation of the following block '
-                        #            f'because it is not related to environment: "{block.text}".')
-                        continue
-                    for sentence in block.sentences:
-                        if level == 'sentence' and sentence.id in climate_unrelated_object_ids:
-                            sentence.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
-                            #logger.info(f'Removed the "netzero_reduction" annotation of the following sentence '
-                            #            f'because it is not related to environment: "{sentence.text}".')
-                            continue
+                if level == 'page':
+                    if page.id in climate_unrelated_object_ids:
+                        page.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
+                for block in page.blocks + page.table_blocks:
+                    if level == 'block':
+                        if block.id in climate_unrelated_object_ids:
+                            block.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
+                    elif level == 'sentence':
+                        for sentence in block.sentences:
+                            if sentence.id in climate_unrelated_object_ids:
+                                sentence.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
+                    elif level == 'text':
+                        for text in block.texts:
+                            if text.id in climate_unrelated_object_ids:
+                                text.remove_annotations_by_annotator_name(annotator_name='netzero_reduction')
 
         return document
 

@@ -7,6 +7,7 @@ from distutils.util import strtobool
 from reportparse.structure.document import Document
 from reportparse.reader.base import BaseReader
 from reportparse.annotator.base import BaseAnnotator
+from reportparse.util.helper import HFModelCache
 
 
 def main(args):
@@ -96,7 +97,7 @@ def main(args):
                                    f'because you are loading document layouts from the json file.')
                     document = Document.from_json_file(file_path=output_path)
                     logger.info(f'Clear all the existing annotations')
-                    document.remove_annotations()
+                    document.remove_all_annotations()
                 elif args.overwrite_strategy == "annotator-add":
                     logger.warning(f'The output file "{output_path}" exists. '
                                    f'We will use the existing "reader" result and add new annotator results.')
@@ -119,6 +120,9 @@ def main(args):
             for annotator in annotators:
                 logger.info(f'Apply the annotator "{annotator}".')
                 document = annotator.annotate(document=document, args=args)
+                logger.info(f'Finished annotations by "{annotator}".')
+                logger.info(f'Current cached huggingface models: {HFModelCache().current_model_cache.keys()}')
+                logger.info(f'Current cached huggingface tokenizers: {HFModelCache().current_tokenizer_cache.keys()}')
 
             # Save the easy-to-use CSV datasets
             if args.output_csv_dataset:

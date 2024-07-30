@@ -58,6 +58,9 @@ page_idx_3,56aa16ea-9a05-3288-a23b-2263ebb02de7,text,"(1115.0, 1617.0, 2064.0, 1
 page_idx_3,4c334acf-615a-3f15-9f28-9f3e76570b34,text,"(3235.0, 466.0, 4016.0, 515.0)",© Waste and Valuables Generation” (Hitachi Group)
 page_idx_3,a3b8ebcd-f89d-3df5-974a-f65c196b2dde,text,"(2173.0, 578.0, 3084.0, 662.0)",Reduction Rate in Waste and Valuables Generation*' per Unit (Hitachi Group)
 page_idx_3,74073f42-7d8f-335f-9e02-1d616382365f,text,"(2173.0, 1458.0, 3105.0, 1572.0)","*1 Amount of waste and valuables generated from the production process. *2 Activity amount is a value closely related to waste and valuables generation at each business site (for example, output, sales, and production weight)."
+page_idx_3,e5cce930-8ff1-3724-b84f-35e5a39c17df,cell,"(2205.4156799316406, 970.4532470703125, 3113.1996459960938, 1207.3731689453125)","100% Target: 14% 84,, Amount generated Amount generated __ =p» __ ~ = Activity amount”"
+page_idx_3,3680f920-d4c2-3ea8-8fab-414ca5e7a857,cell,"(2549.3164672851562, 697.0629470348358, 2843.3768920898438, 964.8352966308594)",From base year 16:. reduction
+page_idx_3,b89b86ec-db5d-3120-9416-3f1a021da0c0,cell,"(2243.102005004883, 1209.713623046875, 3060.7891845703125, 1350.8840942382812)",FY2010 FY2022 (base year)
 page_idx_4,7fdc64b6-2d25-36ad-8d71-a7d5f1aba9ef,title,"(140.0, 292.0, 544.0, 370.0)",Environmental
 page_idx_4,cbe9f614-974b-3b5b-b46b-203f6f3323c6,list,"(140.0, 483.0, 775.0, 728.0)",Advancing Our Environmental Vision and Long-Term Environmental Targets Environmental Governance Achieving a Decarbonized Society
 page_idx_4,ace04c6d-f9c9-3250-9394-761fe260847b,text,"(141.0, 748.0, 803.0, 792.0)",Achieving a Resource-Efficient Society
@@ -74,6 +77,13 @@ page_idx_4,82b0bea5-3f68-36dc-922a-373d3a7b30a3,text,"(3237.0, 737.0, 4188.0, 10
 page_idx_4,1142a146-d194-3f5f-ad9c-68384717a39d,text,"(3241.0, 1004.0, 4195.0, 1652.0)","Hitachi Global Life Solutions works to recycle four catego- ries of end-of-life home appliances (air conditioners, TVs refrigerators/freezers, and washing machines/dryers) at 19 recycling plants as part of cooperative efforts among five companies”? in response to the 2001 Act on Recycling of Specified Home Appliances. A total of 91.3 kt of recyclable materials*® were recovered in fiscal 2022, of which approxi- mately 81.9 kt were recycled. By product type, the recycling rate for refrigerators and freezers was 80% exceeding the legal requirement of 70% by 10 percentage points, and for washing machines and dryers it was 94% exceeding the legal requirement of 82% by 12 percentage points"
 page_idx_4,6bbd44ca-74e7-39fc-8992-2b294e6d90c6,text,"(3237.0, 1675.0, 4158.0, 1815.0)","“1 Effective utilization encompasses material recycling, chemical recycling, and thermal recovery. Pursued in assumed conformance with regulations, condi- tions, etc *2 Hitachi Global Life Solutions, Sharp Corporation, Sony Corporation, Fujitsu"
 page_idx_4,23c7ae15-bc45-38c5-9843-579f284e8bff,text,"(3231.0, 1862.0, 4160.0, 2046.0)","*3 Parts and materials recovered from four categories of end-of-life home appli- ances (air conditioners, TVs, refrigerators/freezers, and washing machines/ dryers) and recycled through in-house use, sale, or transfer free of charge to other entities for use. Data values are aggregated from Hitachi Global Life Solutions and Johnson Controls-Hitachi Air Conditioning"
+page_idx_4,4a2d40fb-02b9-39c3-bd33-6b8cd9ff9e6b,cell,"(1261.1523132324219, 1371.8273468017578, 1327.1253967285156, 1398.5278015136719)",zero
+page_idx_4,32ad60af-8a1b-38d3-89ac-161fba9385ee,cell,"(1631.5849609375, 1260.9945049285889, 2031.5513916015625, 1358.4417877197266)",business sites
+page_idx_4,e14e7a8f-249a-3355-a227-6cd8dd69fdcf,cell,"(1495.5404968261719, 1260.4634017944336, 1618.5899658203125, 1357.3455810546875)",1
+page_idx_4,80bc00f0-e33b-39c2-92f4-a05c147f36cf,cell,"(1636.6392822265625, 1366.6703033447266, 2065.0, 1502.8011779785156)","(58% ""8% achievement) target: 90 business sites (approx. 25%)"
+page_idx_4,87e53c56-25f8-3349-b7ee-f8daea07356c,cell,"(1334.9473114013672, 1363.329833984375, 1434.31103515625, 1398.7245178222656)",landfill
+page_idx_4,0c6ed9d5-8571-3dd9-8178-1ca72f779ae3,cell,"(1108.3076329231262, 1361.49169921875, 1252.6197509765625, 1443.3899230957031)",achieving waste
+page_idx_4,17ccd132-d3ff-3e8f-a91d-1d791df5cd20,cell,"(1107.8786931037903, 1318.2025985717773, 1350.7362518310547, 1353.1905975341797)",Number of sites
 page_idx_5,6f57875f-ef6d-3578-a26e-66b5d395b32a,title,"(1109.0, 296.0, 2161.0, 380.0)",Building a Water-Efficient Society
 page_idx_5,6fb62322-ec43-3edf-a11a-9b141090c2cc,text,"(1110.0, 463.0, 2047.0, 514.0)",Management of Water Use at Business Sites
 page_idx_5,bde96614-545c-3ac4-be70-da98f3db3109,text,"(1111.0, 603.0, 2069.0, 1150.0)","For fiscal 2022, the first year of the Environmental Action Plan for 2024 (fiscal 2022-2024), we set a target reduction of 22% (compared with a base year of fiscal 2010) in water use per unit for manufacturing process and general daily usage in manufacturing sites. We improved on this target with a reduc- tion of 27%. We reduced the volume of water used by 11 million m%, equivalent to a reduction of 45% compared with the base year. Our measures to reduce water usage included more stringent management of water intake using flowmeters, installing water pipes above ground for better leakage control, recirculating cooling water, and reusing purified waste water."
@@ -92,3 +102,30 @@ page_idx_5,0ce1ca96-6629-349c-91fe-c3992f709a00,text,"(138.0, 981.0, 813.0, 1157
 page_idx_5,b44c26af-bf3e-3794-bae0-05153a8ca216,text,"(2176.0, 1137.0, 3137.0, 1583.0)","“1 Total volume of water used in manufacturing processes and general daily usage at manufacturing sites and in general daily usage at locations other than manufacturing sites. *2 The water usage of an energy-related company included in the scope of consoli- dation since fiscal 2020 is included in the figures above beginning fiscal 2022. The water usage for fiscal 2022 by auto parts companies included in the scope of consolidation since fiscal 2020 is not included in the figures above, but amounted to 412 million m®. The total water usage was decreased significantly due to the deconsolidation of the materials- and construction machinery companies. x P.063 Environmental Load from Operations 7 Case Studies of Improving Water Use Efficiency"
 page_idx_5,a939fe50-7864-32bd-b3f6-8cab0f688030,text,"(2173.0, 1586.0, 3030.0, 1626.0)",https://www.hitachi.com/environment/casestudy/index.html#case03
 page_idx_5,deb9ff59-3112-370f-b8a1-4b197c93ab73,title,"(2172.0, 1662.0, 3053.0, 1769.0)",Products and Services That Contribute to Resolving Water Issues
+page_idx_5,9d08bc2c-6681-306c-acf1-6a55c3e9b410,cell,"(3802.1546630859375, 1066.3750686645508, 3908.00634765625, 1092.3305358886719)",systems
+page_idx_5,84a2214b-3e15-30fe-a94d-31e0d89934dd,cell,"(3520.7158813476562, 1363.7890930175781, 3719.1751403808594, 1391.0833435058594)",Comprehensive
+page_idx_5,94f749df-9f5b-35bc-aacc-8cf4afbf4df0,cell,"(3793.9990844726562, 1018.6961936950684, 3899.2446899414062, 1044.5322799682617)",systems
+page_idx_5,0efbf733-ab0f-3c6d-acf5-68c15cbbe375,cell,"(3982.8089599609375, 1149.3934478759766, 4138.58154296875, 1176.5282287597656)",and regions)
+page_idx_5,73121f59-c5f5-3b82-a370-18c4b25c651d,cell,"(3861.85888671875, 1149.602767944336, 3978.5205688476562, 1176.334228515625)",countries
+page_idx_5,72795738-4cbc-3201-af50-db59a143fe1e,cell,"(3765.325439453125, 1485.716796875, 3928.22021484375, 1509.1482543945312)",emergencies
+page_idx_5,89e55c56-88e1-3ffc-8ffb-8aa12cfc388e,cell,"(3518.727569580078, 1315.8276062011719, 3768.5607299804688, 1342.5516967773438)",approximately 900
+page_idx_5,cfd50fd1-f747-39aa-8ee6-460e2a81f474,cell,"(3709.8814392089844, 1485.5908203125, 3759.2273559570312, 1509.3245849609375)",and
+page_idx_5,4495cc91-1c48-3fa0-953b-8efcf9b1825e,cell,"(3820.3143310546875, 1148.1943054199219, 3852.7664184570312, 1170.8696594238281)",40
+page_idx_5,3c0e386f-4a06-37fc-8a0a-4552ebc261d3,cell,"(3247.9095458984375, 1062.8064193725586, 3781.7841796875, 1092.4271087646484)",resources Seawater desalination
+page_idx_5,05732e47-d5d5-3bc2-b404-8166376426f8,cell,"(3766.6871337890625, 1311.2735595703125, 3962.5576782226562, 1346.1229553222656)",plants in Japan)
+page_idx_5,8e313d32-1a34-3518-86fe-604c1d9c971c,cell,"(3831.1807861328125, 1361.3646850585938, 4091.5291137695312, 1391.5477905273438)",solutions for water and
+page_idx_5,292fca59-bde0-32b5-9454-f0833f230bfc,cell,"(3367.1944885253906, 1015.6947135925293, 3786.7402954101562, 1051.2924423217773)",water Wastewater recycling
+page_idx_5,555b3813-6709-3501-9c61-f97a4ae34e8d,cell,"(3766.7962036132812, 1227.0370483398438, 3963.0007934570312, 1262.1715087890625)",plants in Japan)
+page_idx_5,59626cb4-1588-3f2f-b7aa-1d5f8d896460,cell,"(3521.429412841797, 1111.9603729248047, 3748.9926147460938, 1144.226806640625)",Water and sewage
+page_idx_5,fa6e8dcd-e2f4-3721-aaef-18b1e3f3db67,cell,"(3290.5996437072754, 967.2684640884399, 4146.89453125, 999.3923797607422)",Activity field Products or services (implementation to date)
+page_idx_5,3ac8b302-15a3-3c4b-821b-eeedd7e150f3,cell,"(3519.6100158691406, 1395.9313659667969, 3868.9627685546875, 1430.1191711425781)",sewage treatment operators
+page_idx_5,d82f1279-12d2-30e8-97cb-57893f474329,cell,"(3248.5513229370117, 1484.97265625, 3703.5289001464844, 1509.30859375)",control measures © evacuations
+page_idx_5,3b74ac78-078d-3812-9e35-c38219e11e9e,cell,"(3247.939498901367, 1274.8827819824219, 3836.2173461914062, 1308.0877075195312)",infrastructure Sewage treatment plants
+page_idx_5,dbe98c49-5bb6-3e7a-af9a-98b5ea04cfc4,cell,"(3519.7356872558594, 1195.864501953125, 3822.7836303710938, 1224.4657897949219)",Water purification plants
+page_idx_5,400eeea0-42f1-3dea-8a59-659288f03bc3,cell,"(3707.870574951172, 1144.128662109375, 3734.9146118164062, 1175.958755493164)",in
+page_idx_5,1f488e48-af39-3ae4-b4f8-bd7acd7d829d,cell,"(3724.650146484375, 1367.8985900878906, 3769.641357421875, 1395.2708129882812)",
+page_idx_5,4e434c58-8648-39cd-949e-8cbf7a8d07ab,cell,"(3248.385997772217, 1231.5420227050781, 3747.7796630859375, 1268.3182678222656)",Developing water approximately 700
+page_idx_5,76e3f997-2cb4-3403-878c-dfb59b2b1c19,cell,"(3248.3704195022583, 1447.6462707519531, 3740.3428344726562, 1475.303955078125)",Integrated flood Flood forecasting
+page_idx_5,cba87edb-d395-399c-9c7f-003a14d68dc7,cell,"(3741.7760314941406, 1447.9218444824219, 4165.072265625, 1475.0218505859375)",and simulation technology related
+page_idx_5,f42eface-dc3e-3f12-9e6f-fe60e8005ae9,cell,"(3773.222900390625, 1112.6666564941406, 3945.49169921875, 1140.7774353027344)","treatment, etc."
+page_idx_5,b33ada8c-10fc-32b0-8542-97f488d7e2b9,cell,"(3521.9822998046875, 1147.2926025390625, 3704.4598693847656, 1176.7096862792969)",‘over 200 sites

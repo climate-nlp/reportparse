@@ -7237,6 +7237,7 @@
                 }
             ],
             "tables": [],
+            "figures": [],
             "annotations": []
         },
         {
@@ -12699,6 +12700,19 @@
                 }
             ],
             "tables": [],
+            "figures": [
+                {
+                    "figure_id": "6f18021d-5559-3fd5-b9a5-04ccca0f6c0f",
+                    "bbox": [
+                        2174.0,
+                        763.0,
+                        4183.0,
+                        1518.0
+                    ],
+                    "text": "",
+                    "annotations": []
+                }
+            ],
             "annotations": []
         },
         {
@@ -20741,6 +20755,19 @@
                 }
             ],
             "tables": [],
+            "figures": [
+                {
+                    "figure_id": "92115c6f-f08f-35dd-86bc-895d53470da7",
+                    "bbox": [
+                        2142.0,
+                        1448.0,
+                        4208.0,
+                        2273.0
+                    ],
+                    "text": "",
+                    "annotations": []
+                }
+            ],
             "annotations": []
         },
         {
@@ -28650,7 +28677,551 @@
                     "annotations": []
                 }
             ],
-            "tables": [],
+            "tables": [
+                {
+                    "table_id": "ca97c6a7-42d4-3ebc-9095-dbc4b6c5df5d",
+                    "bbox": [
+                        2175.0,
+                        696.0,
+                        3117.0,
+                        1410.0
+                    ],
+                    "html": "<table><tr><td rowspan=2>From base year 16:. reduction</td></tr><tr></tr><tr><td rowspan=3>100% Target: 14% 84,, Amount generated Amount generated __ =p» __ ~ = Activity amount”</td></tr><tr></tr><tr></tr><tr><td>FY2010 FY2022 (base year)</td></tr></table>",
+                    "text": "From base year 16:. reduction  \n  \n 100% Target: 14% 84,, Amount generated Amount generated __ =p» __ ~ = Activity amount”  \n  \n  \n FY2010 FY2022 (base year)  \n",
+                    "blocks": [
+                        {
+                            "id": "e5cce930-8ff1-3724-b84f-35e5a39c17df",
+                            "bbox": [
+                                2205.4156799316406,
+                                970.4532470703125,
+                                3113.1996459960938,
+                                1207.3731689453125
+                            ],
+                            "text": "100% Target: 14% 84,, Amount generated Amount generated __ =p» __ ~ = Activity amount”",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "e5cce930-8ff1-3724-b84f-35e5a39c17df_sent_0",
+                                    "bbox": [
+                                        2208.0,
+                                        977.0,
+                                        3110.0,
+                                        1098.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        58
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "a951ca14-1d32-3276-a6af-65694bb47f38",
+                                        "end_text_annotation_id": "111cc87d-636e-3c1a-bf85-e462c160069a"
+                                    },
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "e5cce930-8ff1-3724-b84f-35e5a39c17df_sent_1",
+                                    "bbox": [
+                                        2627.0,
+                                        1024.0,
+                                        2897.0,
+                                        1115.0
+                                    ],
+                                    "span": [
+                                        59,
+                                        65
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "2a499f42-2357-37f7-a358-bb07447c4a86",
+                                        "end_text_annotation_id": "eba0ab67-2b35-325e-a7ce-4a876204a475"
+                                    },
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "e5cce930-8ff1-3724-b84f-35e5a39c17df_sent_2",
+                                    "bbox": [
+                                        2208.0,
+                                        1104.0,
+                                        2232.0,
+                                        1107.0
+                                    ],
+                                    "span": [
+                                        66,
+                                        67
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "93e61860-10be-3292-9978-3b751258705b",
+                                        "end_text_annotation_id": "93e61860-10be-3292-9978-3b751258705b"
+                                    },
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "e5cce930-8ff1-3724-b84f-35e5a39c17df_sent_3",
+                                    "bbox": [
+                                        2249.0,
+                                        1102.0,
+                                        2897.0,
+                                        1138.0
+                                    ],
+                                    "span": [
+                                        68,
+                                        86
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "185d0df7-a9c2-337a-a862-bd9f3a6826f5",
+                                        "end_text_annotation_id": "2b6d1b5d-dc50-3f25-aa39-07e7c0bdb30a"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "a951ca14-1d32-3276-a6af-65694bb47f38",
+                                    "bbox": [
+                                        2293.0,
+                                        990.0,
+                                        2432.0,
+                                        1044.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        4
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "4c8acb6d-e2d2-322f-9d3f-476c76cf7c39",
+                                    "bbox": [
+                                        2618.0,
+                                        977.0,
+                                        2704.0,
+                                        1004.0
+                                    ],
+                                    "span": [
+                                        5,
+                                        12
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "f7e38188-1d5b-3265-9bdb-cd19406f7d53",
+                                    "bbox": [
+                                        2717.0,
+                                        977.0,
+                                        2774.0,
+                                        999.0
+                                    ],
+                                    "span": [
+                                        13,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "55afde8e-5b81-392b-b72c-12337c0c83b1",
+                                    "bbox": [
+                                        2945.0,
+                                        981.0,
+                                        3072.0,
+                                        1048.0
+                                    ],
+                                    "span": [
+                                        17,
+                                        21
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "bc9789f8-97a3-345d-9d65-a8cc3590f5a4",
+                                    "bbox": [
+                                        2239.0,
+                                        1066.0,
+                                        2342.0,
+                                        1088.0
+                                    ],
+                                    "span": [
+                                        22,
+                                        28
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "a8c3c7ce-a8b0-335b-8b7a-9f14d3fe6eb9",
+                                    "bbox": [
+                                        2351.0,
+                                        1066.0,
+                                        2482.0,
+                                        1093.0
+                                    ],
+                                    "span": [
+                                        29,
+                                        38
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "55bbb14c-ff74-3ffc-b71e-a7668abdcf8e",
+                                    "bbox": [
+                                        2907.0,
+                                        1069.0,
+                                        2994.0,
+                                        1088.0
+                                    ],
+                                    "span": [
+                                        39,
+                                        45
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "679c68c9-027c-3c3d-85ec-d11763f1358b",
+                                    "bbox": [
+                                        3001.0,
+                                        1069.0,
+                                        3110.0,
+                                        1093.0
+                                    ],
+                                    "span": [
+                                        46,
+                                        55
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "111cc87d-636e-3c1a-bf85-e462c160069a",
+                                    "bbox": [
+                                        2208.0,
+                                        1095.0,
+                                        2232.0,
+                                        1098.0
+                                    ],
+                                    "span": [
+                                        56,
+                                        58
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "2a499f42-2357-37f7-a358-bb07447c4a86",
+                                    "bbox": [
+                                        2627.0,
+                                        1024.0,
+                                        2836.0,
+                                        1115.0
+                                    ],
+                                    "span": [
+                                        59,
+                                        62
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "eba0ab67-2b35-325e-a7ce-4a876204a475",
+                                    "bbox": [
+                                        2873.0,
+                                        1093.0,
+                                        2897.0,
+                                        1097.0
+                                    ],
+                                    "span": [
+                                        63,
+                                        65
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "93e61860-10be-3292-9978-3b751258705b",
+                                    "bbox": [
+                                        2208.0,
+                                        1104.0,
+                                        2232.0,
+                                        1107.0
+                                    ],
+                                    "span": [
+                                        66,
+                                        67
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "185d0df7-a9c2-337a-a862-bd9f3a6826f5",
+                                    "bbox": [
+                                        2873.0,
+                                        1102.0,
+                                        2897.0,
+                                        1106.0
+                                    ],
+                                    "span": [
+                                        68,
+                                        69
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "b70d9b8e-c053-3ebc-a36b-84223be1ba7a",
+                                    "bbox": [
+                                        2249.0,
+                                        1111.0,
+                                        2346.0,
+                                        1138.0
+                                    ],
+                                    "span": [
+                                        70,
+                                        78
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "2b6d1b5d-dc50-3f25-aa39-07e7c0bdb30a",
+                                    "bbox": [
+                                        2355.0,
+                                        1109.0,
+                                        2473.0,
+                                        1133.0
+                                    ],
+                                    "span": [
+                                        79,
+                                        86
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "3680f920-d4c2-3ea8-8fab-414ca5e7a857",
+                            "bbox": [
+                                2549.3164672851562,
+                                697.0629470348358,
+                                2843.3768920898438,
+                                964.8352966308594
+                            ],
+                            "text": "From base year 16:. reduction",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "3680f920-d4c2-3ea8-8fab-414ca5e7a857_sent_0",
+                                    "bbox": [
+                                        2554.0,
+                                        698.0,
+                                        2840.0,
+                                        954.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        29
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "2fb024c9-84ea-3041-9861-ccd7c4ba2238",
+                                        "end_text_annotation_id": "3f5a2296-050d-345b-96cd-e372de4eca17"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "2fb024c9-84ea-3041-9861-ccd7c4ba2238",
+                                    "bbox": [
+                                        2564.0,
+                                        698.0,
+                                        2650.0,
+                                        726.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        4
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "1d7af929-2b58-3f31-a39e-ffd72dfd8aa5",
+                                    "bbox": [
+                                        2665.0,
+                                        698.0,
+                                        2747.0,
+                                        726.0
+                                    ],
+                                    "span": [
+                                        5,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "714e6fac-3318-361b-9376-f791faa9ede7",
+                                    "bbox": [
+                                        2759.0,
+                                        705.0,
+                                        2834.0,
+                                        733.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        14
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "0db8e39e-a685-3059-b88b-eb041be8445c",
+                                    "bbox": [
+                                        2600.0,
+                                        766.0,
+                                        2799.0,
+                                        880.0
+                                    ],
+                                    "span": [
+                                        15,
+                                        19
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "3f5a2296-050d-345b-96cd-e372de4eca17",
+                                    "bbox": [
+                                        2554.0,
+                                        905.0,
+                                        2840.0,
+                                        954.0
+                                    ],
+                                    "span": [
+                                        20,
+                                        29
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "b89b86ec-db5d-3120-9416-3f1a021da0c0",
+                            "bbox": [
+                                2243.102005004883,
+                                1209.713623046875,
+                                3060.7891845703125,
+                                1350.8840942382812
+                            ],
+                            "text": "FY2010 FY2022 (base year)",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "b89b86ec-db5d-3120-9416-3f1a021da0c0_sent_0",
+                                    "bbox": [
+                                        2285.0,
+                                        1274.0,
+                                        3058.0,
+                                        1348.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        25
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "9c5eddc2-36f8-3751-8d20-c02e0722a2c0",
+                                        "end_text_annotation_id": "9ef62835-cb05-39f1-9e38-317313e41df3"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "9c5eddc2-36f8-3751-8d20-c02e0722a2c0",
+                                    "bbox": [
+                                        2293.0,
+                                        1278.0,
+                                        2419.0,
+                                        1306.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        6
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "20aa5695-551a-3b82-bb74-eaf79e7b6b0e",
+                                    "bbox": [
+                                        2933.0,
+                                        1274.0,
+                                        3058.0,
+                                        1302.0
+                                    ],
+                                    "span": [
+                                        7,
+                                        13
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "7427867d-c40d-31c9-845b-b7d1e0e4f0ef",
+                                    "bbox": [
+                                        2285.0,
+                                        1321.0,
+                                        2355.0,
+                                        1348.0
+                                    ],
+                                    "span": [
+                                        14,
+                                        19
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "9ef62835-cb05-39f1-9e38-317313e41df3",
+                                    "bbox": [
+                                        2364.0,
+                                        1321.0,
+                                        2426.0,
+                                        1348.0
+                                    ],
+                                    "span": [
+                                        20,
+                                        25
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        }
+                    ],
+                    "annotations": []
+                }
+            ],
+            "figures": [
+                {
+                    "figure_id": "55323669-dc8d-3731-8086-ad17ef794106",
+                    "bbox": [
+                        3239.0,
+                        568.0,
+                        4183.0,
+                        1279.0
+                    ],
+                    "text": "",
+                    "annotations": []
+                }
+            ],
             "annotations": []
         },
         {
@@ -38161,7 +38732,564 @@
                     "annotations": []
                 }
             ],
-            "tables": [],
+            "tables": [
+                {
+                    "table_id": "5e0de445-cbf3-3e96-a038-86782a875f81",
+                    "bbox": [
+                        1102.0,
+                        1229.0,
+                        2065.0,
+                        1522.0
+                    ],
+                    "html": "<table><tr><td colspan=2>Number of sites</td><td></td><td>1</td><td colspan=4>business sites</td></tr><tr><td>achieving waste</td><td>zero</td><td>landfill</td><td rowspan=2 colspan=5>(58% \"8% achievement) target: 90 business sites (approx. 25%)</td></tr><tr><td></td><td></td><td></td></tr></table>",
+                    "text": "Number of sites    1  business sites     \n achieving waste  zero  landfill  (58% \"8% achievement) target: 90 business sites (approx. 25%)      \n         \n",
+                    "blocks": [
+                        {
+                            "id": "4a2d40fb-02b9-39c3-bd33-6b8cd9ff9e6b",
+                            "bbox": [
+                                1261.1523132324219,
+                                1371.8273468017578,
+                                1327.1253967285156,
+                                1398.5278015136719
+                            ],
+                            "text": "zero",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "4a2d40fb-02b9-39c3-bd33-6b8cd9ff9e6b_sent_0",
+                                    "bbox": [
+                                        1263.0,
+                                        1374.0,
+                                        1325.0,
+                                        1392.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        4
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "76e749c8-5ffc-3975-896b-2cc905465fe4",
+                                        "end_text_annotation_id": "76e749c8-5ffc-3975-896b-2cc905465fe4"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "76e749c8-5ffc-3975-896b-2cc905465fe4",
+                                    "bbox": [
+                                        1263.0,
+                                        1374.0,
+                                        1325.0,
+                                        1392.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        4
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "32ad60af-8a1b-38d3-89ac-161fba9385ee",
+                            "bbox": [
+                                1631.5849609375,
+                                1260.9945049285889,
+                                2031.5513916015625,
+                                1358.4417877197266
+                            ],
+                            "text": "business sites",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "32ad60af-8a1b-38d3-89ac-161fba9385ee_sent_0",
+                                    "bbox": [
+                                        1715.0,
+                                        1315.0,
+                                        2030.0,
+                                        1352.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        14
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "ebbe8067-6adf-33a1-99d3-ebb660ec1471",
+                                        "end_text_annotation_id": "a6445a21-9de1-3649-a0a9-2eb14419b14f"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "ebbe8067-6adf-33a1-99d3-ebb660ec1471",
+                                    "bbox": [
+                                        1715.0,
+                                        1315.0,
+                                        1911.0,
+                                        1352.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        8
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "a6445a21-9de1-3649-a0a9-2eb14419b14f",
+                                    "bbox": [
+                                        1929.0,
+                                        1315.0,
+                                        2030.0,
+                                        1352.0
+                                    ],
+                                    "span": [
+                                        9,
+                                        14
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "e14e7a8f-249a-3355-a227-6cd8dd69fdcf",
+                            "bbox": [
+                                1495.5404968261719,
+                                1260.4634017944336,
+                                1618.5899658203125,
+                                1357.3455810546875
+                            ],
+                            "text": "1",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "e14e7a8f-249a-3355-a227-6cd8dd69fdcf_sent_0",
+                                    "bbox": [
+                                        1499.0,
+                                        1262.0,
+                                        1532.0,
+                                        1351.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        1
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "015dbc25-5ce7-3cee-99b8-5f89ab991b1b",
+                                        "end_text_annotation_id": "015dbc25-5ce7-3cee-99b8-5f89ab991b1b"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "015dbc25-5ce7-3cee-99b8-5f89ab991b1b",
+                                    "bbox": [
+                                        1499.0,
+                                        1262.0,
+                                        1532.0,
+                                        1351.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        1
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "80bc00f0-e33b-39c2-92f4-a05c147f36cf",
+                            "bbox": [
+                                1636.6392822265625,
+                                1366.6703033447266,
+                                2065.0,
+                                1502.8011779785156
+                            ],
+                            "text": "(58% \"8% achievement) target: 90 business sites (approx. 25%)",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "80bc00f0-e33b-39c2-92f4-a05c147f36cf_sent_0",
+                                    "bbox": [
+                                        1635.0,
+                                        1372.0,
+                                        2065.0,
+                                        1502.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        56
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "d7303799-c19d-3a03-866c-8969dfdb9bb3",
+                                        "end_text_annotation_id": "51b94155-7331-3d43-aa9c-9e824b81b8a4"
+                                    },
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "80bc00f0-e33b-39c2-92f4-a05c147f36cf_sent_1",
+                                    "bbox": [
+                                        1994.0,
+                                        1475.0,
+                                        2057.0,
+                                        1502.0
+                                    ],
+                                    "span": [
+                                        57,
+                                        61
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "0f919c1e-477d-32bc-ab39-781e0c2f543c",
+                                        "end_text_annotation_id": "0f919c1e-477d-32bc-ab39-781e0c2f543c"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "d7303799-c19d-3a03-866c-8969dfdb9bb3",
+                                    "bbox": [
+                                        1635.0,
+                                        1372.0,
+                                        1748.0,
+                                        1419.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        4
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "fb98a39c-1655-342b-8b5a-91243af57a58",
+                                    "bbox": [
+                                        1635.0,
+                                        1372.0,
+                                        1750.0,
+                                        1460.0
+                                    ],
+                                    "span": [
+                                        5,
+                                        8
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "eb25e8a0-7c95-37bd-b1a9-76ab29d14348",
+                                    "bbox": [
+                                        1768.0,
+                                        1372.0,
+                                        2065.0,
+                                        1419.0
+                                    ],
+                                    "span": [
+                                        9,
+                                        21
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "1e62da6c-c534-3c92-b8dd-8656631c22f9",
+                                    "bbox": [
+                                        1761.0,
+                                        1435.0,
+                                        1840.0,
+                                        1470.0
+                                    ],
+                                    "span": [
+                                        22,
+                                        29
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "b05bb1d4-5e46-362b-a5e3-a9aac8c138aa",
+                                    "bbox": [
+                                        1654.0,
+                                        1475.0,
+                                        1685.0,
+                                        1497.0
+                                    ],
+                                    "span": [
+                                        30,
+                                        32
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "a2b59ff0-f3a2-3722-83a6-3e6fbfd0a5fc",
+                                    "bbox": [
+                                        1696.0,
+                                        1475.0,
+                                        1805.0,
+                                        1497.0
+                                    ],
+                                    "span": [
+                                        33,
+                                        41
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "a345dce3-88ba-3c6e-9e15-b10bc48cd66b",
+                                    "bbox": [
+                                        1815.0,
+                                        1476.0,
+                                        1871.0,
+                                        1497.0
+                                    ],
+                                    "span": [
+                                        42,
+                                        47
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "51b94155-7331-3d43-aa9c-9e824b81b8a4",
+                                    "bbox": [
+                                        1882.0,
+                                        1475.0,
+                                        1976.0,
+                                        1502.0
+                                    ],
+                                    "span": [
+                                        48,
+                                        56
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "0f919c1e-477d-32bc-ab39-781e0c2f543c",
+                                    "bbox": [
+                                        1994.0,
+                                        1475.0,
+                                        2057.0,
+                                        1502.0
+                                    ],
+                                    "span": [
+                                        57,
+                                        61
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "87e53c56-25f8-3349-b7ee-f8daea07356c",
+                            "bbox": [
+                                1334.9473114013672,
+                                1363.329833984375,
+                                1434.31103515625,
+                                1398.7245178222656
+                            ],
+                            "text": "landfill",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "87e53c56-25f8-3349-b7ee-f8daea07356c_sent_0",
+                                    "bbox": [
+                                        1338.0,
+                                        1368.0,
+                                        1431.0,
+                                        1392.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        8
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "23f8f8c3-73b6-3370-aa86-cac639162e7f",
+                                        "end_text_annotation_id": "23f8f8c3-73b6-3370-aa86-cac639162e7f"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "23f8f8c3-73b6-3370-aa86-cac639162e7f",
+                                    "bbox": [
+                                        1338.0,
+                                        1368.0,
+                                        1431.0,
+                                        1392.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        8
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "0c6ed9d5-8571-3dd9-8178-1ca72f779ae3",
+                            "bbox": [
+                                1108.3076329231262,
+                                1361.49169921875,
+                                1252.6197509765625,
+                                1443.3899230957031
+                            ],
+                            "text": "achieving waste",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "0c6ed9d5-8571-3dd9-8178-1ca72f779ae3_sent_0",
+                                    "bbox": [
+                                        1111.0,
+                                        1368.0,
+                                        1251.0,
+                                        1438.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        15
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "7f006e67-5e8b-3211-b0c2-16b0c9735ec0",
+                                        "end_text_annotation_id": "66faae52-4914-3fce-8556-5c0afd6dfb6c"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "7f006e67-5e8b-3211-b0c2-16b0c9735ec0",
+                                    "bbox": [
+                                        1111.0,
+                                        1368.0,
+                                        1251.0,
+                                        1399.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "66faae52-4914-3fce-8556-5c0afd6dfb6c",
+                                    "bbox": [
+                                        1111.0,
+                                        1415.0,
+                                        1198.0,
+                                        1438.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        15
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "17ccd132-d3ff-3e8f-a91d-1d791df5cd20",
+                            "bbox": [
+                                1107.8786931037903,
+                                1318.2025985717773,
+                                1350.7362518310547,
+                                1353.1905975341797
+                            ],
+                            "text": "Number of sites",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "17ccd132-d3ff-3e8f-a91d-1d791df5cd20_sent_0",
+                                    "bbox": [
+                                        1112.0,
+                                        1322.0,
+                                        1348.0,
+                                        1347.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        15
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "f93b7f58-6f43-35a5-bba3-8382096d4e6c",
+                                        "end_text_annotation_id": "1ef0bc31-4c96-35bd-b7d8-9934188e42fe"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "f93b7f58-6f43-35a5-bba3-8382096d4e6c",
+                                    "bbox": [
+                                        1112.0,
+                                        1322.0,
+                                        1231.0,
+                                        1347.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        6
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "9e04c2c2-0058-3ff9-87ca-2e65bdca3e37",
+                                    "bbox": [
+                                        1241.0,
+                                        1322.0,
+                                        1270.0,
+                                        1346.0
+                                    ],
+                                    "span": [
+                                        7,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "1ef0bc31-4c96-35bd-b7d8-9934188e42fe",
+                                    "bbox": [
+                                        1280.0,
+                                        1323.0,
+                                        1348.0,
+                                        1346.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        15
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        }
+                    ],
+                    "annotations": []
+                }
+            ],
+            "figures": [],
             "annotations": []
         },
         {
@@ -49039,7 +50167,1994 @@
                     "annotations": []
                 }
             ],
-            "tables": [],
+            "tables": [
+                {
+                    "table_id": "0dcabc52-32aa-35e4-800a-c38e4f870730",
+                    "bbox": [
+                        3233.0,
+                        955.0,
+                        4197.0,
+                        1532.0
+                    ],
+                    "html": "<table><tr><td colspan=5>Activity field Products or services (implementation to date)</td></tr><tr><td colspan=2>water Wastewater recycling</td><td colspan=2>systems</td><td></td></tr><tr><td colspan=2>resources Seawater desalination</td><td colspan=2>systems</td><td></td></tr><tr><td colspan=2>Water and sewage</td><td colspan=2>treatment, etc.</td><td></td></tr><tr><td>‘over 200 sites</td><td>in</td><td>40</td><td>countries</td><td>and regions)</td></tr><tr><td colspan=3>Water purification plants</td><td></td><td></td></tr><tr><td colspan=2>Developing water approximately 700</td><td colspan=2>plants in Japan)</td><td></td></tr><tr><td colspan=3>infrastructure Sewage treatment plants</td><td></td><td></td></tr><tr><td colspan=2>approximately 900</td><td colspan=2>plants in Japan)</td><td></td></tr><tr><td>Comprehensive</td><td></td><td colspan=3>solutions for water and</td></tr><tr><td colspan=3>sewage treatment operators</td><td></td><td></td></tr><tr><td>Integrated flood Flood forecasting</td><td colspan=4>and simulation technology related</td></tr><tr><td>control measures © evacuations</td><td>and</td><td colspan=2>emergencies</td><td></td></tr></table>",
+                    "text": "Activity field Products or services (implementation to date)      \n water Wastewater recycling   systems    \n resources Seawater desalination   systems    \n Water and sewage   treatment, etc.    \n ‘over 200 sites  in  40  countries  and regions)  \n Water purification plants      \n Developing water approximately 700   plants in Japan)    \n infrastructure Sewage treatment plants      \n approximately 900   plants in Japan)    \n Comprehensive    solutions for water and    \n sewage treatment operators      \n Integrated flood Flood forecasting  and simulation technology related     \n control measures © evacuations  and  emergencies    \n",
+                    "blocks": [
+                        {
+                            "id": "9d08bc2c-6681-306c-acf1-6a55c3e9b410",
+                            "bbox": [
+                                3802.1546630859375,
+                                1066.3750686645508,
+                                3908.00634765625,
+                                1092.3305358886719
+                            ],
+                            "text": "systems",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "9d08bc2c-6681-306c-acf1-6a55c3e9b410_sent_0",
+                                    "bbox": [
+                                        3804.0,
+                                        1067.0,
+                                        3906.0,
+                                        1093.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        7
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "139db7a3-965d-3105-a695-dc544bcf644a",
+                                        "end_text_annotation_id": "139db7a3-965d-3105-a695-dc544bcf644a"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "139db7a3-965d-3105-a695-dc544bcf644a",
+                                    "bbox": [
+                                        3804.0,
+                                        1067.0,
+                                        3906.0,
+                                        1093.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        7
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "84a2214b-3e15-30fe-a94d-31e0d89934dd",
+                            "bbox": [
+                                3520.7158813476562,
+                                1363.7890930175781,
+                                3719.1751403808594,
+                                1391.0833435058594
+                            ],
+                            "text": "Comprehensive",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "84a2214b-3e15-30fe-a94d-31e0d89934dd_sent_0",
+                                    "bbox": [
+                                        3521.0,
+                                        1365.0,
+                                        3716.0,
+                                        1392.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        13
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "29f3f5f3-22de-3faa-ad18-cb37318265cc",
+                                        "end_text_annotation_id": "29f3f5f3-22de-3faa-ad18-cb37318265cc"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "29f3f5f3-22de-3faa-ad18-cb37318265cc",
+                                    "bbox": [
+                                        3521.0,
+                                        1365.0,
+                                        3716.0,
+                                        1392.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        13
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "94f749df-9f5b-35bc-aacc-8cf4afbf4df0",
+                            "bbox": [
+                                3793.9990844726562,
+                                1018.6961936950684,
+                                3899.2446899414062,
+                                1044.5322799682617
+                            ],
+                            "text": "systems",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "94f749df-9f5b-35bc-aacc-8cf4afbf4df0_sent_0",
+                                    "bbox": [
+                                        3796.0,
+                                        1019.0,
+                                        3897.0,
+                                        1045.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        7
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "ea5912bf-7c8f-3ab5-9122-b08945e14d0b",
+                                        "end_text_annotation_id": "ea5912bf-7c8f-3ab5-9122-b08945e14d0b"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "ea5912bf-7c8f-3ab5-9122-b08945e14d0b",
+                                    "bbox": [
+                                        3796.0,
+                                        1019.0,
+                                        3897.0,
+                                        1045.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        7
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "0efbf733-ab0f-3c6d-acf5-68c15cbbe375",
+                            "bbox": [
+                                3982.8089599609375,
+                                1149.3934478759766,
+                                4138.58154296875,
+                                1176.5282287597656
+                            ],
+                            "text": "and regions)",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "0efbf733-ab0f-3c6d-acf5-68c15cbbe375_sent_0",
+                                    "bbox": [
+                                        3986.0,
+                                        1150.0,
+                                        4137.0,
+                                        1177.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        12
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "b3fd9342-aa8b-3c89-a6d9-8665a80b6f49",
+                                        "end_text_annotation_id": "e0c21610-0e67-33e6-8d21-7a9b4eb43345"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "b3fd9342-aa8b-3c89-a6d9-8665a80b6f49",
+                                    "bbox": [
+                                        3986.0,
+                                        1150.0,
+                                        4031.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        3
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "e0c21610-0e67-33e6-8d21-7a9b4eb43345",
+                                    "bbox": [
+                                        4042.0,
+                                        1150.0,
+                                        4137.0,
+                                        1177.0
+                                    ],
+                                    "span": [
+                                        4,
+                                        12
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "73121f59-c5f5-3b82-a370-18c4b25c651d",
+                            "bbox": [
+                                3861.85888671875,
+                                1149.602767944336,
+                                3978.5205688476562,
+                                1176.334228515625
+                            ],
+                            "text": "countries",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "73121f59-c5f5-3b82-a370-18c4b25c651d_sent_0",
+                                    "bbox": [
+                                        3863.0,
+                                        1150.0,
+                                        3976.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        9
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "16fc80a9-a338-3be0-9bb1-db9803bb4d30",
+                                        "end_text_annotation_id": "16fc80a9-a338-3be0-9bb1-db9803bb4d30"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "16fc80a9-a338-3be0-9bb1-db9803bb4d30",
+                                    "bbox": [
+                                        3863.0,
+                                        1150.0,
+                                        3976.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "72795738-4cbc-3201-af50-db59a143fe1e",
+                            "bbox": [
+                                3765.325439453125,
+                                1485.716796875,
+                                3928.22021484375,
+                                1509.1482543945312
+                            ],
+                            "text": "emergencies",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "72795738-4cbc-3201-af50-db59a143fe1e_sent_0",
+                                    "bbox": [
+                                        3767.0,
+                                        1483.0,
+                                        3926.0,
+                                        1510.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        11
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "a2069402-9ed0-324c-931f-a9e751f9beb2",
+                                        "end_text_annotation_id": "a2069402-9ed0-324c-931f-a9e751f9beb2"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "a2069402-9ed0-324c-931f-a9e751f9beb2",
+                                    "bbox": [
+                                        3767.0,
+                                        1483.0,
+                                        3926.0,
+                                        1510.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        11
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "89e55c56-88e1-3ffc-8ffb-8aa12cfc388e",
+                            "bbox": [
+                                3518.727569580078,
+                                1315.8276062011719,
+                                3768.5607299804688,
+                                1342.5516967773438
+                            ],
+                            "text": "approximately 900",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "89e55c56-88e1-3ffc-8ffb-8aa12cfc388e_sent_0",
+                                    "bbox": [
+                                        3528.0,
+                                        1317.0,
+                                        3758.0,
+                                        1344.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        17
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "34656f8d-cae4-3d1d-901e-78d9731580ae",
+                                        "end_text_annotation_id": "30504014-4bdb-35cb-847c-db6559f69796"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "34656f8d-cae4-3d1d-901e-78d9731580ae",
+                                    "bbox": [
+                                        3528.0,
+                                        1317.0,
+                                        3702.0,
+                                        1344.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        13
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "30504014-4bdb-35cb-847c-db6559f69796",
+                                    "bbox": [
+                                        3711.0,
+                                        1317.0,
+                                        3758.0,
+                                        1339.0
+                                    ],
+                                    "span": [
+                                        14,
+                                        17
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "cfd50fd1-f747-39aa-8ee6-460e2a81f474",
+                            "bbox": [
+                                3709.8814392089844,
+                                1485.5908203125,
+                                3759.2273559570312,
+                                1509.3245849609375
+                            ],
+                            "text": "and",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "cfd50fd1-f747-39aa-8ee6-460e2a81f474_sent_0",
+                                    "bbox": [
+                                        3712.0,
+                                        1483.0,
+                                        3757.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        3
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "c8285b3e-dc6d-3e2e-b5d6-f5abc67f4f2a",
+                                        "end_text_annotation_id": "c8285b3e-dc6d-3e2e-b5d6-f5abc67f4f2a"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "c8285b3e-dc6d-3e2e-b5d6-f5abc67f4f2a",
+                                    "bbox": [
+                                        3712.0,
+                                        1483.0,
+                                        3757.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        3
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "4495cc91-1c48-3fa0-953b-8efcf9b1825e",
+                            "bbox": [
+                                3820.3143310546875,
+                                1148.1943054199219,
+                                3852.7664184570312,
+                                1170.8696594238281
+                            ],
+                            "text": "40",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "4495cc91-1c48-3fa0-953b-8efcf9b1825e_sent_0",
+                                    "bbox": [
+                                        3822.0,
+                                        1150.0,
+                                        3853.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        2
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "dc91914b-cb32-36b9-966a-713e520c7cbc",
+                                        "end_text_annotation_id": "dc91914b-cb32-36b9-966a-713e520c7cbc"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "dc91914b-cb32-36b9-966a-713e520c7cbc",
+                                    "bbox": [
+                                        3822.0,
+                                        1150.0,
+                                        3853.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        2
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "3c0e386f-4a06-37fc-8a0a-4552ebc261d3",
+                            "bbox": [
+                                3247.9095458984375,
+                                1062.8064193725586,
+                                3781.7841796875,
+                                1092.4271087646484
+                            ],
+                            "text": "resources Seawater desalination",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "3c0e386f-4a06-37fc-8a0a-4552ebc261d3_sent_0",
+                                    "bbox": [
+                                        3252.0,
+                                        1065.0,
+                                        3794.0,
+                                        1088.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        31
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "77b877f0-93ea-30d3-9f2b-c271b61bd0df",
+                                        "end_text_annotation_id": "7f852856-0fbf-3213-a830-91791f3357dc"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "77b877f0-93ea-30d3-9f2b-c271b61bd0df",
+                                    "bbox": [
+                                        3252.0,
+                                        1065.0,
+                                        3372.0,
+                                        1082.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "0853e942-4700-3a90-8b65-ac7986f0137b",
+                                    "bbox": [
+                                        3521.0,
+                                        1066.0,
+                                        3639.0,
+                                        1088.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        18
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "7f852856-0fbf-3213-a830-91791f3357dc",
+                                    "bbox": [
+                                        3648.0,
+                                        1066.0,
+                                        3794.0,
+                                        1088.0
+                                    ],
+                                    "span": [
+                                        19,
+                                        31
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "05732e47-d5d5-3bc2-b404-8166376426f8",
+                            "bbox": [
+                                3766.6871337890625,
+                                1311.2735595703125,
+                                3962.5576782226562,
+                                1346.1229553222656
+                            ],
+                            "text": "plants in Japan)",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "05732e47-d5d5-3bc2-b404-8166376426f8_sent_0",
+                                    "bbox": [
+                                        3769.0,
+                                        1317.0,
+                                        3963.0,
+                                        1344.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        16
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "52549ef3-b0a4-3832-91ff-adc2d14cb334",
+                                        "end_text_annotation_id": "54c2019e-7f7a-33d7-a59a-47a849520f9b"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "52549ef3-b0a4-3832-91ff-adc2d14cb334",
+                                    "bbox": [
+                                        3769.0,
+                                        1317.0,
+                                        3842.0,
+                                        1344.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        6
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "c9e65952-4c90-3016-a10e-c6f6cc435467",
+                                    "bbox": [
+                                        3852.0,
+                                        1317.0,
+                                        3870.0,
+                                        1338.0
+                                    ],
+                                    "span": [
+                                        7,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "54c2019e-7f7a-33d7-a59a-47a849520f9b",
+                                    "bbox": [
+                                        3881.0,
+                                        1317.0,
+                                        3963.0,
+                                        1344.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "8e313d32-1a34-3518-86fe-604c1d9c971c",
+                            "bbox": [
+                                3831.1807861328125,
+                                1361.3646850585938,
+                                4091.5291137695312,
+                                1391.5477905273438
+                            ],
+                            "text": "solutions for water and",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "8e313d32-1a34-3518-86fe-604c1d9c971c_sent_0",
+                                    "bbox": [
+                                        3806.0,
+                                        1365.0,
+                                        4090.0,
+                                        1387.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        23
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "a20862db-aba7-3d23-b1d3-953a0692292a",
+                                        "end_text_annotation_id": "607f0352-bb03-3e26-9b68-cae54639961b"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "a20862db-aba7-3d23-b1d3-953a0692292a",
+                                    "bbox": [
+                                        3806.0,
+                                        1365.0,
+                                        3916.0,
+                                        1387.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "1ad9dc9f-2f4e-391f-8fdb-5e1074428e96",
+                                    "bbox": [
+                                        3925.0,
+                                        1365.0,
+                                        3958.0,
+                                        1387.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        13
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "1eec4707-76a9-3ace-859a-f594014a9fc0",
+                                    "bbox": [
+                                        3966.0,
+                                        1366.0,
+                                        4036.0,
+                                        1387.0
+                                    ],
+                                    "span": [
+                                        14,
+                                        19
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "607f0352-bb03-3e26-9b68-cae54639961b",
+                                    "bbox": [
+                                        4045.0,
+                                        1365.0,
+                                        4090.0,
+                                        1387.0
+                                    ],
+                                    "span": [
+                                        20,
+                                        23
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "292fca59-bde0-32b5-9454-f0833f230bfc",
+                            "bbox": [
+                                3367.1944885253906,
+                                1015.6947135925293,
+                                3786.7402954101562,
+                                1051.2924423217773
+                            ],
+                            "text": "water Wastewater recycling",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "292fca59-bde0-32b5-9454-f0833f230bfc_sent_0",
+                                    "bbox": [
+                                        3364.0,
+                                        1018.0,
+                                        3785.0,
+                                        1047.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        26
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "c46295ac-0af9-3654-be0c-c533839aaa7f",
+                                        "end_text_annotation_id": "0e46ae2b-8316-3db0-a31a-cfcec6739918"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "c46295ac-0af9-3654-be0c-c533839aaa7f",
+                                    "bbox": [
+                                        3364.0,
+                                        1026.0,
+                                        3434.0,
+                                        1047.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        5
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "fac14116-9e92-3335-aedd-f7914f462170",
+                                    "bbox": [
+                                        3520.0,
+                                        1018.0,
+                                        3668.0,
+                                        1040.0
+                                    ],
+                                    "span": [
+                                        6,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "0e46ae2b-8316-3db0-a31a-cfcec6739918",
+                                    "bbox": [
+                                        3678.0,
+                                        1018.0,
+                                        3785.0,
+                                        1045.0
+                                    ],
+                                    "span": [
+                                        17,
+                                        26
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "555b3813-6709-3501-9c61-f97a4ae34e8d",
+                            "bbox": [
+                                3766.7962036132812,
+                                1227.0370483398438,
+                                3963.0007934570312,
+                                1262.1715087890625
+                            ],
+                            "text": "plants in Japan)",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "555b3813-6709-3501-9c61-f97a4ae34e8d_sent_0",
+                                    "bbox": [
+                                        3769.0,
+                                        1233.0,
+                                        3963.0,
+                                        1260.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        16
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "5b3108c4-9546-30d2-b973-74eaa52ef857",
+                                        "end_text_annotation_id": "796476f8-2bdd-30d5-8b3a-1c5cbea02189"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "5b3108c4-9546-30d2-b973-74eaa52ef857",
+                                    "bbox": [
+                                        3769.0,
+                                        1233.0,
+                                        3842.0,
+                                        1260.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        6
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "9cc76ff3-e947-36a5-9b35-b2524a80b3a2",
+                                    "bbox": [
+                                        3852.0,
+                                        1233.0,
+                                        3870.0,
+                                        1254.0
+                                    ],
+                                    "span": [
+                                        7,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "796476f8-2bdd-30d5-8b3a-1c5cbea02189",
+                                    "bbox": [
+                                        3881.0,
+                                        1233.0,
+                                        3963.0,
+                                        1260.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "59626cb4-1588-3f2f-b7aa-1d5f8d896460",
+                            "bbox": [
+                                3521.429412841797,
+                                1111.9603729248047,
+                                3748.9926147460938,
+                                1144.226806640625
+                            ],
+                            "text": "Water and sewage",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "59626cb4-1588-3f2f-b7aa-1d5f8d896460_sent_0",
+                                    "bbox": [
+                                        3520.0,
+                                        1114.0,
+                                        3754.0,
+                                        1141.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        16
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "7baf1c13-f556-3fd7-bf7e-c93d59985d7c",
+                                        "end_text_annotation_id": "a8e9bf87-ab21-3ff5-85f2-d575a5a009d6"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "7baf1c13-f556-3fd7-bf7e-c93d59985d7c",
+                                    "bbox": [
+                                        3520.0,
+                                        1114.0,
+                                        3594.0,
+                                        1136.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        5
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "c4856459-f207-3c9c-949a-6fd2c2c62774",
+                                    "bbox": [
+                                        3603.0,
+                                        1114.0,
+                                        3648.0,
+                                        1136.0
+                                    ],
+                                    "span": [
+                                        6,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "a8e9bf87-ab21-3ff5-85f2-d575a5a009d6",
+                                    "bbox": [
+                                        3658.0,
+                                        1119.0,
+                                        3754.0,
+                                        1141.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "fa6e8dcd-e2f4-3721-aaef-18b1e3f3db67",
+                            "bbox": [
+                                3290.5996437072754,
+                                967.2684640884399,
+                                4146.89453125,
+                                999.3923797607422
+                            ],
+                            "text": "Activity field Products or services (implementation to date)",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "fa6e8dcd-e2f4-3721-aaef-18b1e3f3db67_sent_0",
+                                    "bbox": [
+                                        3290.0,
+                                        971.0,
+                                        4148.0,
+                                        998.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        60
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "5db92006-0684-3aaa-b8dd-4da23b2019b2",
+                                        "end_text_annotation_id": "3f6d7201-0027-3704-8f22-da5f396a0c32"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "5db92006-0684-3aaa-b8dd-4da23b2019b2",
+                                    "bbox": [
+                                        3290.0,
+                                        971.0,
+                                        3384.0,
+                                        998.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        8
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "ea0a8f55-0ff4-3fb0-bc2b-c3f2bb5db0cb",
+                                    "bbox": [
+                                        3393.0,
+                                        971.0,
+                                        3446.0,
+                                        992.0
+                                    ],
+                                    "span": [
+                                        9,
+                                        14
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "f4c8107e-d93e-3894-aab5-c15a68878bb8",
+                                    "bbox": [
+                                        3560.0,
+                                        971.0,
+                                        3675.0,
+                                        992.0
+                                    ],
+                                    "span": [
+                                        15,
+                                        23
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "89a6b90f-c198-3a82-affe-c9aa8cebc10c",
+                                    "bbox": [
+                                        3685.0,
+                                        976.0,
+                                        3710.0,
+                                        992.0
+                                    ],
+                                    "span": [
+                                        24,
+                                        26
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "d77edbf6-e223-33bd-ba7a-1333e7e39236",
+                                    "bbox": [
+                                        3719.0,
+                                        971.0,
+                                        3824.0,
+                                        992.0
+                                    ],
+                                    "span": [
+                                        27,
+                                        35
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "58441450-5f87-3102-a8dd-df7e81265263",
+                                    "bbox": [
+                                        3835.0,
+                                        971.0,
+                                        4040.0,
+                                        998.0
+                                    ],
+                                    "span": [
+                                        36,
+                                        51
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "bdececec-00e0-3e71-9e9f-bac69bbf6587",
+                                    "bbox": [
+                                        4050.0,
+                                        972.0,
+                                        4075.0,
+                                        992.0
+                                    ],
+                                    "span": [
+                                        52,
+                                        54
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "3f6d7201-0027-3704-8f22-da5f396a0c32",
+                                    "bbox": [
+                                        4085.0,
+                                        971.0,
+                                        4148.0,
+                                        998.0
+                                    ],
+                                    "span": [
+                                        55,
+                                        60
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "3ac8b302-15a3-3c4b-821b-eeedd7e150f3",
+                            "bbox": [
+                                3519.6100158691406,
+                                1395.9313659667969,
+                                3868.9627685546875,
+                                1430.1191711425781
+                            ],
+                            "text": "sewage treatment operators",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "3ac8b302-15a3-3c4b-821b-eeedd7e150f3_sent_0",
+                                    "bbox": [
+                                        3521.0,
+                                        1401.0,
+                                        3873.0,
+                                        1427.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        26
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "d7df8334-0c1a-3a09-b1fe-37f3be6dfb0e",
+                                        "end_text_annotation_id": "cb34dab3-a850-3723-ad8f-46ce0227eb8a"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "d7df8334-0c1a-3a09-b1fe-37f3be6dfb0e",
+                                    "bbox": [
+                                        3521.0,
+                                        1405.0,
+                                        3617.0,
+                                        1427.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        6
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "79107a7b-3088-3310-8835-35a0263595b7",
+                                    "bbox": [
+                                        3626.0,
+                                        1401.0,
+                                        3745.0,
+                                        1422.0
+                                    ],
+                                    "span": [
+                                        7,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "cb34dab3-a850-3723-ad8f-46ce0227eb8a",
+                                    "bbox": [
+                                        3755.0,
+                                        1401.0,
+                                        3873.0,
+                                        1427.0
+                                    ],
+                                    "span": [
+                                        17,
+                                        26
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "d82f1279-12d2-30e8-97cb-57893f474329",
+                            "bbox": [
+                                3248.5513229370117,
+                                1484.97265625,
+                                3703.5289001464844,
+                                1509.30859375
+                            ],
+                            "text": "control measures © evacuations",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "d82f1279-12d2-30e8-97cb-57893f474329_sent_0",
+                                    "bbox": [
+                                        3251.0,
+                                        1483.0,
+                                        3702.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        30
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "fc73d70e-cb0a-3462-9008-afaf747f1128",
+                                        "end_text_annotation_id": "0bf74581-ac83-3a73-9d3f-75e4c366f92f"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "fc73d70e-cb0a-3462-9008-afaf747f1128",
+                                    "bbox": [
+                                        3251.0,
+                                        1483.0,
+                                        3335.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        7
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "72ebc7f9-a715-3d9b-aeec-7bed4fcc7a79",
+                                    "bbox": [
+                                        3346.0,
+                                        1488.0,
+                                        3465.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        8,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "ad9b1430-a5de-3482-92d4-1cd814705c3a",
+                                    "bbox": [
+                                        3530.0,
+                                        1488.0,
+                                        3544.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        17,
+                                        18
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "0bf74581-ac83-3a73-9d3f-75e4c366f92f",
+                                    "bbox": [
+                                        3554.0,
+                                        1483.0,
+                                        3702.0,
+                                        1505.0
+                                    ],
+                                    "span": [
+                                        19,
+                                        30
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "3b74ac78-078d-3812-9e35-c38219e11e9e",
+                            "bbox": [
+                                3247.939498901367,
+                                1274.8827819824219,
+                                3836.2173461914062,
+                                1308.0877075195312
+                            ],
+                            "text": "infrastructure Sewage treatment plants",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "3b74ac78-078d-3812-9e35-c38219e11e9e_sent_0",
+                                    "bbox": [
+                                        3252.0,
+                                        1275.0,
+                                        3833.0,
+                                        1308.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        38
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "5146c408-0890-3a23-b70d-00da22fde9e5",
+                                        "end_text_annotation_id": "cf419226-0333-3aee-a2db-52a4f44e04b3"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "5146c408-0890-3a23-b70d-00da22fde9e5",
+                                    "bbox": [
+                                        3252.0,
+                                        1275.0,
+                                        3413.0,
+                                        1297.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        14
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "b4d98c7d-9b82-3ac6-b76b-e6cf2667a1ad",
+                                    "bbox": [
+                                        3521.0,
+                                        1281.0,
+                                        3621.0,
+                                        1308.0
+                                    ],
+                                    "span": [
+                                        15,
+                                        21
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "d90a24b2-a17a-3df1-89fb-cbb4ddcc58f9",
+                                    "bbox": [
+                                        3630.0,
+                                        1282.0,
+                                        3749.0,
+                                        1303.0
+                                    ],
+                                    "span": [
+                                        22,
+                                        31
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "cf419226-0333-3aee-a2db-52a4f44e04b3",
+                                    "bbox": [
+                                        3760.0,
+                                        1281.0,
+                                        3833.0,
+                                        1308.0
+                                    ],
+                                    "span": [
+                                        32,
+                                        38
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "dbe98c49-5bb6-3e7a-af9a-98b5ea04cfc4",
+                            "bbox": [
+                                3519.7356872558594,
+                                1195.864501953125,
+                                3822.7836303710938,
+                                1224.4657897949219
+                            ],
+                            "text": "Water purification plants",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "dbe98c49-5bb6-3e7a-af9a-98b5ea04cfc4_sent_0",
+                                    "bbox": [
+                                        3520.0,
+                                        1198.0,
+                                        3821.0,
+                                        1225.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        25
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "4dc4a390-5ec5-3f53-a035-6632b650920c",
+                                        "end_text_annotation_id": "9853f3f5-85a5-300d-9387-0dd4a6894e8f"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "4dc4a390-5ec5-3f53-a035-6632b650920c",
+                                    "bbox": [
+                                        3520.0,
+                                        1198.0,
+                                        3594.0,
+                                        1220.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        5
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "208e1ec3-4061-38b3-9c5f-df6836efcce8",
+                                    "bbox": [
+                                        3603.0,
+                                        1198.0,
+                                        3736.0,
+                                        1225.0
+                                    ],
+                                    "span": [
+                                        6,
+                                        18
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "9853f3f5-85a5-300d-9387-0dd4a6894e8f",
+                                    "bbox": [
+                                        3748.0,
+                                        1198.0,
+                                        3821.0,
+                                        1225.0
+                                    ],
+                                    "span": [
+                                        19,
+                                        25
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "400eeea0-42f1-3dea-8a59-659288f03bc3",
+                            "bbox": [
+                                3707.870574951172,
+                                1144.128662109375,
+                                3734.9146118164062,
+                                1175.958755493164
+                            ],
+                            "text": "in",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "400eeea0-42f1-3dea-8a59-659288f03bc3_sent_0",
+                                    "bbox": [
+                                        3713.0,
+                                        1150.0,
+                                        3731.0,
+                                        1171.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        2
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "9ee81028-531b-3dbf-8476-83b46f6caf29",
+                                        "end_text_annotation_id": "9ee81028-531b-3dbf-8476-83b46f6caf29"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "9ee81028-531b-3dbf-8476-83b46f6caf29",
+                                    "bbox": [
+                                        3713.0,
+                                        1150.0,
+                                        3731.0,
+                                        1171.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        2
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "1f488e48-af39-3ae4-b4f8-bd7acd7d829d",
+                            "bbox": [
+                                3724.650146484375,
+                                1367.8985900878906,
+                                3769.641357421875,
+                                1395.2708129882812
+                            ],
+                            "text": "",
+                            "layout_type": "cell",
+                            "sentences": [],
+                            "texts": [],
+                            "annotations": []
+                        },
+                        {
+                            "id": "4e434c58-8648-39cd-949e-8cbf7a8d07ab",
+                            "bbox": [
+                                3248.385997772217,
+                                1231.5420227050781,
+                                3747.7796630859375,
+                                1268.3182678222656
+                            ],
+                            "text": "Developing water approximately 700",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "4e434c58-8648-39cd-949e-8cbf7a8d07ab_sent_0",
+                                    "bbox": [
+                                        3252.0,
+                                        1233.0,
+                                        3758.0,
+                                        1267.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        34
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "a2823a71-a5fe-316c-9244-950cf82ae37d",
+                                        "end_text_annotation_id": "183ab5e4-d3b0-33a2-b70f-7de3947ff11f"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "a2823a71-a5fe-316c-9244-950cf82ae37d",
+                                    "bbox": [
+                                        3252.0,
+                                        1240.0,
+                                        3388.0,
+                                        1267.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        10
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "e2622b8e-8aa4-3b61-a8f3-f45ebd3f59a4",
+                                    "bbox": [
+                                        3398.0,
+                                        1241.0,
+                                        3468.0,
+                                        1262.0
+                                    ],
+                                    "span": [
+                                        11,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "9ea18c2b-bf11-336c-92c4-bf39e3813197",
+                                    "bbox": [
+                                        3528.0,
+                                        1233.0,
+                                        3702.0,
+                                        1260.0
+                                    ],
+                                    "span": [
+                                        17,
+                                        30
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "183ab5e4-d3b0-33a2-b70f-7de3947ff11f",
+                                    "bbox": [
+                                        3712.0,
+                                        1233.0,
+                                        3758.0,
+                                        1255.0
+                                    ],
+                                    "span": [
+                                        31,
+                                        34
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "76e3f997-2cb4-3403-878c-dfb59b2b1c19",
+                            "bbox": [
+                                3248.3704195022583,
+                                1447.6462707519531,
+                                3740.3428344726562,
+                                1475.303955078125
+                            ],
+                            "text": "Integrated flood Flood forecasting",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "76e3f997-2cb4-3403-878c-dfb59b2b1c19_sent_0",
+                                    "bbox": [
+                                        3252.0,
+                                        1448.0,
+                                        3735.0,
+                                        1475.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        34
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "f8d2bdb1-d15c-3d90-bfc1-c2968a95394a",
+                                        "end_text_annotation_id": "fdfe6b32-c644-3cec-9e0b-e74b7443a10c"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "f8d2bdb1-d15c-3d90-bfc1-c2968a95394a",
+                                    "bbox": [
+                                        3252.0,
+                                        1448.0,
+                                        3376.0,
+                                        1475.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        10
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "94384044-8d03-39c5-a3e8-c7e0198b14fe",
+                                    "bbox": [
+                                        3385.0,
+                                        1448.0,
+                                        3446.0,
+                                        1470.0
+                                    ],
+                                    "span": [
+                                        11,
+                                        16
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "d98f9468-3a18-3d70-aa08-f62ba4cb2b95",
+                                    "bbox": [
+                                        3524.0,
+                                        1448.0,
+                                        3589.0,
+                                        1470.0
+                                    ],
+                                    "span": [
+                                        17,
+                                        22
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "fdfe6b32-c644-3cec-9e0b-e74b7443a10c",
+                                    "bbox": [
+                                        3599.0,
+                                        1448.0,
+                                        3735.0,
+                                        1475.0
+                                    ],
+                                    "span": [
+                                        23,
+                                        34
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "cba87edb-d395-399c-9c7f-003a14d68dc7",
+                            "bbox": [
+                                3741.7760314941406,
+                                1447.9218444824219,
+                                4165.072265625,
+                                1475.0218505859375
+                            ],
+                            "text": "and simulation technology related",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "cba87edb-d395-399c-9c7f-003a14d68dc7_sent_0",
+                                    "bbox": [
+                                        3745.0,
+                                        1448.0,
+                                        4163.0,
+                                        1475.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        33
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "fe6c07a4-4830-378e-b526-55f853ea86db",
+                                        "end_text_annotation_id": "c52e6696-1ac0-32f1-b5ae-ea70bc9eb25b"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "fe6c07a4-4830-378e-b526-55f853ea86db",
+                                    "bbox": [
+                                        3745.0,
+                                        1448.0,
+                                        3790.0,
+                                        1470.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        3
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "03e3822b-699d-3b85-8e93-d45ff18d85a2",
+                                    "bbox": [
+                                        3801.0,
+                                        1448.0,
+                                        3924.0,
+                                        1470.0
+                                    ],
+                                    "span": [
+                                        4,
+                                        14
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "0b0423a3-1d50-3ae3-b979-f22bb48651a1",
+                                    "bbox": [
+                                        3934.0,
+                                        1448.0,
+                                        4072.0,
+                                        1475.0
+                                    ],
+                                    "span": [
+                                        15,
+                                        25
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "c52e6696-1ac0-32f1-b5ae-ea70bc9eb25b",
+                                    "bbox": [
+                                        4082.0,
+                                        1448.0,
+                                        4163.0,
+                                        1470.0
+                                    ],
+                                    "span": [
+                                        26,
+                                        33
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "f42eface-dc3e-3f12-9e6f-fe60e8005ae9",
+                            "bbox": [
+                                3773.222900390625,
+                                1112.6666564941406,
+                                3945.49169921875,
+                                1140.7774353027344
+                            ],
+                            "text": "treatment, etc.",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "f42eface-dc3e-3f12-9e6f-fe60e8005ae9_sent_0",
+                                    "bbox": [
+                                        3763.0,
+                                        1115.0,
+                                        3943.0,
+                                        1139.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        15
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "cca34f8c-a87d-35ae-8bae-250150a35bd0",
+                                        "end_text_annotation_id": "cc4f626a-4853-3800-8d9e-6afeadeefe49"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "cca34f8c-a87d-35ae-8bae-250150a35bd0",
+                                    "bbox": [
+                                        3763.0,
+                                        1115.0,
+                                        3888.0,
+                                        1139.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        10
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "cc4f626a-4853-3800-8d9e-6afeadeefe49",
+                                    "bbox": [
+                                        3900.0,
+                                        1115.0,
+                                        3943.0,
+                                        1136.0
+                                    ],
+                                    "span": [
+                                        11,
+                                        15
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        },
+                        {
+                            "id": "b33ada8c-10fc-32b0-8542-97f488d7e2b9",
+                            "bbox": [
+                                3521.9822998046875,
+                                1147.2926025390625,
+                                3704.4598693847656,
+                                1176.7096862792969
+                            ],
+                            "text": "‘over 200 sites",
+                            "layout_type": "cell",
+                            "sentences": [
+                                {
+                                    "id": "b33ada8c-10fc-32b0-8542-97f488d7e2b9_sent_0",
+                                    "bbox": [
+                                        3528.0,
+                                        1150.0,
+                                        3702.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        15
+                                    ],
+                                    "reference": {
+                                        "start_text_annotation_id": "720c8010-3a24-3634-a6c4-2157f4a94aa7",
+                                        "end_text_annotation_id": "f092cba7-d7d5-327d-a565-1b26e882723e"
+                                    },
+                                    "annotations": []
+                                }
+                            ],
+                            "texts": [
+                                {
+                                    "id": "720c8010-3a24-3634-a6c4-2157f4a94aa7",
+                                    "bbox": [
+                                        3528.0,
+                                        1155.0,
+                                        3581.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        0,
+                                        5
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "2451e332-4f83-397d-b85a-cde6e0c5d47b",
+                                    "bbox": [
+                                        3591.0,
+                                        1150.0,
+                                        3637.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        6,
+                                        9
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": "f092cba7-d7d5-327d-a565-1b26e882723e",
+                                    "bbox": [
+                                        3647.0,
+                                        1150.0,
+                                        3702.0,
+                                        1172.0
+                                    ],
+                                    "span": [
+                                        10,
+                                        15
+                                    ],
+                                    "reference": null,
+                                    "annotations": []
+                                }
+                            ],
+                            "annotations": []
+                        }
+                    ],
+                    "annotations": []
+                }
+            ],
+            "figures": [
+                {
+                    "figure_id": "8969c4a6-7a56-317d-a6c6-1ef9261ab8c1",
+                    "bbox": [
+                        1107.0,
+                        1394.0,
+                        2056.0,
+                        2119.0
+                    ],
+                    "text": "",
+                    "annotations": []
+                },
+                {
+                    "figure_id": "75ca72a5-70f6-3df4-98de-389905a85bb3",
+                    "bbox": [
+                        2164.0,
+                        654.0,
+                        3128.0,
+                        1126.0
+                    ],
+                    "text": "",
+                    "annotations": []
+                }
+            ],
             "annotations": []
         }
     ]

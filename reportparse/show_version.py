@@ -23,7 +23,6 @@ def main():
     print()
 
     print('================== ReportParse version ==================')
-    print(f'Version: 0.1')
     try:
         commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('ascii').strip()
         print(f'Commit ID: {commit_id}')

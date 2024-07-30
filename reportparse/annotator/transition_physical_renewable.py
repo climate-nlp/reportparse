@@ -2,12 +2,11 @@ from logging import getLogger
 import argparse
 from distutils.util import strtobool
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
 from reportparse.util.settings import LAYOUT_NAMES, LEVEL_NAMES
+from reportparse.util.helper import HFModelCache
 
 
 @BaseAnnotator.register("transition_physical_renewable")
@@ -32,15 +31,11 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
 
     def __init__(self):
         super().__init__()
-        self.transition_physical_tokenizer = None
-        self.transition_physical_model = None
         self.transition_physical_model_name_or_path = 'climatebert/transition-physical'
         self.transition_physical_tokenizer_name_or_path = 'climatebert/distilroberta-base-climate-detector'
         self.transition_physical_label_map = {
             'LABEL_0': 'transition_risk', 'LABEL_1': 'none', 'LABEL_2': 'physical_risk',
         }
-        self.renewable_tokenizer = None
-        self.renewable_model = None
         self.renewable_model_name_or_path = 'climatebert/renewable'
         self.renewable_tokenizer_name_or_path = 'climatebert/distilroberta-base-climate-detector'
         return
@@ -74,30 +69,22 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
             target_layouts = ['text', 'list']
 
         if not use_deprecated:
-            if self.transition_physical_tokenizer is None or self.transition_physical_model is None:
-                self.transition_physical_tokenizer = AutoTokenizer.from_pretrained(
-                    self.transition_physical_tokenizer_name_or_path,
-                    max_len=max_len
-                )
-                self.transition_physical_model = AutoModelForSequenceClassification.from_pretrained(
-                    self.transition_physical_model_name_or_path
-                )
+            transition_physical_tokenizer = HFModelCache().load_tokenizer(
+                self.transition_physical_tokenizer_name_or_path, max_len=max_len)
+            transition_physical_model = HFModelCache().load_sequence_classification_model(
+                self.transition_physical_model_name_or_path)
 
-        if self.renewable_tokenizer is None or self.renewable_model is None:
-            self.renewable_tokenizer = AutoTokenizer.from_pretrained(
-                self.renewable_tokenizer_name_or_path,
-                max_len=max_len
-            )
-            self.renewable_model = AutoModelForSequenceClassification.from_pretrained(
-                self.renewable_model_name_or_path
-            )
+        renewable_tokenizer = HFModelCache().load_tokenizer(
+            self.renewable_tokenizer_name_or_path, max_len=max_len)
+        renewable_model = HFModelCache().load_sequence_classification_model(
+            self.renewable_model_name_or_path)
 
         # Get renewable related mentions
         document_renewable_annot = annotate_by_sequence_classification(
             annotator_name='renewable',
             document=document,
-            tokenizer=self.renewable_tokenizer,
-            model=self.renewable_model,
+            tokenizer=renewable_tokenizer,
+            model=renewable_model,
             level=level,
             target_layouts=target_layouts,
             batch_size=batch_size
@@ -115,8 +102,8 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
         document = annotate_by_sequence_classification(
             annotator_name='transition_physical_renewable',
             document=document,
-            tokenizer=self.transition_physical_tokenizer,
-            model=self.transition_physical_model,
+            tokenizer=transition_physical_tokenizer,
+            model=transition_physical_model,
             level=level,
             target_layouts=target_layouts,
             batch_size=batch_size

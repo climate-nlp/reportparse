@@ -3,6 +3,7 @@ import json
 
 import pandas as pd
 import numpy as np
+from PIL import Image
 from typing import List, Tuple, Any
 
 from reportparse.util.settings import LAYOUT_NAMES
@@ -82,7 +83,7 @@ class AnnotatableLevel:
         self._id = _id
         self._bbox = bbox
         self._text = text
-        self._annotations = []
+        self._annotations: List[Annotation] = []
         return
 
     def __str__(self):
@@ -466,6 +467,10 @@ class Page(AnnotatableLevel):
     def image(self) -> np.ndarray or None:
         return self._image
 
+    @image.setter
+    def image(self, image):
+        self._image = image
+
     @property
     def blocks(self) -> List[Block]:
         return self._blocks
@@ -517,6 +522,16 @@ class Page(AnnotatableLevel):
             page.add_figure(figure=Figure.from_dict(data=figure_data))
         return page
 
+    def draw_layout(self, **kwargs) -> np.ndarray:
+        from reportparse.util.helper import draw_layout_on_page
+        img = draw_layout_on_page(page=self, **kwargs)
+        return img
+
+    def show(self, **kwargs):
+        img = self.draw_layout(**kwargs)
+        img = Image.fromarray(img, 'RGB')
+        img.show()
+
 
 class Document:
 
@@ -557,11 +572,11 @@ class Document:
         annots = [a for o, a in self.find_all_annotations()]
         return find_element_by_id(elements=annots, str_id=annotation_id)
 
-    def remove_annotations_by_annotator_name(self, annotator_name: str):
+    def remove_all_annotations_by_annotator_name(self, annotator_name: str):
         for annot_obj, _ in self.find_all_annotations_by_annotator_name(annotator_name=annotator_name):
             annot_obj.remove_annotations_by_annotator_name(annotator_name=annotator_name)
 
-    def remove_annotations(self):
+    def remove_all_annotations(self):
         for annot_obj, _ in self.find_all_annotations():
             annot_obj.remove_annotations()
 

@@ -1,11 +1,10 @@
 from logging import getLogger
 import argparse
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from reportparse.annotator.base import BaseAnnotator
 from reportparse.structure.document import Document, Annotation
 from reportparse.util.plm_classifier import annotate_by_sequence_classification
+from reportparse.util.helper import HFModelCache
 
 
 @BaseAnnotator.register("climate_table")
@@ -29,8 +28,6 @@ class ClimateTableAnnotator(BaseAnnotator):
 
     def __init__(self):
         super().__init__()
-        self.tokenizer = None
-        self.model = None
         self.climate_model_name_or_path = 'climatebert/distilroberta-base-climate-detector'
         return
 
@@ -53,14 +50,10 @@ class ClimateTableAnnotator(BaseAnnotator):
         assert batch_size > 0
         assert 1 >= score_threshold >= 0
 
-        if self.tokenizer is None or self.model is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.climate_model_name_or_path,
-                max_len=max_len
-            )
-            self.model = AutoModelForSequenceClassification.from_pretrained(
-                self.climate_model_name_or_path
-            )
+        tokenizer = HFModelCache().load_tokenizer(
+            self.climate_model_name_or_path, max_len=max_len)
+        model = HFModelCache().load_sequence_classification_model(
+            self.climate_model_name_or_path)
 
         '''
         Algorithm for detecting climate-related tables:
@@ -71,8 +64,8 @@ class ClimateTableAnnotator(BaseAnnotator):
         document = annotate_by_sequence_classification(
             annotator_name='dummy',
             document=document,
-            tokenizer=self.tokenizer,
-            model=self.model,
+            tokenizer=tokenizer,
+            model=model,
             level='block',
             target_layouts=['text', 'list'],
             batch_size=batch_size
@@ -94,7 +87,7 @@ class ClimateTableAnnotator(BaseAnnotator):
                 )
                 table.add_annotation(annot_obj)
 
-        document.remove_annotations_by_annotator_name('dummy')
+        document.remove_all_annotations_by_annotator_name('dummy')
 
         return document
 
