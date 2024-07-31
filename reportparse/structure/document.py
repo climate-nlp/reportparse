@@ -522,9 +522,11 @@ class Page(AnnotatableLevel):
             page.add_figure(figure=Figure.from_dict(data=figure_data))
         return page
 
-    def draw_layout(self, **kwargs) -> np.ndarray:
+    def draw_layout(self, return_pillow_image: bool = False, **kwargs) -> np.ndarray:
         from reportparse.util.helper import draw_layout_on_page
         img = draw_layout_on_page(page=self, **kwargs)
+        if return_pillow_image:
+            img = Image.fromarray(img, 'RGB')
         return img
 
     def show(self, **kwargs):

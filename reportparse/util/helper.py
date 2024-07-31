@@ -237,34 +237,32 @@ def draw_layout_on_page(
                 rectangle_thickness=2,
             )
 
-        if show_annotation:
-            box_stack = []
-            category_names_list = []
-            if annotator_name is not None:
-                annotations = page.find_all_annotations_by_annotator_name(annotator_name)
-            else:
-                annotations = page.find_all_annotations()
-            for annot_obj, annot in annotations:
+    if show_annotation:
+        box_stack = []
+        category_names_list = []
+        if annotator_name is not None:
+            annotations = page.find_all_annotations_by_annotator_name(annotator_name)
+        else:
+            annotations = page.find_all_annotations()
 
-                if annot.annotator != 'climate_figure':
-                    continue
+        for annot_obj, annot in annotations:
+            if annot.annotator == 'climate_figure':
+                continue
+            score = f'({annot.meta["score"]:.1f})' if isinstance(annot.meta, dict) and 'score' in annot.meta else ''
+            if hasattr(annot_obj, 'bbox'):
+                box_stack.append(annot_obj.bbox)
+                category_names_list.append(f'{annot.annotator}={annot.value}{score}')
 
-                score = f'({annot.meta["score"]:.1f})' if isinstance(annot.meta, dict) and 'score' in annot.meta else ''
-
-                if hasattr(annot_obj, 'bbox'):
-                    box_stack.append(annot_obj.bbox)
-                    category_names_list.append(f'{annot.annotator}={annot.value}{score}')
-
-            if box_stack:
-                boxes = np.vstack(box_stack)
-                img = draw_boxes(
-                    np_image=img,
-                    boxes=boxes,
-                    category_names_list=category_names_list,
-                    category_to_color={
-                        k: ImageColor.getcolor(annotation_color, "RGB") for k in set(category_names_list)},
-                    font_scale=1.5,
-                    rectangle_thickness=6,
-                )
+        if box_stack:
+            boxes = np.vstack(box_stack)
+            img = draw_boxes(
+                np_image=img,
+                boxes=boxes,
+                category_names_list=category_names_list,
+                category_to_color={
+                    k: ImageColor.getcolor(annotation_color, "RGB") for k in set(category_names_list)},
+                font_scale=1.5,
+                rectangle_thickness=6,
+            )
 
     return img
