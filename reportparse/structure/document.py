@@ -516,10 +516,12 @@ class Page(AnnotatableLevel):
             page.add_annotation(annot)
         for block_data in data['blocks']:
             page.add_block(block=Block.from_dict(data=block_data))
-        for table_data in data['tables']:
-            page.add_table(table=Table.from_dict(data=table_data))
-        for figure_data in data['figures']:
-            page.add_figure(figure=Figure.from_dict(data=figure_data))
+        if 'tables' in data:
+            for table_data in data['tables']:
+                page.add_table(table=Table.from_dict(data=table_data))
+        if 'figures' in data:
+            for figure_data in data['figures']:
+                page.add_figure(figure=Figure.from_dict(data=figure_data))
         return page
 
     def draw_layout(self, return_pillow_image: bool = False, **kwargs) -> np.ndarray:
