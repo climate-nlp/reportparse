@@ -1,75 +1,134 @@
 from logging import getLogger
 import argparse
 import os
-import numpy as np
-import math
-import fitz
-from PIL import Image
 import spacy
 from typing import List, Dict
+from typing import Callable
+#import sec_parser as sp
 
 from reportparse.reader.base import BaseReader
-from reportparse.structure.document import Document, Page, Block
+from reportparse.structure.document import Document, Page, Block, Table
+
+"""
+The Edgar10KParser class is modified class of Edgar10QParser here:
+https://github.com/alphanome-ai/sec-parser/blob/main/sec_parser/processing_engine/core.py
+
+We modified default steps to avoid text merges.
+
+The license information of the original code is available here:
+
+MIT License
+Copyright (c) 2023 Alphanome.AI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+from sec_parser.processing_steps.empty_element_classifier import EmptyElementClassifier
+from sec_parser.processing_steps.highlighted_text_classifier import (
+    HighlightedTextClassifier,
+)
+from sec_parser.processing_steps.image_classifier import ImageClassifier
+from sec_parser.processing_steps.individual_semantic_element_extractor.individual_semantic_element_extractor import (
+    IndividualSemanticElementExtractor,
+)
+from sec_parser.processing_steps.individual_semantic_element_extractor.single_element_checks.image_check import (
+    ImageCheck,
+)
+from sec_parser.processing_steps.individual_semantic_element_extractor.single_element_checks.table_check import (
+    TableCheck,
+)
+from sec_parser.processing_steps.individual_semantic_element_extractor.single_element_checks.top_section_title_check import (
+    TopSectionTitleCheck,
+)
+from sec_parser.processing_steps.individual_semantic_element_extractor.single_element_checks.xbrl_tag_check import (
+    XbrlTagCheck,
+)
+from sec_parser.processing_steps.introductory_section_classifier import (
+    IntroductorySectionElementClassifier,
+)
+from sec_parser.processing_steps.page_header_classifier import PageHeaderClassifier
+from sec_parser.processing_steps.page_number_classifier import PageNumberClassifier
+from sec_parser.processing_steps.supplementary_text_classifier import (
+    SupplementaryTextClassifier,
+)
+from sec_parser.processing_steps.table_classifier import TableClassifier
+from sec_parser.processing_steps.table_of_contents_classifier import (
+    TableOfContentsClassifier,
+)
+from sec_parser.processing_steps.text_classifier import TextClassifier
+from sec_parser.processing_steps.title_classifier import TitleClassifier
+from sec_parser.processing_steps.top_section_manager_for_10q import (
+    TopSectionManagerFor10Q,
+)
+from sec_parser.semantic_elements.highlighted_text_element import HighlightedTextElement
+from sec_parser.semantic_elements.semantic_elements import (
+    NotYetClassifiedElement,
+    TextElement,
+)
+from sec_parser.semantic_elements.table_element.table_element import TableElement
+
+from sec_parser.processing_steps.abstract_classes.abstract_processing_step import (
+    AbstractProcessingStep,
+)
+from sec_parser.processing_steps.individual_semantic_element_extractor.single_element_checks.abstract_single_element_check import (
+    AbstractSingleElementCheck,
+)
+from sec_parser.processing_engine.core import AbstractSemanticElementParser
 
 
-def _try_get_pixmap(pdf_path, page_number):
-    doc = fitz.open(pdf_path)
-    page = doc.load_page(page_number)
-    zoom = 300 / 72
-    mat = fitz.Matrix(zoom, zoom)
-    pix = page.get_pixmap(matrix=mat)
-    #img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-    #img = np.array(img)
+class Edgar10KParser(AbstractSemanticElementParser):
 
+    def get_default_steps(
+        self,
+        get_checks: Callable[[], list[AbstractSingleElementCheck]] | None = None,
+    ) -> list[AbstractProcessingStep]:
+        return [
+            IndividualSemanticElementExtractor(
+                get_checks=get_checks or self.get_default_single_element_checks,
+            ),
+            ImageClassifier(types_to_process={NotYetClassifiedElement}),
+            EmptyElementClassifier(types_to_process={NotYetClassifiedElement}),
+            TableClassifier(types_to_process={NotYetClassifiedElement}),
+            TableOfContentsClassifier(types_to_process={TableElement}),
+            TopSectionManagerFor10Q(types_to_process={NotYetClassifiedElement}),
+            IntroductorySectionElementClassifier(),
+            TextClassifier(types_to_process={NotYetClassifiedElement}),
+            HighlightedTextClassifier(types_to_process={TextElement}),
+            SupplementaryTextClassifier(
+                types_to_process={TextElement, HighlightedTextElement},
+            ),
+            PageHeaderClassifier(
+                types_to_process={TextElement, HighlightedTextElement},
+            ),
+            PageNumberClassifier(
+                types_to_process={TextElement, HighlightedTextElement},
+            ),
+            TitleClassifier(types_to_process={HighlightedTextElement}),
+        ]
 
-def load_dummy_page_image(page) -> Dict:
-    logger = getLogger(__name__)
-    logger.info('\tLoad dummy images')
-    zoom = 300 / 72
-    mat = fitz.Matrix(zoom, zoom)
-    width, height = page.mediabox.width * zoom, page.mediabox.height * zoom
-    img = np.full(shape=(math.ceil(height), math.ceil(width), 3), fill_value=255).astype(np.uint8)
-    return {'success': True, 'img': img, 'mat': mat, 'width': width, 'height': height}
-
-
-def load_image_from_page(page) -> Dict:
-    logger = getLogger(__name__)
-    logger.info(f'\tLoad images from the page {page.number}')
-    zoom = 300 / 72
-    mat = fitz.Matrix(zoom, zoom)
-
-    width, height = page.mediabox.width * zoom, page.mediabox.height * zoom
-
-    pix = page.get_pixmap(matrix=mat)
-    img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-    img = np.array(img)
-    """
-    # Workaround for a bug: https://github.com/pymupdf/PyMuPDF/issues/3072
-    # (Fixed at PyMuPDF==1.23.22)
-    img = np.full(shape=(math.ceil(height), math.ceil(width), 3), fill_value=255).astype(np.uint8)
-    proc = multiprocessing.Process(target=_try_get_pixmap, args=(pdf_path, page.number))
-    timeout = 10
-    start = time.time()
-    proc.start()
-    success = True
-    while proc.is_alive():
-        time.sleep(0.01)
-        end = time.time()
-        if end - start > timeout:
-            print("\tKilled get_pixmap because it hangs")
-            proc.kill()
-            success = False
-            break
-    if success:
-        proc.kill()
-        pix = page.get_pixmap(matrix=mat)
-        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-        img = np.array(img)
-        end = time.time()
-        print(f'\tLoaded image ({end - start}s)')
-    """
-
-    return {'success': True, 'img': img, 'mat': mat, 'width': width, 'height': height}
+    def get_default_single_element_checks(self) -> list[AbstractSingleElementCheck]:
+        return [
+            TableCheck(),
+            XbrlTagCheck(),
+            ImageCheck(),
+            TopSectionTitleCheck(),
+        ]
 
 
 @BaseReader.register("10k")
@@ -85,107 +144,97 @@ class Sec10KReader(BaseReader):
         self.en_core_web_sm = None
         return
 
-    def _make_blocks(self, page, mat: fitz.Matrix, page_width: int, page_height: int) -> List[Block]:
-        logger = getLogger(__name__)
-
-        # word: (x0, y0, x1, y1, "word", block_no, line_no, word_no)
-        words = page.get_text('words')
-
+    def _make_block(self, block_id: str, text: str, element_name: str) -> Block:
         if self.en_core_web_sm is None:
             self.en_core_web_sm = spacy.load('en_core_web_sm')
 
-        all_text = ''
-        word_spans = []
-        word_bboxes = []
-        for word in words:
-            word_text = word[4]
-            word_spans.append((len(all_text), len(all_text) + len(word_text)))
-            all_text += word[4] + ' '
-            word_bboxes.append(tuple(word[:4]))
+        element_name_2_layout_type = {
+            'TopSectionTitle': 'title',
+            'TitleElement': 'title',
+            'TextElement': 'text',
+            'TableCell': 'cell',
+        }
 
-        all_text = all_text.rstrip()
+        block = Block(
+            block_id=block_id,
+            text=text.strip(),
+            layout_type=element_name_2_layout_type[element_name],
+            bbox=(0, 0, 0, 0)  # No bbox information available
+        )
 
-        blocks = []
-        logger.info('\tApply the sentence tokenization by SpaCy')
-        doc = self.en_core_web_sm(all_text)
-        for i_sent, sent in enumerate(doc.sents):
-            sent_bbox = [9999999., 9999999., 0., 0.]
-            for word_span, text_bbox in zip(word_spans, word_bboxes):
-                if set(range(*word_span)) & set(range(sent.start_char, sent.end_char)):
-                    sent_bbox[0] = min(sent_bbox[0], text_bbox[0])
-                    sent_bbox[1] = min(sent_bbox[1], text_bbox[1])
-                    sent_bbox[2] = max(sent_bbox[2], text_bbox[2])
-                    sent_bbox[3] = max(sent_bbox[3], text_bbox[3])
+        doc = self.en_core_web_sm(text)
 
-            # Here, a block equals to a sentence
-            block_id = str(hash(f'{page.number}_{i_sent}_{sent_bbox}'))
-            block_text = sent.text.strip()
-
-            # Workaround
-            sent_bbox = fitz.Rect(sent_bbox[:4])
-            sent_bbox = list(sent_bbox * mat)
-            sent_bbox[0] = min(sent_bbox[0], page_width)
-            sent_bbox[1] = min(sent_bbox[1], page_height)
-            sent_bbox[2] = min(sent_bbox[2], page_width)
-            sent_bbox[3] = min(sent_bbox[3], page_height)
-            sent_bbox = tuple(sent_bbox)
-
-            block = Block(
-                block_id=block_id,
-                text=block_text,
-                layout_type='text',
-                bbox=sent_bbox
-            )
+        for sent in doc.sents:
             block.add_sentence(
-                span_id=block_id + '_sent_0',
-                span=(0, len(block_text)),
-                bbox=sent_bbox,
+                span_id=block_id + '_sent_' + str(len(block.sentences)),
+                span=(sent.start_char, sent.end_char),
+                bbox=(0, 0, 0, 0)  # No bbox information available
             )
+        return block
 
-            blocks.append(block)
+    def _make_table(self, table_id: str, bs4_tag) -> Table:
+        if self.en_core_web_sm is None:
+            self.en_core_web_sm = spacy.load('en_core_web_sm')
 
-        return blocks
+        table = Table(
+            table_id=table_id,
+            html=str(bs4_tag),
+            text=bs4_tag.text.strip(),
+            bbox=(0, 0, 0, 0)  # No bbox information available
+        )
+
+        for tr in bs4_tag.findAll('tr'):
+            for td in tr.findAll('td'):
+                block_id = str(hash(f'{table_id}_{len(table.blocks)}_TableCell'))
+                table_text = td.getText().strip()
+                if table_text:
+                    table.add_block(
+                        self._make_block(block_id=block_id, text=table_text, element_name='TableCell')
+                    )
+
+        return table
 
     def analyze(
             self,
-            txt_path: str,
+            input_path: str,
     ) -> Document:
-        logger = getLogger(__name__)
 
-        doc = fitz.open(pdf_path)
+        with open(input_path, 'r') as f:
+            html = f.read()
 
-        document = Document(name=os.path.basename(pdf_path))
+        elements: list = Edgar10KParser().parse(html)
 
-        for page in doc:
-            logger.info(f'Read page {page.number}')
-            if max_pages is not None and page.number >= max_pages:
-                break
-            if skip_pages is not None and page.number in skip_pages:
-                continue
+        document = Document(name=os.path.basename(input_path))
 
-            if skip_load_image:
-                image_info = load_dummy_page_image(page=page)
-                img = None
-            else:
-                image_info = load_image_from_page(page=page)
-                img = image_info['img']
+        # We consider the sub top-level (i.e., level 1) section as a page
+        page_num = 0
+        doc_page = None
+        for element in elements:
+            element_info = element.to_dict()
+            element_name = element_info['cls_name']
+            element_level = None if 'level' not in element_info else element_info['level']
 
-            mat = image_info['mat']
-            width = image_info['width']
-            height = image_info['height']
+            if element_name == 'TopSectionTitle':
+                if element_level == 1:
+                    doc_page = Page(
+                        page_num=page_num,
+                        width=0, height=0,
+                        image=None,
+                    )
+                    document.add_page(page=doc_page)
+                    page_num += 1
 
-            doc_page = Page(
-                page_num=page.number,
-                width=width, height=height,
-                image=img,
-            )
-
-            logger.info('\tRead blocks')
-            blocks = self._make_blocks(page=page, mat=mat, page_width=width, page_height=height)
-            for block in blocks:
-                doc_page.add_block(block=block)
-
-            document.add_page(page=doc_page)
+            if doc_page is not None:
+                if element_name in ['TopSectionTitle', 'TitleElement', 'TextElement']:
+                    block_id = str(hash(f'{page_num}_{len(doc_page.blocks)}_{element_name}'))
+                    doc_page.add_block(
+                        self._make_block(block_id=block_id, text=element.text, element_name=element_name)
+                    )
+                elif element_name == 'TableElement':
+                    table_id = str(hash(f'{page_num}_{len(doc_page.tables)}_{element_name}'))
+                    doc_page.add_table(
+                        self._make_table(table_id=table_id, bs4_tag=element.html_tag._bs4)
+                    )
 
         return document
 
@@ -198,16 +247,13 @@ class Sec10KReader(BaseReader):
     ) -> Document:
         logger = getLogger(__name__)
 
-        if args is None:
-            logger.warning('The "read" method received the "args" argument, '
-                           'which means any other optional arguments will be ignored.')
-
-        max_pages = args.max_pages if args is not None else max_pages
-        skip_pages = args.skip_pages if args is not None else skip_pages
-        skip_load_image = args.skip_load_image if args is not None else skip_load_image
+        logger.warning('We ignore any arguments except input_path for this 10K reader.')
+        logger.warning('We do not apply layout analysis because the input data is the HTML file. '
+                       'Note that bounding boxes for any elements are always (0, 0, 0, 0) '
+                       'because we do not conduct the layout analysis.')
 
         document = self.analyze(
-            txt_path=input_path,
+            input_path=input_path,
         )
         return document
 
