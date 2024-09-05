@@ -3,9 +3,6 @@ import argparse
 import os
 from typing import List
 
-import deepdoctection.utils
-import math
-import numpy as np
 import deepdoctection as dd
 import spacy
 
@@ -30,16 +27,16 @@ class DeepdoctectionReader(BaseReader):
         if self.en_core_web_sm is None:
             self.en_core_web_sm = spacy.load('en_core_web_sm')
 
-        text_annotation_ids = layout.text_['annotation_ids']
-        text_bboxes = [page.get_annotation(annotation_ids=aid)[0].bbox for aid in text_annotation_ids]
+        word_annotation_ids = layout.text_['ann_ids']
+        word_bboxes = [page.get_annotation(annotation_ids=aid)[0].bbox for aid in word_annotation_ids]
 
         block_text = ''
-        text_spans = []
-        for text in layout.text_['text_list']:
-            text_spans.append((len(block_text), len(block_text + text)))
-            block_text += text + ' '
+        word_spans = []
+        for word in layout.text_['words']:
+            word_spans.append((len(block_text), len(block_text + word)))
+            block_text += word + ' '
 
-        assert len(text_spans) == len(text_annotation_ids) == len(text_bboxes)
+        assert len(word_spans) == len(word_annotation_ids) == len(word_bboxes)
 
         block = Block(
             block_id=layout.annotation_id,
@@ -48,11 +45,11 @@ class DeepdoctectionReader(BaseReader):
             bbox=tuple(layout.bbox)
         )
 
-        for text_annotation_id, text_span, text_bbox in zip(text_annotation_ids, text_spans, text_bboxes):
+        for word_annotation_id, word_span, word_bbox in zip(word_annotation_ids, word_spans, word_bboxes):
             block.add_text(
-                span_id=text_annotation_id,
-                span=text_span,
-                bbox=text_bbox,
+                span_id=word_annotation_id,
+                span=word_span,
+                bbox=word_bbox,
             )
 
         doc = self.en_core_web_sm(block_text)
@@ -60,20 +57,20 @@ class DeepdoctectionReader(BaseReader):
         for sent in doc.sents:
 
             sent_bbox = [9999999, 9999999, 0, 0]
-            start_text_annotation_id, end_text_annotation_id = None, None
-            for text_span, text_bbox, text_annotation_id in zip(text_spans, text_bboxes, text_annotation_ids):
-                if set(range(*text_span)) & set(range(sent.start_char, sent.end_char)):
-                    sent_bbox[0] = min(sent_bbox[0], text_bbox[0])
-                    sent_bbox[1] = min(sent_bbox[1], text_bbox[1])
-                    sent_bbox[2] = max(sent_bbox[2], text_bbox[2])
-                    sent_bbox[3] = max(sent_bbox[3], text_bbox[3])
+            start_word_annotation_id, end_word_annotation_id = None, None
+            for word_span, word_bbox, word_annotation_id in zip(word_spans, word_bboxes, word_annotation_ids):
+                if set(range(*word_span)) & set(range(sent.start_char, sent.end_char)):
+                    sent_bbox[0] = min(sent_bbox[0], word_bbox[0])
+                    sent_bbox[1] = min(sent_bbox[1], word_bbox[1])
+                    sent_bbox[2] = max(sent_bbox[2], word_bbox[2])
+                    sent_bbox[3] = max(sent_bbox[3], word_bbox[3])
 
-                    if start_text_annotation_id is None:
-                        start_text_annotation_id = text_annotation_id
-                    end_text_annotation_id = text_annotation_id
+                    if start_word_annotation_id is None:
+                        start_word_annotation_id = word_annotation_id
+                    end_word_annotation_id = word_annotation_id
 
-            assert start_text_annotation_id is not None
-            assert end_text_annotation_id is not None
+            assert start_word_annotation_id is not None
+            assert end_word_annotation_id is not None
             #assert sent.text.startswith(layout.text_['text_list'][text_annotation_ids.index(start_text_annotation_id)])
             #assert sent.text.endswith(layout.text_['text_list'][text_annotation_ids.index(end_text_annotation_id)])
 
@@ -82,8 +79,8 @@ class DeepdoctectionReader(BaseReader):
                 span=(sent.start_char, sent.end_char),
                 bbox=sent_bbox,
                 reference={
-                    'start_text_annotation_id': start_text_annotation_id,
-                    'end_text_annotation_id': end_text_annotation_id,
+                    'start_text_annotation_id': start_word_annotation_id,
+                    'end_text_annotation_id': end_word_annotation_id,
                 }
             )
 
@@ -92,16 +89,16 @@ class DeepdoctectionReader(BaseReader):
     def _make_table(self, page: dd.Page, table: dd.Table) -> Table:
         table_obj = Table(table_id=table.annotation_id, html=table.html, text=table.text, bbox=tuple(table.bbox))
         for cell in table.cells:
-            text_annotation_ids = cell.text_['annotation_ids']
-            text_bboxes = [page.get_annotation(annotation_ids=aid)[0].bbox for aid in text_annotation_ids]
+            word_annotation_ids = cell.text_['ann_ids']
+            word_bboxes = [page.get_annotation(annotation_ids=aid)[0].bbox for aid in word_annotation_ids]
 
             block_text = ''
-            text_spans = []
-            for text in cell.text_['text_list']:
-                text_spans.append((len(block_text), len(block_text + text)))
-                block_text += text + ' '
+            word_spans = []
+            for word in cell.text_['word']:
+                word_spans.append((len(block_text), len(block_text + word)))
+                block_text += word + ' '
 
-            assert len(text_spans) == len(text_annotation_ids) == len(text_bboxes)
+            assert len(word_spans) == len(word_annotation_ids) == len(word_bboxes)
 
             block = Block(
                 block_id=cell.annotation_id,
@@ -110,11 +107,11 @@ class DeepdoctectionReader(BaseReader):
                 bbox=tuple(cell.bbox)
             )
 
-            for text_annotation_id, text_span, text_bbox in zip(text_annotation_ids, text_spans, text_bboxes):
+            for word_annotation_id, word_span, word_bbox in zip(word_annotation_ids, word_spans, word_bboxes):
                 block.add_text(
-                    span_id=text_annotation_id,
-                    span=text_span,
-                    bbox=text_bbox,
+                    span_id=word_annotation_id,
+                    span=word_span,
+                    bbox=word_bbox,
                 )
 
             doc = self.en_core_web_sm(block_text)
@@ -122,30 +119,28 @@ class DeepdoctectionReader(BaseReader):
             for sent in doc.sents:
 
                 sent_bbox = [9999999, 9999999, 0, 0]
-                start_text_annotation_id, end_text_annotation_id = None, None
-                for text_span, text_bbox, text_annotation_id in zip(text_spans, text_bboxes, text_annotation_ids):
-                    if set(range(*text_span)) & set(range(sent.start_char, sent.end_char)):
-                        sent_bbox[0] = min(sent_bbox[0], text_bbox[0])
-                        sent_bbox[1] = min(sent_bbox[1], text_bbox[1])
-                        sent_bbox[2] = max(sent_bbox[2], text_bbox[2])
-                        sent_bbox[3] = max(sent_bbox[3], text_bbox[3])
+                start_word_annotation_id, end_word_annotation_id = None, None
+                for word_span, word_bbox, word_annotation_id in zip(word_spans, word_bboxes, word_annotation_ids):
+                    if set(range(*word_span)) & set(range(sent.start_char, sent.end_char)):
+                        sent_bbox[0] = min(sent_bbox[0], word_bbox[0])
+                        sent_bbox[1] = min(sent_bbox[1], word_bbox[1])
+                        sent_bbox[2] = max(sent_bbox[2], word_bbox[2])
+                        sent_bbox[3] = max(sent_bbox[3], word_bbox[3])
 
-                        if start_text_annotation_id is None:
-                            start_text_annotation_id = text_annotation_id
-                        end_text_annotation_id = text_annotation_id
+                        if start_word_annotation_id is None:
+                            start_word_annotation_id = word_annotation_id
+                        end_word_annotation_id = word_annotation_id
 
-                assert start_text_annotation_id is not None
-                assert end_text_annotation_id is not None
-                #assert sent.text.startswith(layout.text_['text_list'][text_annotation_ids.index(start_text_annotation_id)])
-                #assert sent.text.endswith(layout.text_['text_list'][text_annotation_ids.index(end_text_annotation_id)])
+                assert start_word_annotation_id is not None
+                assert end_word_annotation_id is not None
 
                 block.add_sentence(
                     span_id=cell.annotation_id + '_sent_' + str(len(block.sentences)),
                     span=(sent.start_char, sent.end_char),
                     bbox=sent_bbox,
                     reference={
-                        'start_text_annotation_id': start_text_annotation_id,
-                        'end_text_annotation_id': end_text_annotation_id,
+                        'start_text_annotation_id': start_word_annotation_id,
+                        'end_text_annotation_id': end_word_annotation_id,
                     }
                 )
 

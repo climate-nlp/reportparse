@@ -1,21 +1,24 @@
 registrable==0.0.4
-git+https://github.com/huggingface/transformers.git@057e1d74733f52817dc05b673a340b4e3ebea08c
-opencv-python==4.5.4.60
-spacy==3.7.2
+transformers==4.44.2
+opencv-python==4.10.0.84
+spacy==3.7.6
 #beautifulsoup4==4.11.2
 datasets==2.14.7
 pycryptodome==3.19.0
 PyMuPDF==1.23.22
+sec-parser==0.58.1
+pydantic==2.8.2
 
-pandas==2.0.3
+pandas==2.2.2
 lxml==5.2.2
 wordcloud==1.9.3
-gradio==3.50
+gradio==4.42.0
 
-# Required for deepdoctection (modified from origin requirements because pyyaml==6.0 and pypdf2==1.27.9 do not work)
+# Required for deepdoctection (modified from the requirements of deepdoctection)
+lazy-imports==0.3.1
 attrs==21.4.0
     # via jsonlines
-catalogue==2.0.7
+catalogue==2.0.10
     # via deepdoctection (setup.py)
 certifi==2021.10.8
     # via requests
@@ -25,39 +28,39 @@ filelock==3.6.0
     # via huggingface-hub
 fsspec==2023.9.2
     # via huggingface-hub
-huggingface-hub==0.17.2
+huggingface-hub==0.23.2
     # via deepdoctection (setup.py)
 idna==3.3
     # via requests
-importlib-metadata==4.11.2
+importlib-metadata==7.1.0
     # via deepdoctection (setup.py)
-jsonlines==3.0.0
+jsonlines==3.1.0
     # via deepdoctection (setup.py)
 mock==4.0.3
     # via deepdoctection (setup.py)
 networkx==2.7.1
     # via deepdoctection (setup.py)
-numpy==1.22.3
+numpy==1.26.4
     # via deepdoctection (setup.py)
 packaging==21.3
     # via
     #   deepdoctection (setup.py)
     #   huggingface-hub
-pillow==10.0.1
+pillow==9.5.0
     # via deepdoctection (setup.py)
 pyparsing==3.0.7
     # via packaging
-PyPDF2==3.0.1
+pypdf==3.17.3
     # via deepdoctection (setup.py)
 pyyaml==6.0.1
     # via
     #   deepdoctection (setup.py)
     #   huggingface-hub
-pyzmq==24.0.1
+pyzmq==26.2.0
     # via deepdoctection (setup.py)
-requests==2.27.1
+requests==2.32.3
     # via huggingface-hub
-tabulate==0.8.10
+tabulate==0.9.0
     # via deepdoctection (setup.py)
 termcolor==2.0.1
     # via deepdoctection (setup.py)
@@ -65,10 +68,11 @@ tqdm==4.64.0
     # via
     #   deepdoctection (setup.py)
     #   huggingface-hub
-typing-extensions==4.1.1
-    # via huggingface-hub
-urllib3==1.26.8
+typing-extensions==4.12.2
+    # via
+    #   huggingface-hub
+    #   pypdf
+urllib3==2.0.6
     # via requests
 zipp==3.7.0
     # via importlib-metadata
-timm==0.6.12

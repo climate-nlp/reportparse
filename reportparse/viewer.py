@@ -258,7 +258,7 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                         label="Display PDF images"
                     )
                     with gr.Row():
-                        with gr.Box():
+                        with gr.Group():
                             with gr.Group():
                                 show_block = gr.Checkbox(
                                     label="Block",
@@ -273,7 +273,7 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                                     min_width=5,
                                     scale=1,
                                 )
-                        with gr.Box():
+                        with gr.Group():
                             with gr.Group():
                                 show_table_block = gr.Checkbox(
                                     label="Table block",
@@ -288,7 +288,7 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                                     min_width=5,
                                     scale=1,
                                 )
-                        with gr.Box():
+                        with gr.Group():
                             with gr.Group():
                                 show_figure_block = gr.Checkbox(
                                     label="Figure",
@@ -303,7 +303,7 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                                     min_width=5,
                                     scale=1,
                                 )
-                        with gr.Box():
+                        with gr.Group():
                             with gr.Group():
                                 show_sentence = gr.Checkbox(
                                     label="Sentence",
@@ -317,7 +317,7 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
                                     info='Bounding box color',
                                     min_width=5, scale=1
                                 )
-                        with gr.Box():
+                        with gr.Group():
                             with gr.Group():
                                 show_word = gr.Checkbox(
                                     label="Text box",
@@ -366,29 +366,29 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
             gr.Markdown("# Outputs", elem_id='output_title')
             summary_text = gr.Markdown('')
 
-        with gr.Box():
+        with gr.Group():
             gr.Markdown('## Summary')
             with gr.Row():
                 with gr.Column(variant='panel', scale=5):
-                    with gr.Box():
+                    with gr.Group():
                         gr.Markdown(f"##### Layout of first {MAX_IMAGES} pages")
                         layout_gallery = gr.Gallery(
                             label=f"", show_label=False, elem_id="layout_gallery",
                             columns=1, rows=1, height=700, preview=True, object_fit='scale-down',
                         )
                 with gr.Column(variant='panel', scale=3):
-                    with gr.Box():
+                    with gr.Group():
                         basic_plot = gr.LinePlot(label='Layout stats')
-                    with gr.Box():
+                    with gr.Group():
                         annotation_plot = gr.BarPlot(label='Annotation stats')
-                    with gr.Box():
+                    with gr.Group():
                         gr.Markdown(f"##### Wordcloud for each label")
                         wordcloud_gallery = gr.Gallery(
                             label="", show_label=False, elem_id="wordcloud_gallery",
                             columns=1, rows=1, height=200, preview=True, object_fit='scale-down',
                         )
 
-        with gr.Box():
+        with gr.Group():
             gr.Markdown('## Full data of the annotation method')
             with gr.Column():
                 annotation_data = gr.Dataframe(wrap=True, height=1000, interactive=True)
@@ -408,7 +408,7 @@ Report Parse is a tool to analyze layout of corporate responsibility reports (e.
             outputs=[summary_text, annotation_data, basic_plot, annotation_plot, layout_gallery, wordcloud_gallery],
         )
 
-        demo.load(_js="""
+        demo.load(js="""
         function scroll_to_output() {
           const button = document.querySelector("#show_button");
           button.addEventListener("click", e => {

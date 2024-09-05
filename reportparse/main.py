@@ -1,3 +1,4 @@
+import logging
 from logging import getLogger
 import traceback
 import argparse
@@ -21,7 +22,7 @@ def main(args):
     if len(args.annotators) == 0:
         logger.warning(f'You do not specify any annotators. You will only get the document layout analysis results.')
 
-    # Load PDF files
+    # Load input files
     input_file_paths = []
     if os.path.isdir(args.input):
         logger.info(f'You specify a directory as the input. '
@@ -32,23 +33,44 @@ def main(args):
             if os.path.isfile(fpath):
                 if args.input_type == 'pdf' and fpath.lower().endswith('.pdf'):
                     input_file_paths.append(fpath)
-                elif args.input_type == 'json' and fpath.lower().endswith('.pdf.json'):
+                elif args.input_type == 'html' and (fpath.lower().endswith('.html') or fpath.lower().endswith('.htm')):
+                    if args.reader != '10k':
+                        raise FileNotFoundError(
+                            f"Only '10k' reader can be used for the HTML file input."
+                        )
+                    input_file_paths.append(fpath)
+                elif args.input_type == 'json' \
+                        and (
+                            fpath.lower().endswith('.pdf.json')
+                            or fpath.lower().endswith('.html.json')
+                            or fpath.lower().endswith('.htm.json')
+                        ):
                     input_file_paths.append(fpath)
     else:
         if not os.path.isfile(args.input):
             raise FileNotFoundError(
                 f"The input file ({args.input}) is not a valid file."
             )
-        if (args.input.lower().endswith('.pdf') and args.input_type != 'pdf') or \
-                (args.input.lower().endswith('.pdf.json') and args.input_type != 'json'):
+        input_file = args.input.lower()
+        if not (input_file.endswith('.pdf')
+                or input_file.endswith('.html')
+                or input_file.endswith('.htm')
+                or input_file.endswith('.json')
+        ):
             raise ValueError(
-                f"The input_type ({args.input_type}) is not consistent with the input file ({args.input})"
-                "Use --overwrite_output_dir to overcome."
+                f"The extension of the input file ({args.input}) is not valid. "
+                f"Please specify either '.pdf', '.html', or '.json'"
             )
-        elif not (args.input.lower().endswith('.pdf') or args.input.lower().endswith('.pdf.json')):
-            raise ValueError(
-                f"The extension of the input file ({args.input}) is not valid. Please specify the PDF or JSON file."
-            )
+
+        if input_file.endswith('.pdf'):
+            args.input_type = 'pdf'
+        elif input_file.endswith('.html') or input_file.endswith('.htm'):
+            args.input_type = 'html'
+        elif input_file.endswith('.json'):
+            args.input_type = 'json'
+
+        logger.warning(f'The input_type argument is automatically inferred by the input file name: '
+                       f'input_type="{args.input_type}"')
         input_file_paths.append(args.input)
 
     logger.info(f'We will analyze the following {args.input_type} file(s): {input_file_paths}')
@@ -65,11 +87,11 @@ def main(args):
         annotator = BaseAnnotator.by_name(annotator_name)()
         annotators.append(annotator)
 
-    # Process the input PDF files
+    # Process the input files
     for input_path in input_file_paths:
         logger.info(f'###### Processing "{input_path}". ######')
 
-        if args.input_type == 'pdf':
+        if args.input_type in ['pdf', 'html']:
             output_path = os.path.join(args.output_dir, os.path.basename(input_path) + '.json')
         else:
             output_path = os.path.join(args.output_dir, os.path.basename(input_path))
@@ -127,7 +149,7 @@ def main(args):
             # Save the easy-to-use CSV datasets
             if args.output_csv_dataset:
                 for level in ['page', 'block', 'sentence', 'table', 'figure']:
-                    if args.input_type == 'pdf':
+                    if args.input_type in ['pdf', 'html']:
                         output_csv_path = os.path.join(
                             args.output_dir, os.path.basename(input_path) + f'.{level}-level-dataset.csv')
                     else:
@@ -169,8 +191,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_type',
         type=str,
-        choices=['pdf', 'json'],
-        help='The input file type. "pdf" is a PDF file. '
+        choices=['pdf', 'json', 'html'],
+        help='The input file type. "pdf" is a PDF file. "html" is an HTML file. '
              '"json" is the output file of ReportParse where we will load data only from it.',
         default='pdf',
     )
@@ -178,7 +200,7 @@ if __name__ == '__main__':
         '--reader',
         type=str,
         choices=BaseReader.list_available(),
-        help='The name of the PDF layout / text extraction method',
+        help='The name of the layout / text extraction method',
         default='pymupdf',
     )
     parser.add_argument(

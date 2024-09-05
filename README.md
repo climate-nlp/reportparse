@@ -113,7 +113,7 @@ Our project is inspired by or related to following wonderful projects. If you ar
 We highly recommend you to prepare the Python environment only for ReportParse because our tool depends on complicated external package versions.
 At this time, we officially support the following version.
 
-- Python 3.8.16
+- Python 3.12.5
 
 ### Clone the project
 
@@ -127,17 +127,14 @@ cd reportparse
 Run the following commands to install required packages.
 
 ```bash
-pip install pip==23.3.1 setuptools==59.5.0 cython==3.0.6 wheel==0.42.0
-pip install "deepdoctection[pt]==0.26" --no-deps
+pip install pip==23.3.1 setuptools==70.3.0 cython==3.0.6 wheel==0.42.0
+pip install "deepdoctection[pt]==0.33.0" --no-deps
 pip install -r requirements.txt
-pip install git+https://github.com/facebookresearch/detectron2.git@ff53992b1985b63bd3262b5a36167098e3dada02 --no-build-isolation
+# Make sure that the torch and torchvision versions depend on your Python and computer environment
+pip install torch==2.4.0 torchvision==0.19.0
+pip install git+https://github.com/facebookresearch/detectron2.git@v0.6 --no-build-isolation
 
 python -m spacy download en_core_web_sm
-
-# Make sure that the torch and torchvision version depend on your Python version
-pip install torch==1.10.1 torchvision==0.11.2
-# If you use CUDA, for example:
-#pip install torch==1.10.1+cu111 torchvision==0.11.2+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 **IMPORTANT: To use deepdoctection, you need to install external packages of poppler, tesseract, leptonica, and qpdf.**
 

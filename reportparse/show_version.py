@@ -1,6 +1,6 @@
 import subprocess
 
-import PyPDF2
+import pypdf
 import deepdoctection
 import fitz
 import PIL
@@ -32,7 +32,7 @@ def main():
 
     print('======== Reader-related python package versions =========')
     print(f'deepdoctection: {deepdoctection.__version__}')
-    print(f'PyPDF2: {PyPDF2.__version__}')
+    print(f'pypdf: {pypdf.__version__}')
     print(f'fitz: {fitz.__version__}')
     print(f'PIL: {PIL.__version__}')
     print(f'spacy: {spacy.__version__}')

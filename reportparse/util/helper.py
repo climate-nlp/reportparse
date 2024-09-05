@@ -3,7 +3,7 @@ import copy
 import math
 import numpy as np
 import cv2
-import deepdoctection as dd
+from deepdoctection.utils.viz import viz_handler
 from PIL import ImageColor
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
@@ -103,7 +103,7 @@ def draw_boxes(
         if category_names_list is not None:
             choose_color = category_to_color.get(category_names_list[i])
             if font_scale > 0 and category_names_list[i] is not None:
-                np_image = dd.draw_text(
+                np_image = viz_handler.draw_text(
                     np_image, (box[0], box[1]), category_names_list[i], color=choose_color, font_scale=font_scale
                 )
             cv2.rectangle(
