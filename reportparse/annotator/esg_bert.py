@@ -25,11 +25,11 @@ class ESGBertAnnotator(BaseAnnotator):
     def annotate(
         self,
         document: Document, args=None,
-        max_len=128, batch_size=8, level='sentence', target_layouts=('text', 'list')
+        max_len=256, batch_size=8, level='sentence', target_layouts=('text', 'list')
     ) -> Document:
         logger = getLogger(__name__)
 
-        if args is None:
+        if args is not None:
             logger.warning('The "annotate" method received the "args" argument, '
                            'which means any other optional arguments will be ignored.')
 

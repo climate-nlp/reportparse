@@ -43,11 +43,11 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
     def annotate(
         self,
         document: Document, args=None,
-        max_len=128, batch_size=8, level='block', target_layouts=('text', 'list'), use_deprecated=False,
+        max_len=256, batch_size=8, level='block', target_layouts=('text', 'list'), use_deprecated=False,
     ) -> Document:
         logger = getLogger(__name__)
 
-        if args is None:
+        if args is not None:
             logger.warning('The "annotate" method received the "args" argument, '
                            'which means any other optional arguments will be ignored.')
 
@@ -121,7 +121,7 @@ class TransitionPhysicalRenewableAnnotator(BaseAnnotator):
         parser.add_argument(
             '--transition_physical_renewable_max_len',
             type=int,
-            default=128
+            default=256
         )
         parser.add_argument(
             '--transition_physical_renewable_batch_size',

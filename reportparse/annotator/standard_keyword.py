@@ -39,7 +39,7 @@ class StandardKeywordAnnotator(BaseAnnotator):
     ) -> Document:
         logger = getLogger(__name__)
 
-        if args is None:
+        if args is not None:
             logger.warning('The "annotate" method received the "args" argument, '
                            'which means any other optional arguments will be ignored.')
 
